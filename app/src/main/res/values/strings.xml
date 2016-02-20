@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">NCKH2016</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_search">Search</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_dang_ky">DangKyActivity</string>
+
+    <string name="btndangky">đăng ký</string>
+    <string name="editmasv">mã sinh viên</string>
+    <string name="edithoten">họ và tên</string>
+    <string name="editemail">email</string>
+</resources>

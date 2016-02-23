@@ -171,6 +171,80 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return mCursor;
     }
 
+    public Cursor getAllKhoa(){
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_KHOA, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //close();
+        }
+        return mCursor;
+    }
+
+    public Cursor getNganh(String maKhoa){
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_NGANH + " WHERE makhoa = " + maKhoa, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //close();
+        }
+        return mCursor;
+    }
+
+    public Cursor getAllUserData(){
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + TB_USER, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //close();
+        }
+        return mCursor;
+    }
+
+    public String getTenKhoa(String maKhoa){
+        String tenKhoa = null;
+        try {
+            // Mở kết nối
+            openDataBase();
+            Cursor cursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_KHOA + " WHERE makhoa = " + maKhoa, null);
+            while (cursor.moveToNext()) {
+                tenKhoa = cursor.getString(cursor.getColumnIndex("tenkhoa"));
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return tenKhoa;
+    }
+    public String getTenNganh(String maNganh){
+        String tenNganh = null;
+        try {
+            // Mở kết nối
+            openDataBase();
+            Cursor cursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_NGANH + " WHERE manganh = " + maNganh, null);
+            while (cursor.moveToNext()) {
+                tenNganh = cursor.getString(cursor.getColumnIndex("tennganh"));
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return tenNganh;
+    }
+
     public long insertNguoiDung(ContentValues values){
         long flag = -1;
         try{
@@ -192,7 +266,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Cursor cursor = database.query(TB_USER, null, null, null,
                     null, null, null);
             while (cursor.moveToNext()) {
-                mArrayList.add(cursor.getString(cursor.getColumnIndex("hoten")));
+                mArrayList.add(cursor.getString(cursor.getColumnIndex("masv")));
             }
             cursor.close();
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.nckh2016.vuduytung.nckh2016;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -14,15 +15,22 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements FragmentDangKy.OnFragmentInteractionListener, FragmentQuaTrinhHocTap.OnFragmentInteractionListener, FragmentNienGiam.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener{
+        implements FragmentDangKy.OnFragmentInteractionListener, FragmentNguoiDung.OnFragmentInteractionListener, FragmentNienGiam.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener{
+
+    public static final String PREFS_NAME = "current_user";
+    public String current_user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +74,13 @@ public class MainActivity extends AppCompatActivity
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+        // Restore preferences
+        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        if(currentUserData == null){
+            //form dang ky
+        } else{
+            current_user = currentUserData.getString("user_mssv", null);
+        }
     }
 
     @Override
@@ -102,6 +117,24 @@ public class MainActivity extends AppCompatActivity
             Spinner spinnerNguoiDung = (Spinner)findViewById(R.id.spinnerNguoiDung);
             ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, data.getAllNguoiDung());
             spinnerNguoiDung.setAdapter(mAdapter);
+            if(current_user!=null){
+                spinnerNguoiDung.setSelection(mAdapter.getPosition(current_user));
+            }
+            spinnerNguoiDung.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("user_mssv", parent.getItemAtPosition(position).toString());
+                    editor.putString("user_name", parent.getItemAtPosition(position).toString());
+                    editor.commit();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
         }
 
         return true;

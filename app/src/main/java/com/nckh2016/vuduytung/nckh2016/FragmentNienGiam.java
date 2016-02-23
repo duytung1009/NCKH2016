@@ -74,7 +74,7 @@ public class FragmentNienGiam extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_nien_giam, container, false);
-        SQLiteDataController data = new SQLiteDataController(getActivity());
+        SQLiteDataController data = new SQLiteDataController(getContext());
         try{
             data.isCreatedDatabase();
         }

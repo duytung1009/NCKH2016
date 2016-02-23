@@ -11,6 +11,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +22,15 @@
         <activity
             android:name=".DangKyActivity"
             android:label="@string/title_activity_dang_ky"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ThongTinCaNhanActivity"
+            android:label="@string/title_activity_thong_tin_ca_nhan"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

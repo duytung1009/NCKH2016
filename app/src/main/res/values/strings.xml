@@ -15,4 +15,5 @@
     <string name="editmasv">mã sinh viên</string>
     <string name="edithoten">họ và tên</string>
     <string name="editemail">email</string>
+    <string name="title_activity_thong_tin_ca_nhan">ThongTinCaNhanActivity</string>
 </resources>

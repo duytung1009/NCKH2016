@@ -20,10 +20,10 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                FragmentDangKy tab1 = new FragmentDangKy();
+                FragmentNguoiDung tab1 = new FragmentNguoiDung();
                 return tab1;
             case 1:
-                FragmentQuaTrinhHocTap tab2 = new FragmentQuaTrinhHocTap();
+                FragmentDangKy tab2 = new FragmentDangKy();
                 return tab2;
             case 2:
                 FragmentNienGiam tab3 = new FragmentNienGiam();

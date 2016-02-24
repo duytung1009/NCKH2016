@@ -1,20 +1,17 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ThongTinCaNhanActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "current_user";
@@ -32,6 +29,8 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
         TextView tvEmail = (TextView)findViewById(R.id.tvEmail);
         TextView tvKhoa = (TextView)findViewById(R.id.tvKhoa);
         TextView tvNganh = (TextView)findViewById(R.id.tvNganh);
+        TextView tvNamThu = (TextView)findViewById(R.id.tvNamThu);
+        TextView tvHocKy = (TextView)findViewById(R.id.tvHocKy);
         SQLiteDataController data = new SQLiteDataController(this);
         try{
             data.isCreatedDatabase();
@@ -45,7 +44,17 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
         } else{
             current_user = currentUserData.getString("user_mssv", null);
         }
-        Cursor cUser = data.getAllUserData();
+        ArrayList<Object> mListUser = data.getUser(current_user);
+        ObjectUser currentUser = (ObjectUser)mListUser.get(0);
+        tvMaSinhVien.setText(currentUser.getMasv());
+        tvTenSinhVien.setText(currentUser.getHoten());
+        tvEmail.setText(currentUser.getEmail());
+        tvKhoa.setText(data.getTenKhoa(currentUser.getMakhoa()));
+        tvNganh.setText(data.getTenNganh(currentUser.getManganh()));
+        tvNamThu.setText(currentUser.getNamhoc());
+        tvHocKy.setText(currentUser.getKyhoc());
+
+        /*Cursor cUser = data.getAllUserData();
         while(cUser.moveToNext()){
             if(cUser.getString(cUser.getColumnIndexOrThrow("masv")).equals(current_user)){
                 tvMaSinhVien.setText(cUser.getString(cUser.getColumnIndexOrThrow("masv")));
@@ -55,7 +64,7 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
                 tvNganh.setText(data.getTenNganh(cUser.getString(cUser.getColumnIndexOrThrow("manganh"))));
             }
         }
-        cUser.close();
+        cUser.close();*/
     }
 
 }

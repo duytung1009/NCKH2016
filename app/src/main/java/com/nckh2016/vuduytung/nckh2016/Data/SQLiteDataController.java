@@ -9,6 +9,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.CTDTEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.MonHocEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.KhoaEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.NganhEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -153,97 +159,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 SQLiteDatabase.OPEN_READWRITE);
     }
 
-    /**
-     * Lấy danh sách tất cả các môn học
-     *
-     * @return
-     */
-    public Cursor getAllMonHoc(){
-        Cursor mCursor = null;
-        try{
-            openDataBase();
-            mCursor = database.rawQuery("SELECT * FROM " + TB_MONHOC, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            //close();
-        }
-        return mCursor;
-    }
-
-    public Cursor getAllKhoa(){
-        Cursor mCursor = null;
-        try{
-            openDataBase();
-            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_KHOA, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            //close();
-        }
-        return mCursor;
-    }
-
-    public Cursor getNganh(String maKhoa){
-        Cursor mCursor = null;
-        try{
-            openDataBase();
-            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_NGANH + " WHERE makhoa = " + maKhoa, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            //close();
-        }
-        return mCursor;
-    }
-
-    public Cursor getAllUserData(){
-        Cursor mCursor = null;
-        try{
-            openDataBase();
-            mCursor = database.rawQuery("SELECT * FROM " + TB_USER, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            //close();
-        }
-        return mCursor;
-    }
-
-    public String getTenKhoa(String maKhoa){
-        String tenKhoa = null;
-        try {
-            // Mở kết nối
-            openDataBase();
-            Cursor cursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_KHOA + " WHERE makhoa = " + maKhoa, null);
-            while (cursor.moveToNext()) {
-                tenKhoa = cursor.getString(cursor.getColumnIndex("tenkhoa"));
-            }
-            cursor.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close();
-        }
-        return tenKhoa;
-    }
-    public String getTenNganh(String maNganh){
-        String tenNganh = null;
-        try {
-            // Mở kết nối
-            openDataBase();
-            Cursor cursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_NGANH + " WHERE manganh = " + maNganh, null);
-            while (cursor.moveToNext()) {
-                tenNganh = cursor.getString(cursor.getColumnIndex("tennganh"));
-            }
-            cursor.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close();
-        }
-        return tenNganh;
-    }
+    //sql methods
 
     public long insertNguoiDung(ContentValues values){
         long flag = -1;
@@ -258,7 +174,288 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<String> getAllNguoiDung(){
+    /**
+     * Lấy danh sách tất cả các môn học
+     *
+     * @return
+     */
+    public ArrayList<Object> getMonHoc(){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + MonHocEntry.TABLE_NAME, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectMonHoc(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TEN_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+    public ArrayList<Object> getMonHoc(String maMonHoc){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + MonHocEntry.TABLE_NAME + " WHERE " + MonHocEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectMonHoc(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TEN_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+
+    public ArrayList<Object> getCTDT(String mabm, String hocky){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + CTDTEntry.TABLE_NAME + " WHERE " + CTDTEntry.COLUMN_MA_BO_MON + " = " + mabm + " and " + CTDTEntry.COLUMN_HOC_KY + " = " + hocky, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(CTDTEntry.COLUMN_MA_MON_HOC))).get(0));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+
+    public ArrayList<Object> getKhoa(){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + KhoaEntry.TABLE_NAME, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectKhoa(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(KhoaEntry.COLUMN_MA_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(KhoaEntry.COLUMN_TEN_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(KhoaEntry.COLUMN_TRUONG_KHOA))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+
+    public ArrayList<Object> getNganhTheoKhoa(String maKhoa){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + NganhEntry.TABLE_NAME + " WHERE makhoa = " + maKhoa, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectNganh(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_MA_NGANH)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_MA_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_TEN_NGANH))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+
+    public ArrayList<Object> getUser(){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserEntry.TABLE_NAME, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectUser(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_SV)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_NGANH)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HO_TEN)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_NAM_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_KY_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_EMAIL))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+    public ArrayList<Object> getUser(String masv){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserEntry.TABLE_NAME + " WHERE " + UserEntry.COLUMN_MA_SV + " = '" + masv + "'", null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectUser(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_SV)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_NGANH)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HO_TEN)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_NAM_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_KY_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_EMAIL))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+    public boolean checkUser(String masv){
+        boolean flag = false;
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserEntry.TABLE_NAME + " WHERE " + UserEntry.COLUMN_MA_SV + " = '" + masv + "'", null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    if((mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_SV)).equals(masv))) {
+                        flag = true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return flag;
+    }
+
+    public String getTenKhoa(String maKhoa){
+        String tenKhoa = null;
+        Cursor cursor = null;
+        try {
+            // Mở kết nối
+            openDataBase();
+            cursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_KHOA + " WHERE makhoa = " + maKhoa, null);
+            while (cursor.moveToNext()) {
+                tenKhoa = cursor.getString(cursor.getColumnIndex("tenkhoa"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+            close();
+        }
+        return tenKhoa;
+    }
+    public String getTenNganh(String maNganh){
+        String tenNganh = null;
+        Cursor cursor = null;
+        try {
+            // Mở kết nối
+            openDataBase();
+            cursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_NGANH + " WHERE manganh = " + maNganh, null);
+            while (cursor.moveToNext()) {
+                tenNganh = cursor.getString(cursor.getColumnIndex("tennganh"));
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+            close();
+        }
+        return tenNganh;
+    }
+
+    /*public Cursor getAllKhoa(){
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_KHOA, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //close();
+        }
+        return mCursor;
+    }*/
+
+    /*public Cursor getNganh(String maKhoa){
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_NGANH + " WHERE makhoa = " + maKhoa, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //close();
+        }
+        return mCursor;
+    }*/
+
+    /*public Cursor getAllUserData(){
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + TB_USER, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //close();
+        }
+        return mCursor;
+    }*/
+
+    /*public ArrayList<String> getAllNguoiDung(){
         ArrayList<String> mArrayList = new ArrayList<String>();
         try {
             // Mở kết nối
@@ -275,5 +472,5 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             close();
         }
         return mArrayList;
-    }
+    }*/
 }

@@ -71,7 +71,7 @@ public class FragmentDangKy extends Fragment {
         btndangky.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), DangKyActivity.class);
+                Intent intent = new Intent(getActivity(), TaoTaiKhoanActivity.class);
                 startActivity(intent);
             }
         });

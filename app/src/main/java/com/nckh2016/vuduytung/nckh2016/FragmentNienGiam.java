@@ -1,7 +1,6 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,10 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.nckh2016.vuduytung.nckh2016.Data.MonHocAdapter;
+import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 /**
@@ -81,8 +81,10 @@ public class FragmentNienGiam extends Fragment {
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        Cursor mCursor = data.getAllMonHoc();
-        MonHocAdapter monHocAdapter = new MonHocAdapter(getActivity(), mCursor, 0);
+        ArrayList<Object> mArrayList = data.getMonHoc();
+        AdapterMonHoc monHocAdapter = new AdapterMonHoc(getActivity(), 0, mArrayList);
+        /*Cursor mCursor = data.getAllMonHoc();
+        AdapterMonHoc monHocAdapter = new MonHocAdapter(getActivity(), mCursor, 0);*/
         ListView listView = (ListView) view.findViewById(R.id.list_view_niemgiam);
         listView.setAdapter(monHocAdapter);
         return view;

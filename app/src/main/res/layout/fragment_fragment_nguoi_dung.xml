@@ -35,15 +35,33 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2"
                     android:gravity="center"
-                    android:text="test"/>
+                    android:singleLine="true"
+                    android:text="@string/btn_thongtincanhan"/>
             </LinearLayout>
 
-            <Button
+            <LinearLayout
+                style="@style/btn_layout"
+                android:id="@+id/layout_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:text="test"/>
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/account_box_outline"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/test"/>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -53,19 +71,53 @@
             android:orientation="horizontal"
             android:layout_weight="1">
 
-            <Button
+            <LinearLayout
+                style="@style/btn_layout"
+                android:id="@+id/layout_3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:text="test"/>
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/account_box_outline"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/test"/>
+            </LinearLayout>
 
-            <Button
+            <LinearLayout
+                style="@style/btn_layout"
+                android:id="@+id/layout_4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:text="test"/>
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/account_box_outline"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/test"/>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -75,19 +127,53 @@
             android:orientation="horizontal"
             android:layout_weight="1">
 
-            <Button
+            <LinearLayout
+                style="@style/btn_layout"
+                android:id="@+id/layout_5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:text="test"/>
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/account_box_outline"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/test"/>
+            </LinearLayout>
 
-            <Button
+            <LinearLayout
+                style="@style/btn_layout"
+                android:id="@+id/layout_6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:text="test"/>
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/account_box_outline"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/test"/>
+            </LinearLayout>
 
         </LinearLayout>
 

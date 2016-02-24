@@ -8,12 +8,19 @@
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_dang_ky">DangKyActivity</string>
+    <string name="title_activity_dang_ky">Đăng ký</string>
 
     <string name="btndangky">đăng ký</string>
     <string name="editmasv">mã sinh viên</string>
     <string name="edithoten">họ và tên</string>
     <string name="editemail">email</string>
-    <string name="title_activity_thong_tin_ca_nhan">ThongTinCaNhanActivity</string>
+
+    <string name="title_activity_thong_tin_ca_nhan">Thông tin cá nhân</string>
+
+    <string name="btn_thongtincanhan">thông tin cá nhân</string>
+
+    <string name="test">test</string>
+
+    <string name="title_activity_tao_tai_khoan">TaoTaiKhoanActivity</string>
+
 </resources>

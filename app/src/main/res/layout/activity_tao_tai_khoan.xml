@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.nckh2016.vuduytung.nckh2016.DangKyActivity">
+    tools:context="com.nckh2016.vuduytung.nckh2016.TaoTaiKhoanActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,6 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_dang_ky" />
+    <include layout="@layout/content_tao_tai_khoan" />
 
 </android.support.design.widget.CoordinatorLayout>

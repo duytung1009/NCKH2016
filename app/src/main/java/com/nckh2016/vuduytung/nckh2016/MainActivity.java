@@ -19,18 +19,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements FragmentDangKy.OnFragmentInteractionListener, FragmentNguoiDung.OnFragmentInteractionListener, FragmentNienGiam.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener{
 
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
+    ArrayList<Object> mListUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,20 +115,33 @@ public class MainActivity extends AppCompatActivity
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        if(!data.getAllNguoiDung().isEmpty()){
+        if(!data.getUser().isEmpty()){
+            mListUser = data.getUser();
+            List<String> mListTenUser = new ArrayList<String>();
+            for (Object object : mListUser) {
+                ObjectUser value = (ObjectUser) object;
+                mListTenUser.add(value != null ? value.getHoten() : null);
+            }
+            ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, mListTenUser);
             Spinner spinnerNguoiDung = (Spinner)findViewById(R.id.spinnerNguoiDung);
-            ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, data.getAllNguoiDung());
             spinnerNguoiDung.setAdapter(mAdapter);
             if(current_user!=null){
-                spinnerNguoiDung.setSelection(mAdapter.getPosition(current_user));
+                int index = 0;
+                for (Object object : mListUser) {
+                    ObjectUser value = (ObjectUser) object;
+                    if(value.getMasv().equals(current_user)){
+                        index = mListUser.indexOf(value);
+                    }
+                }
+                spinnerNguoiDung.setSelection(index);
             }
             spinnerNguoiDung.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("user_mssv", parent.getItemAtPosition(position).toString());
-                    editor.putString("user_name", parent.getItemAtPosition(position).toString());
+                    editor.putString("user_mssv", ((ObjectUser)mListUser.get(position)).getMasv());
+                    editor.putString("user_name", ((ObjectUser)mListUser.get(position)).getHoten());
                     editor.commit();
                 }
 
@@ -136,7 +151,6 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
-
         return true;
     }
 

@@ -1,34 +1,40 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.nckh2016.vuduytung.nckh2016.KeHoachHocTapActivityFragment"
+    tools:context=".KeHoachHocTap1Fragment"
     tools:showIn="@layout/activity_ke_hoach_hoc_tap">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <TextView
-            style="@style/bigText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ngành "/>
-        <TextView
-            android:id="@+id/txtTenNganh"
-            style="@style/bigText"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <TextView
+                style="@style/bigText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ngành "/>
+            <TextView
+                android:id="@+id/txtTenNganh"
+                style="@style/bigText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"/>
+        </LinearLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#c0c0c0"/>
+        <ListView
+            android:id="@+id/list_view_hoctap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/list_view_hoctap"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </ListView>
-
-</LinearLayout>
+</FrameLayout>

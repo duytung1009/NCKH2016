@@ -28,7 +28,7 @@ public class TaoTaiKhoanActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment frag2 = new TaoTaiKhoan2Fragment();
         ft.addToBackStack(tag);
-        ft.replace(R.id.fragment, frag2, tag);
+        ft.replace(R.id.fragment_tao_tai_khoan, frag2, tag);
         ft.commit();
     }
 

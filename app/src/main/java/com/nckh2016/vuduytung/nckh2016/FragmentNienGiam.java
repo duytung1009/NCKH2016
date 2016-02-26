@@ -1,6 +1,7 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,9 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
+import com.nckh2016.vuduytung.nckh2016.Data.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
@@ -35,6 +38,7 @@ public class FragmentNienGiam extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    ArrayList<Object> mArrayList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -81,11 +85,21 @@ public class FragmentNienGiam extends Fragment {
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        ArrayList<Object> mArrayList = data.getMonHoc();
+        mArrayList = data.getMonHoc();
         AdapterMonHoc monHocAdapter = new AdapterMonHoc(getActivity(), 0, mArrayList);
         /*Cursor mCursor = data.getAllMonHoc();
         AdapterMonHoc monHocAdapter = new MonHocAdapter(getActivity(), mCursor, 0);*/
         ListView listView = (ListView) view.findViewById(R.id.list_view_niemgiam);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getContext(), ChiTietMonHocActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("mamh", ((ObjectMonHoc)mArrayList.get(position)).getMamh());
+                intent.putExtra("MaMonHoc", bundle);
+                startActivity(intent);
+            }
+        });
         listView.setAdapter(monHocAdapter);
         return view;
     }

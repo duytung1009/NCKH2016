@@ -60,7 +60,7 @@
                     android:layout_weight="2"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="@string/test"/>
+                    android:text="@string/btn_kehoachhoctap"/>
             </LinearLayout>
 
         </LinearLayout>

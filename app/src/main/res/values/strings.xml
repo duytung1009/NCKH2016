@@ -18,9 +18,14 @@
     <string name="title_activity_thong_tin_ca_nhan">Thông tin cá nhân</string>
 
     <string name="btn_thongtincanhan">thông tin cá nhân</string>
+    <string name="btn_kehoachhoctap">kế hoạch học tập</string>
 
     <string name="test">test</string>
 
     <string name="title_activity_tao_tai_khoan">TaoTaiKhoanActivity</string>
+    <string name="title_activity_ke_hoach_hoc_tap">KeHoachHocTapActivity</string>
+    <string name="title_activity_chi_tiet_mon_hoc">ChiTietMonHocActivity</string>
+
+    <string name="khong">Chưa có thông tin mô tả</string>
 
 </resources>

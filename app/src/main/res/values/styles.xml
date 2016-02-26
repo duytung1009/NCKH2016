@@ -23,6 +23,11 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
+    <style name="bigText">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="normalText">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">16sp</item>

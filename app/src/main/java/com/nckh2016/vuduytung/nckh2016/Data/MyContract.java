@@ -27,12 +27,13 @@ public class MyContract {
         }*/
     }
 
-    public static final class CTDTEntry implements BaseColumns {
-        public static final String TABLE_NAME = "CTDT";
+    public static final class ChuongTrinhDaoTaoEntry implements BaseColumns {
+        public static final String TABLE_NAME = "chuongtrinhdaotao";
 
         public static final String COLUMN_MA_BO_MON = "mabm";
         public static final String COLUMN_MA_MON_HOC = "mamh";
         public static final String COLUMN_HOC_KY = "hocky";
+        public static final String COLUMN_CHUYEN_NGANH = "chuyennganh";
     }
 
     public static final class ChuyenSauEntry implements BaseColumns {

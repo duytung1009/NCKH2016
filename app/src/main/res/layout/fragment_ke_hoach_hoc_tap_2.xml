@@ -5,10 +5,24 @@
     android:background="?android:colorBackground"
     tools:context=".KeHoachHocTap2Fragment">
 
-    <ListView
-        android:id="@+id/list_view_chonmonhoc"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <ListView
+            android:id="@+id/list_view_chonmonhoc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnThemMonHoc">
+        </ListView>
+
+        <Button
+            android:id="@+id/btnThemMonHoc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/btn_themmonhoc"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
 </FrameLayout>

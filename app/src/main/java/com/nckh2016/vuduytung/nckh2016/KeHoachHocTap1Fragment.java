@@ -69,8 +69,7 @@ public class KeHoachHocTap1Fragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(hocKyAdapter.getItem(position).getHocKy() != 0){
-                    //start new intent...
-                    ((KeHoachHocTapActivity)getActivity()).loadFragment2(hocKyAdapter.getItem(position));
+                    ((KeHoachHocTapActivity) getActivity()).loadFragment2(hocKyAdapter.getItem(position));
                 }
             }
         });

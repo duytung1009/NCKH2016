@@ -52,7 +52,7 @@ public class TaoTaiKhoan2Fragment extends Fragment {
                 } catch (IOException e) {
                     Log.e("tag", e.getMessage());
                 }
-                ArrayList<Object> mArrayList = data.getCTDT("801", parent.getSelectedItem().toString());
+                ArrayList<Object> mArrayList = data.getChuongTrinhDaoTao("801", Integer.parseInt(mSpinnerNamHoc.getSelectedItem().toString()), Integer.parseInt(parent.getSelectedItem().toString()), 0);
                 AdapterMonHoc monHocAdapter = new AdapterMonHoc(getActivity(), 0, mArrayList);
                 mListHocKy.setAdapter(monHocAdapter);
             }

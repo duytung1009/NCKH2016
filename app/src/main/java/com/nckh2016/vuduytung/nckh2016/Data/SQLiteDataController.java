@@ -9,11 +9,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.CTDTEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuongTrinhDaoTaoEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.MonHocEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.KhoaEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.NganhEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserDataEntry;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -234,15 +235,24 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
-    public ArrayList<Object> getCTDT(String mabm, String hocky){
+    public ArrayList<Object> getChuongTrinhDaoTao(String mabm, int namHoc, int hocKy, int chuyenSau){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT * FROM " + CTDTEntry.TABLE_NAME + " WHERE " + CTDTEntry.COLUMN_MA_BO_MON + " = " + mabm + " and " + CTDTEntry.COLUMN_HOC_KY + " = " + hocky, null);
-            if(mCursor != null) {
-                while(mCursor.moveToNext()){
-                    result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(CTDTEntry.COLUMN_MA_MON_HOC))).get(0));
+            if(hocKy == 0){
+                mCursor = database.rawQuery("SELECT * FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME + " WHERE " + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + mabm + " and " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " in (" + ((namHoc*2)-1) + " , " + (namHoc*2) + ") and " + ChuongTrinhDaoTaoEntry.COLUMN_CHUYEN_NGANH + " = " + chuyenSau, null);
+                if(mCursor != null) {
+                    while(mCursor.moveToNext()){
+                        result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC))).get(0));
+                    }
+                }
+            } else{
+                mCursor = database.rawQuery("SELECT * FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME + " WHERE " + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + mabm + " and " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " = " + hocKy  + " and " + ChuongTrinhDaoTaoEntry.COLUMN_CHUYEN_NGANH + " = " + chuyenSau, null);
+                if(mCursor != null) {
+                    while(mCursor.moveToNext()){
+                        result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC))).get(0));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -252,6 +262,33 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             close();
         }
         return result;
+    }
+
+    public ArrayList<Object> getMonHocChuaQua(String maSinhVien, ArrayList<Object> danhSachMonHoc){
+        ArrayList<Object> monHocChuaQua = new ArrayList<Object>();
+        for (Object value:danhSachMonHoc) {
+            if(checkMonHocChuaQua(maSinhVien, ((ObjectMonHoc)value).getMamh())){
+                monHocChuaQua.add(value);
+            }
+        }
+        return monHocChuaQua;
+    }
+    public boolean checkMonHocChuaQua(String maSinhVien, String maMonHoc){
+        boolean flag = false;
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + maSinhVien + " and " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc + " and " + UserDataEntry.COLUMN_DIEM_SO + " >= 4", null);
+            if(mCursor != null) {
+                flag = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return flag;
     }
 
     public ArrayList<Object> getKhoa(){

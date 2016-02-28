@@ -1,5 +1,6 @@
 package com.nckh2016.vuduytung.nckh2016;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements FragmentDangKy.OnFragmentInteractionListener, FragmentNguoiDung.OnFragmentInteractionListener, FragmentNienGiam.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener{
+        implements FragmentQuaTrinhHocTap.OnFragmentInteractionListener, FragmentNguoiDung.OnFragmentInteractionListener, FragmentNienGiam.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener{
 
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
@@ -51,14 +52,25 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("tab 2"));
-        tabLayout.addTab(tabLayout.newTab().setText("tab 3"));
+        /*tabLayout.addTab(tabLayout.newTab().setText("chức năng"));
+        tabLayout.addTab(tabLayout.newTab().setText("hồ sơ"));
+        tabLayout.addTab(tabLayout.newTab().setText("niên giám"));*/
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
+        // Restore preferences
+        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        if((currentUserData.getString("user_mssv", null) == null) || (currentUserData.getString("user_mssv", null).isEmpty())){
+            //form dang ky
+            tabLayout.addTab(tabLayout.newTab().setText("niên giám"));
+        } else{
+            current_user = currentUserData.getString("user_mssv", null);
+            tabLayout.addTab(tabLayout.newTab().setText("chức năng"));
+            tabLayout.addTab(tabLayout.newTab().setText("hồ sơ"));
+            tabLayout.addTab(tabLayout.newTab().setText("niên giám"));
+        }
+
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final TabsPagerAdapter adapter = new TabsPagerAdapter
-                (getSupportFragmentManager(), tabLayout.getTabCount());
+        final TabsPagerAdapter adapter = new TabsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -76,13 +88,6 @@ public class MainActivity extends AppCompatActivity
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        // Restore preferences
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if(currentUserData == null){
-            //form dang ky
-        } else{
-            current_user = currentUserData.getString("user_mssv", null);
-        }
     }
 
     @Override
@@ -194,4 +199,11 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == 1){
+            recreate();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

@@ -21,6 +21,11 @@
     <string name="btn_kehoachhoctap">kế hoạch học tập</string>
     <string name="btn_themmonhoc">thêm môn học</string>
 
+    <string name="btn_1_fragment_niengiam">chương trình đào tạo</string>
+    <string name="btn_2_fragment_niengiam">bộ môn chủ quản</string>
+    <string name="btn_3_fragment_niengiam">test</string>
+    <string name="btn_4_fragment_niengiam">test</string>
+
     <string name="test">test</string>
 
     <string name="title_activity_tao_tai_khoan">TaoTaiKhoanActivity</string>

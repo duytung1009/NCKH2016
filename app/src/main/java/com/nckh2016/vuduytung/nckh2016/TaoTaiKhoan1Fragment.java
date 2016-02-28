@@ -1,6 +1,7 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -27,6 +28,7 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class TaoTaiKhoan1Fragment extends Fragment {
+    public static final String PREFS_NAME = "current_user";
     ArrayList<Object> mListKhoa, mListNganh;
     Spinner mSpinnerKhoa, mSpinnerNganh, mSpinnerNamHoc, mSpinnerHocKy;
 
@@ -136,7 +138,14 @@ public class TaoTaiKhoan1Fragment extends Fragment {
                         if(flag == -1){
                             Toast.makeText(getContext(), "insert failed", Toast.LENGTH_SHORT).show();
                         } else {
-                            ((TaoTaiKhoanActivity)getActivity()).loadFragment2();
+                            //((TaoTaiKhoanActivity)getActivity()).loadFragment2();
+                            SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, getContext().MODE_PRIVATE);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putString("user_mssv", masv);
+                            editor.putString("user_name", hoten);
+                            editor.commit();
+                            getActivity().setResult(1);
+                            ((TaoTaiKhoanActivity)getActivity()).finish();
                         }
                     }
                 }

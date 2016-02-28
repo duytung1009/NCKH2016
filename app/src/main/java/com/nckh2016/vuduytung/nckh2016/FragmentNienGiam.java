@@ -5,19 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
-import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectMonHoc;
-import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
-
-import java.io.IOException;
-import java.util.ArrayList;
+import android.widget.Button;
 
 
 /**
@@ -37,8 +28,6 @@ public class FragmentNienGiam extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    ArrayList<Object> mArrayList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -78,29 +67,14 @@ public class FragmentNienGiam extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_nien_giam, container, false);
-        SQLiteDataController data = new SQLiteDataController(getContext());
-        try{
-            data.isCreatedDatabase();
-        }
-        catch (IOException e){
-            Log.e("tag", e.getMessage());
-        }
-        mArrayList = data.getMonHoc();
-        AdapterMonHoc monHocAdapter = new AdapterMonHoc(getActivity(), 0, mArrayList);
-        /*Cursor mCursor = data.getAllMonHoc();
-        AdapterMonHoc monHocAdapter = new MonHocAdapter(getActivity(), mCursor, 0);*/
-        ListView listView = (ListView) view.findViewById(R.id.list_view_niemgiam);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Button btndangky = (Button)view.findViewById(R.id.btnDangKy);
+        btndangky.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), ChiTietMonHocActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("mamh", ((ObjectMonHoc)mArrayList.get(position)).getMamh());
-                intent.putExtra("MaMonHoc", bundle);
-                startActivity(intent);
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TaoTaiKhoanActivity.class);
+                startActivityForResult(intent, 1);
             }
         });
-        listView.setAdapter(monHocAdapter);
         return view;
     }
 

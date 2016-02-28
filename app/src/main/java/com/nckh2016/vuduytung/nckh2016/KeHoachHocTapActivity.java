@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
 
+import java.util.ArrayList;
+
 public class KeHoachHocTapActivity extends AppCompatActivity {
     ObjectHocKy selectedHocKy;
 
@@ -32,6 +34,18 @@ public class KeHoachHocTapActivity extends AppCompatActivity {
         frag2.setArguments(bundle);
         ft.addToBackStack(tag);
         ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag2, tag);
+        ft.commit();
+    }
+
+    public void loadFragment3(ArrayList<String> selectedMonHoc){
+        String tag = "frag3";
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("mamonhoc", selectedMonHoc);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment frag3 = new KeHoachHocTap3Fragment();
+        frag3.setArguments(bundle);
+        ft.addToBackStack(tag);
+        ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag3, tag);
         ft.commit();
     }
 }

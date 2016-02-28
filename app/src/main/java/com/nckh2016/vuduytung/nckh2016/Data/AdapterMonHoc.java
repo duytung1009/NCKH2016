@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class AdapterMonHoc extends ArrayAdapter<Object> {
     private Context context;
     private ArrayList<Object> objects;
+    TextView txMaMonHoc, txTenMonHoc, txSoTinChi;
 
     public AdapterMonHoc(Context context, int resource, ArrayList<Object> objects) {
         super(context, resource, objects);
@@ -31,10 +32,10 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
         final Object mObject = objects.get(position);
         if(mObject != null){
             ObjectMonHoc mMonHoc = (ObjectMonHoc) mObject;
-            view = LayoutInflater.from(context).inflate(R.layout.list_item_monhoc, parent, false);
-            TextView txMaMonHoc = (TextView) view.findViewById(R.id.txMaMonHoc);
-            TextView txTenMonHoc = (TextView) view.findViewById(R.id.txTenMonHoc);
-            TextView txSoTinChi = (TextView) view.findViewById(R.id.txSoTinChi);
+            view = LayoutInflater.from(context).inflate(R.layout.item_monhoc, parent, false);
+            txMaMonHoc = (TextView) view.findViewById(R.id.txMaMonHoc);
+            txTenMonHoc = (TextView) view.findViewById(R.id.txTenMonHoc);
+            txSoTinChi = (TextView) view.findViewById(R.id.txSoTinChi);
             txMaMonHoc.setText(mMonHoc.getMamh());
             txTenMonHoc.setText(mMonHoc.getTenmh());
             txSoTinChi.setText(mMonHoc.getTinchi());

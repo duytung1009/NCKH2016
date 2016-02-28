@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_toRightOf="@+id/imageView"
-        android:layout_toLeftOf="@+id/checkBox">
+        android:layout_toLeftOf="@+id/edNhapDiem">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,10 +66,12 @@
         </LinearLayout>
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/checkBox"
+    <EditText
+        android:id="@+id/edNhapDiem"
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:gravity="center" />
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:singleLine="true"/>
 </RelativeLayout>

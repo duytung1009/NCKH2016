@@ -55,7 +55,12 @@ public class KeHoachHocTap1Fragment extends Fragment {
         hocKyAdapter = new AdapterHocKy(getContext());
         for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
             hocKyAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
-            if(i+1 != Integer.parseInt(cUser.getNamhoc())){
+            //add 2 hoc ky
+            for(int j=0; j<Integer.parseInt(cUser.getKyhoc()); j++){
+                hocKyAdapter.addItem(new ObjectHocKy(i+1, j+1, cUser.getManganh()));
+            }
+            //add 4 hoc ky
+            /*if(i+1 != Integer.parseInt(cUser.getNamhoc())){
                 for(int j=0; j<4; j++){
                     hocKyAdapter.addItem(new ObjectHocKy(i+1, j+1, cUser.getManganh()));
                 }
@@ -63,7 +68,7 @@ public class KeHoachHocTap1Fragment extends Fragment {
                 for(int j=0; j<Integer.parseInt(cUser.getKyhoc()); j++){
                     hocKyAdapter.addItem(new ObjectHocKy(i+1, j+1, cUser.getManganh()));
                 }
-            }
+            }*/
         }
         listViewHocTap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

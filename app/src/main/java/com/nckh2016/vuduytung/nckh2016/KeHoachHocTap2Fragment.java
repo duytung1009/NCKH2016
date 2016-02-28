@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc2;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
@@ -26,8 +28,12 @@ import java.util.ArrayList;
 public class KeHoachHocTap2Fragment extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
+    public boolean checkAll = false;
     ObjectHocKy selectedHocKy;
+    AdapterMonHoc2 monHocAdapter;
     ListView mListHocKy;
+    Button btnThemMonHoc;
+    CheckBox selectAllCheckBox;
 
     public KeHoachHocTap2Fragment() {
         // Required empty public constructor
@@ -48,13 +54,14 @@ public class KeHoachHocTap2Fragment extends Fragment {
         }
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
         mListHocKy = (ListView)view.findViewById(R.id.list_view_chonmonhoc);
+        btnThemMonHoc = (Button)view.findViewById(R.id.btnThemMonHoc);
+        selectAllCheckBox = (CheckBox)view.findViewById(R.id.selectAllCheckBox);
         SQLiteDataController data = new SQLiteDataController(getContext());
         try {
             data.isCreatedDatabase();
         } catch (IOException e) {
             Log.e("tag", e.getMessage());
         }
-        Toast.makeText(getContext(), (selectedHocKy.getNamHoc() + " - " + (selectedHocKy.getHocKy())), Toast.LENGTH_SHORT).show();
         int maHocKy = 0, chuyenSau = 0;
         switch(selectedHocKy.getNamHoc()){
             case 1:
@@ -125,8 +132,27 @@ public class KeHoachHocTap2Fragment extends Fragment {
         }
         ArrayList<Object> mArrayList = data.getChuongTrinhDaoTao(selectedHocKy.getNganh(), selectedHocKy.getNamHoc(), maHocKy, chuyenSau);
         ArrayList<Object> mMonHocChuaQua = data.getMonHocChuaQua(current_user, mArrayList);
-        AdapterMonHoc2 monHocAdapter = new AdapterMonHoc2(getActivity(), 0, mMonHocChuaQua);
+        monHocAdapter = new AdapterMonHoc2(this, 0, mMonHocChuaQua);
+        selectAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    checkAll = true;
+                    monHocAdapter.notifyDataSetChanged();
+                } else {
+                    checkAll = false;
+                    monHocAdapter.notifyDataSetChanged();
+                }
+            }
+        });
         mListHocKy.setAdapter(monHocAdapter);
+        btnThemMonHoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<String> selectedMonHoc = monHocAdapter.getSelectedMonHoc();
+                ((KeHoachHocTapActivity) getActivity()).loadFragment3(selectedMonHoc);
+            }
+        });
         return view;
     }
 }

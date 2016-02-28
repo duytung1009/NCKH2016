@@ -234,6 +234,42 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result;
     }
+    public ArrayList<Object> getMonHoc(ArrayList<String> maMonHoc){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            StringBuilder ids = new StringBuilder();
+            ids.append("(");
+            for(int i = 0; i < maMonHoc.size(); i++) {
+                ids.append(String.valueOf(maMonHoc.get(i)));
+                if (i < maMonHoc.size() - 1) {
+                    ids.append(",");
+                }
+            }
+            ids.append(")");
+            mCursor = database.rawQuery("SELECT * FROM " + MonHocEntry.TABLE_NAME + " WHERE " + MonHocEntry.COLUMN_MA_MON_HOC + " in " + ids.toString(), null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectMonHoc(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TEN_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
 
     public ArrayList<Object> getChuongTrinhDaoTao(String mabm, int namHoc, int hocKy, int chuyenSau){
         ArrayList<Object> result = new ArrayList<Object>();

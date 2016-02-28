@@ -17,19 +17,40 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-
-        switch (position) {
-            case 0:
-                FragmentNguoiDung tab1 = new FragmentNguoiDung();
-                return tab1;
+        switch (mNumOfTabs){
             case 1:
-                FragmentDangKy tab2 = new FragmentDangKy();
-                return tab2;
-            case 2:
-                FragmentNienGiam tab3 = new FragmentNienGiam();
-                return tab3;
+                FragmentNienGiam tab = new FragmentNienGiam();
+                return tab;
+            case 3:
+                switch (position) {
+                    case 0:
+                        FragmentNguoiDung tab1 = new FragmentNguoiDung();
+                        return tab1;
+                    case 1:
+                        FragmentQuaTrinhHocTap tab2 = new FragmentQuaTrinhHocTap();
+                        return tab2;
+                    case 2:
+                        FragmentNienGiam tab3 = new FragmentNienGiam();
+                        return tab3;
+                    default:
+                        return null;
+                }
             default:
                 return null;
+        }
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        switch (object.getClass().getSimpleName()){
+            case "FragmentNguoiDung":
+                return 0;
+            case "FragmentQuaTrinhHocTap":
+                return 1;
+            case "FragmentNienGiam":
+                return 2;
+            default:
+                return super.getItemPosition(object);
         }
     }
 

@@ -46,7 +46,7 @@ public class TaoTaiKhoan1Fragment extends Fragment {
 
         ArrayAdapter<String> mNamHocAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, new String[] {"1","2","3","4","5"});
         mSpinnerNamHoc.setAdapter(mNamHocAdapter);
-        ArrayAdapter<String> mHocKyAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, new String[] {"1","2","3","4"});
+        ArrayAdapter<String> mHocKyAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, new String[] {"1","2"});
         mSpinnerHocKy.setAdapter(mHocKyAdapter);
 
         SQLiteDataController data = new SQLiteDataController(getContext());

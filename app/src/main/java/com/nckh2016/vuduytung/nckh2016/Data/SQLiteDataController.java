@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Tung on 20/2/2016.
@@ -167,6 +168,29 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try{
             openDataBase();
             flag = database.insert(TB_USER, null, values);
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            close();
+            return flag;
+        }
+    }
+    public boolean insertUserData(ArrayList<ObjectUserData> values){
+        boolean flag = true;
+        try{
+            openDataBase();
+            for(ObjectUserData value : values){
+                ContentValues userData = new ContentValues();
+                userData.put(UserDataEntry.COLUMN_MA_SV, value.getMasv());
+                userData.put(UserDataEntry.COLUMN_MA_MON_HOC, value.getMamonhoc());
+                userData.put(UserDataEntry.COLUMN_HOC_KY, value.getHocky());
+                userData.put(UserDataEntry.COLUMN_NAM_THU, value.getNamthu());
+                userData.put(UserDataEntry.COLUMN_DIEM_SO, value.getDiemso());
+                long num = database.insert(TB_USERDATA, null, userData);
+                if (num == -1) {
+                    flag = false;
+                }
+            }
         } catch (Exception e){
             e.printStackTrace();
         } finally {

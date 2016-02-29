@@ -37,10 +37,13 @@ public class KeHoachHocTapActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    public void loadFragment3(ArrayList<String> selectedMonHoc){
+    public void loadFragment3(ObjectHocKy hocKy, ArrayList<String> selectedMonHoc){
         String tag = "frag3";
         Bundle bundle = new Bundle();
         bundle.putStringArrayList("mamonhoc", selectedMonHoc);
+        bundle.putString("nganh", hocKy.getNganh());
+        bundle.putInt("namhoc", hocKy.getNamHoc());
+        bundle.putInt("hocky", hocKy.getHocKy());
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment frag3 = new KeHoachHocTap3Fragment();
         frag3.setArguments(bundle);

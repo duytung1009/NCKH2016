@@ -47,11 +47,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ke_hoach_hoc_tap_2, container, false);
         // Restore preferences
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        if(currentUserData == null){
-            //form dang ky
-        } else{
-            current_user = currentUserData.getString("user_mssv", null);
-        }
+        current_user = currentUserData.getString("user_mssv", null);
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
         mListHocKy = (ListView)view.findViewById(R.id.list_view_chonmonhoc);
         btnThemMonHoc = (Button)view.findViewById(R.id.btnThemMonHoc);
@@ -150,7 +146,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ArrayList<String> selectedMonHoc = monHocAdapter.getSelectedMonHoc();
-                ((KeHoachHocTapActivity) getActivity()).loadFragment3(selectedMonHoc);
+                ((KeHoachHocTapActivity) getActivity()).loadFragment3(selectedHocKy, selectedMonHoc);
             }
         });
         return view;

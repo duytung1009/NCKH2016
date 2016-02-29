@@ -8,9 +8,8 @@
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="title_activity_dang_ky">Đăng ký</string>
 
-    <string name="btndangky">đăng ký</string>
+    <string name="btndangky">thêm hồ sơ</string>
     <string name="editmasv">mã sinh viên</string>
     <string name="edithoten">họ và tên</string>
     <string name="editemail">email</string>
@@ -20,6 +19,7 @@
     <string name="btn_thongtincanhan">thông tin cá nhân</string>
     <string name="btn_kehoachhoctap">kế hoạch học tập</string>
     <string name="btn_themmonhoc">thêm môn học</string>
+    <string name="btn_luumonhoc">lưu môn học</string>
 
     <string name="btn_1_fragment_niengiam">chương trình đào tạo</string>
     <string name="btn_2_fragment_niengiam">bộ môn chủ quản</string>
@@ -28,6 +28,8 @@
 
     <string name="test">test</string>
 
+    <string name="title_activity_search_result">SearchResultActivity</string>
+    <string name="title_activity_dang_ky">Đăng ký</string>
     <string name="title_activity_tao_tai_khoan">TaoTaiKhoanActivity</string>
     <string name="title_activity_ke_hoach_hoc_tap">KeHoachHocTapActivity</string>
     <string name="title_activity_chi_tiet_mon_hoc">ChiTietMonHocActivity</string>

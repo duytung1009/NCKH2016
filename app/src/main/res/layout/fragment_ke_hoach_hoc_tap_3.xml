@@ -5,9 +5,24 @@
     android:background="?android:colorBackground"
     tools:context="com.nckh2016.vuduytung.nckh2016.KeHoachHocTap3Fragment">
 
-    <ListView
-        android:id="@+id/list_view_monhoc_nhapdiem"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent">
 
+        <ListView
+            android:id="@+id/list_view_monhoc_nhapdiem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnLuuMonHoc"></ListView>
+
+        <Button
+            android:id="@+id/btnLuuMonHoc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="20dp"
+            android:text="@string/btn_luumonhoc"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
 </FrameLayout>

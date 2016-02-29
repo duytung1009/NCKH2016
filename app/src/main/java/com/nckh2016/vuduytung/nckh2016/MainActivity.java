@@ -1,5 +1,7 @@
 package com.nckh2016.vuduytung.nckh2016;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -111,8 +113,26 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Tìm kiếm");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent = new Intent(getBaseContext(), SearchResultActivity.class);
+                intent.putExtra("query", query);
+                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         SQLiteDataController data = new SQLiteDataController(this);
         try{
             data.isCreatedDatabase();
@@ -128,13 +148,13 @@ public class MainActivity extends AppCompatActivity
                 mListTenUser.add(value != null ? value.getHoten() : null);
             }
             ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, mListTenUser);
-            Spinner spinnerNguoiDung = (Spinner)findViewById(R.id.spinnerNguoiDung);
+            Spinner spinnerNguoiDung = (Spinner) findViewById(R.id.spinnerNguoiDung);
             spinnerNguoiDung.setAdapter(mAdapter);
-            if(current_user!=null){
+            if (current_user != null) {
                 int index = 0;
                 for (Object object : mListUser) {
                     ObjectUser value = (ObjectUser) object;
-                    if(value.getMasv().equals(current_user)){
+                    if (value.getMasv().equals(current_user)){
                         index = mListUser.indexOf(value);
                     }
                 }

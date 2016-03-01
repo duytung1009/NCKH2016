@@ -10,11 +10,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuongTrinhDaoTaoEntry;
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.MonHocEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.KhoaEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.MonHocEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.NganhEntry;
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserDataEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Tung on 20/2/2016.
@@ -167,7 +166,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         long flag = -1;
         try{
             openDataBase();
-            flag = database.insert(TB_USER, null, values);
+            flag = database.insert(UserEntry.TABLE_NAME, null, values);
         } catch (Exception e){
             e.printStackTrace();
         } finally {
@@ -177,6 +176,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
     public boolean insertUserData(ArrayList<ObjectUserData> values){
         boolean flag = true;
+        Cursor mCursor = null;
         try{
             openDataBase();
             for(ObjectUserData value : values){
@@ -186,7 +186,13 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 userData.put(UserDataEntry.COLUMN_HOC_KY, value.getHocky());
                 userData.put(UserDataEntry.COLUMN_NAM_THU, value.getNamthu());
                 userData.put(UserDataEntry.COLUMN_DIEM_SO, value.getDiemso());
-                long num = database.insert(TB_USERDATA, null, userData);
+                long num = -1;
+                mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + value.getMasv() + " AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + value.getMamonhoc(), null);
+                if(mCursor.moveToFirst()) {
+                    num = database.update(UserDataEntry.TABLE_NAME, userData, UserDataEntry.COLUMN_MA_SV + " = ? AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = ?", new String[]{value.getMasv(), value.getMamonhoc()});
+                } else{
+                    num = database.insert(UserDataEntry.TABLE_NAME, null, userData);
+                }
                 if (num == -1) {
                     flag = false;
                 }
@@ -194,9 +200,67 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e){
             e.printStackTrace();
         } finally {
+            mCursor.close();
             close();
             return flag;
         }
+    }
+    public Double tongDiem(String masv){
+        double tongDiem = 0;
+        double tongTinChi = 0;
+        double diemSo = 0;
+        int tinChi = 0;
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME + " WHERE " + UserEntry.COLUMN_MA_SV + " = " + masv, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    diemSo = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
+                    tinChi = Integer.parseInt(((ObjectMonHoc) (getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))).get(0))).getTinchi());
+                    tongDiem += (diemSo * tinChi);
+                    tongTinChi += tinChi;
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return (tongDiem / tongTinChi)/10*4;
+    }
+    public int[] soTinChi(String masv){
+        int[] soTinChi = {0,0,0,0,0};
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME + " WHERE " + UserEntry.COLUMN_MA_SV + " = " + masv, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    double diem = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
+                    int tinChi = Integer.parseInt(((ObjectMonHoc) (getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))).get(0))).getTinchi());
+                    if(diem < 4){
+                        soTinChi[0] += tinChi;
+                    } else if(diem < 5.5){
+                        soTinChi[1] += tinChi;
+                    } else if(diem < 7){
+                        soTinChi[2] += tinChi;
+                    } else if(diem < 8.5){
+                        soTinChi[3] += tinChi;
+                    } else {
+                        soTinChi[4] += tinChi;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return soTinChi;
     }
 
     /**
@@ -327,7 +391,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     public ArrayList<Object> getMonHocChuaQua(String maSinhVien, ArrayList<Object> danhSachMonHoc){
         ArrayList<Object> monHocChuaQua = new ArrayList<Object>();
         for (Object value:danhSachMonHoc) {
-            if(checkMonHocChuaQua(maSinhVien, ((ObjectMonHoc)value).getMamh())){
+            if(!checkMonHocChuaQua(maSinhVien, ((ObjectMonHoc)value).getMamh())){
                 monHocChuaQua.add(value);
             }
         }
@@ -339,7 +403,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try{
             openDataBase();
             mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + maSinhVien + " and " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc + " and " + UserDataEntry.COLUMN_DIEM_SO + " >= 4", null);
-            if(mCursor != null) {
+            if(mCursor.moveToFirst()) {
                 flag = true;
             }
         } catch (Exception e) {

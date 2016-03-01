@@ -53,6 +53,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        loadTabs();
+    }
+
+    public void loadTabs(){
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
         /*tabLayout.addTab(tabLayout.newTab().setText("chức năng"));
         tabLayout.addTab(tabLayout.newTab().setText("hồ sơ"));
@@ -166,7 +170,7 @@ public class MainActivity extends AppCompatActivity
                     SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putString("user_mssv", ((ObjectUser)mListUser.get(position)).getMasv());
-                    editor.putString("user_name", ((ObjectUser)mListUser.get(position)).getHoten());
+                    editor.putString("user_name", ((ObjectUser) mListUser.get(position)).getHoten());
                     editor.commit();
                 }
 

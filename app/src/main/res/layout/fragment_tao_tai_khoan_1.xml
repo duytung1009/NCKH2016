@@ -2,125 +2,131 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TaoTaiKhoan1Fragment"
->
+    android:background="?android:colorBackground"
+    tools:context=".TaoTaiKhoan1Fragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/editMaSinhVien"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:singleLine="true"
-            android:inputType="number"
-            android:imeOptions="actionDone"
-            android:hint="@string/editmasv"/>
-
-        <EditText
-            android:id="@+id/editHoTen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:singleLine="true"
-            android:imeOptions="actionDone"
-            android:hint="@string/edithoten"/>
-
-        <EditText
-            android:id="@+id/editEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:singleLine="true"
-            android:imeOptions="actionDone"
-            android:hint="@string/editemail"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Khoa"/>
-
-        <Spinner
-            android:id="@+id/spinnerKhoa"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp">
-        </Spinner>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Ngành"/>
-
-        <Spinner
-            android:id="@+id/spinnerNganh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp">
-        </Spinner>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/editMaSinhVien"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:singleLine="true"
+                android:inputType="number"
+                android:imeOptions="actionDone"
+                android:hint="@string/editmasv"/>
+
+            <EditText
+                android:id="@+id/editHoTen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                android:hint="@string/edithoten"/>
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                android:hint="@string/editemail"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Khoa"/>
+
+            <Spinner
+                android:id="@+id/spinnerKhoa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+            </Spinner>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Ngành"/>
+
+            <Spinner
+                android:id="@+id/spinnerNganh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+            </Spinner>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:layout_weight="1">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="Năm thứ"/>
-                <Spinner
-                    android:id="@+id/spinnerNamHoc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
                     android:layout_weight="1">
-                </Spinner>
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="Năm thứ"/>
+                    <Spinner
+                        android:id="@+id/spinnerNamHoc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+                    </Spinner>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:layout_weight="1">
+                </LinearLayout>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="Học kỳ"/>
-                <Spinner
-                    android:id="@+id/spinnerHocKy"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
                     android:layout_weight="1">
-                </Spinner>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="Học kỳ"/>
+                    <Spinner
+                        android:id="@+id/spinnerHocKy"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+                    </Spinner>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-    <Button
-        android:id="@+id/btnDangKy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_gravity="bottom"
-        android:text="@string/btndangky"
-        android:textColor="@android:color/white" />
+        <Button
+            android:id="@+id/btnDangKy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_alignParentBottom="true"
+            android:text="@string/btndangky"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
 
 </FrameLayout>

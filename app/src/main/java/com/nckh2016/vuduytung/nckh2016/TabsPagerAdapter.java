@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
  * Created by Tung on 19/2/2016.
  */
 public class TabsPagerAdapter extends FragmentStatePagerAdapter {
+    FragmentNguoiDung tab1;
+    FragmentQuaTrinhHocTap tab2;
+    FragmentNienGiam tab3;
     int mNumOfTabs;
 
     public TabsPagerAdapter(FragmentManager fm, int NumOfTabs) {
@@ -19,18 +22,26 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (mNumOfTabs){
             case 1:
-                FragmentNienGiam tab = new FragmentNienGiam();
-                return tab;
+                if(tab3 == null){
+                    tab3 = new FragmentNienGiam();
+                }
+                return tab3;
             case 3:
                 switch (position) {
                     case 0:
-                        FragmentNguoiDung tab1 = new FragmentNguoiDung();
+                        if(tab1 == null){
+                            tab1 = FragmentNguoiDung.newInstance(null, null);
+                        }
                         return tab1;
                     case 1:
-                        FragmentQuaTrinhHocTap tab2 = new FragmentQuaTrinhHocTap();
+                        if(tab2 == null){
+                            tab2 = FragmentQuaTrinhHocTap.newInstance(null,null);
+                        }
                         return tab2;
                     case 2:
-                        FragmentNienGiam tab3 = new FragmentNienGiam();
+                        if(tab3 == null){
+                            tab3 = FragmentNienGiam.newInstance(null, null);
+                        }
                         return tab3;
                     default:
                         return null;
@@ -40,9 +51,8 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    @Override
-    public int getItemPosition(Object object) {
-        switch (object.getClass().getSimpleName()){
+    public int getTabPosition(String tabName){
+        switch (tabName) {
             case "FragmentNguoiDung":
                 return 0;
             case "FragmentQuaTrinhHocTap":
@@ -50,8 +60,13 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
             case "FragmentNienGiam":
                 return 2;
             default:
-                return super.getItemPosition(object);
+                return 0;
         }
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
     @Override

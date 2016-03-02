@@ -28,7 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/account_box_outline"
+                    android:src="@drawable/student"
                     />
                 <TextView
                     android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/account_box_outline"
+                    android:src="@drawable/report_card"
                     />
                 <TextView
                     android:layout_width="match_parent"

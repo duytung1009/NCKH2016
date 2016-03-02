@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 
 /**
@@ -67,12 +68,28 @@ public class FragmentNienGiam extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_nien_giam, container, false);
-        Button btndangky = (Button)view.findViewById(R.id.btnDangKy);
-        btndangky.setOnClickListener(new View.OnClickListener() {
+        Button btnDangKy = (Button)view.findViewById(R.id.btnDangKy);
+        btnDangKy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TaoTaiKhoanActivity.class);
                 startActivityForResult(intent, 1);
+            }
+        });
+        LinearLayout layout_1 = (LinearLayout)view.findViewById(R.id.layout_1);
+        layout_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NganhActivity.class);
+                startActivity(intent);
+            }
+        });
+        LinearLayout layout_2 = (LinearLayout)view.findViewById(R.id.layout_2);
+        layout_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), BoMonActivity.class);
+                startActivity(intent);
             }
         });
         return view;

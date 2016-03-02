@@ -64,6 +64,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
         </activity>
+        <activity
+            android:name=".BoMonActivity"
+            android:label="@string/title_activity_bo_mon"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
+        </activity>
+        <activity
+            android:name=".NganhActivity"
+            android:label="@string/title_activity_nganh"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

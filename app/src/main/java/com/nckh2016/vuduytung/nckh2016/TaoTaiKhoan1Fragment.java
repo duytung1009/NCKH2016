@@ -56,7 +56,7 @@ public class TaoTaiKhoan1Fragment extends Fragment {
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        mListKhoa = data.getKhoa();
+        mListKhoa = data.getKhoaCoNganh();
         List<String> mListTenKhoa = new ArrayList<String>();
         for (Object object : mListKhoa) {
             ObjectKhoa value = (ObjectKhoa) object;

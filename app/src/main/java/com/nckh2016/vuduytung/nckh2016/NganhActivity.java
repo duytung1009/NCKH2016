@@ -4,20 +4,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-public class TaoTaiKhoanActivity extends AppCompatActivity {
+public class NganhActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tao_tai_khoan);
+        setContentView(R.layout.activity_nganh);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        /*String tag = "frag1";
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment frag1 = new TaoTaiKhoan1Fragment();
-        ft.addToBackStack(tag);
-        ft.replace(R.id.fragment, frag1, tag);
-        ft.commit();*/
     }
+
 }

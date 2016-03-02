@@ -11,8 +11,9 @@ import android.util.Log;
 
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuongTrinhDaoTaoEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.KhoaEntry;
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.MonHocEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.NganhEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.BoMonEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.MonHocEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserDataEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
 
@@ -359,6 +360,34 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    public ArrayList<Object> getMonHocTheoBoMon(String maBoMon){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + MonHocEntry.TABLE_NAME + " WHERE " + MonHocEntry.COLUMN_MA_BO_MON + " = " + maBoMon, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectMonHoc(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TEN_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+
     public ArrayList<Object> getChuongTrinhDaoTao(String mabm, int namHoc, int hocKy, int chuyenSau){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -414,7 +443,49 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return flag;
     }
+    public float getDiem(String maSinhVien, String maMonHoc){
+        float diem = -1;
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + maSinhVien + " and " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    diem = mCursor.getFloat(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)) > diem ? mCursor.getFloat(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)) : diem;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return diem;
+    }
 
+    public ArrayList<Object> getKhoaCoNganh(){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + KhoaEntry.TABLE_NAME + " WHERE makhoa NOT IN (1,2,12,13,14)", null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectKhoa(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(KhoaEntry.COLUMN_MA_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(KhoaEntry.COLUMN_TEN_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(KhoaEntry.COLUMN_TRUONG_KHOA))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
     public ArrayList<Object> getKhoa(){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -451,6 +522,30 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_MA_NGANH)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_MA_KHOA)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_TEN_NGANH))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+
+    public ArrayList<Object> getBoMonTheoKhoa(String maKhoa){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + BoMonEntry.TABLE_NAME + " WHERE makhoa = " + maKhoa, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectBoMon(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(BoMonEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(BoMonEntry.COLUMN_MA_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(BoMonEntry.COLUMN_TEN_BO_MON))
                     ));
                 }
             }

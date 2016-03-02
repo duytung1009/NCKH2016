@@ -24,7 +24,7 @@
                 android:paddingLeft="10dp"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text="Danh sách môn học"/>
+                android:text="@string/txtdanhsachmonhoc"/>
 
             <CheckBox
                 android:id="@+id/selectAllCheckBox"

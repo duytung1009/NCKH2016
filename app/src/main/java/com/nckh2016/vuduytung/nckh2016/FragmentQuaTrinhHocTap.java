@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,8 +89,14 @@ public class FragmentQuaTrinhHocTap extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_qua_trinh_hoc_tap, container, false);
+        //get chart
+        mainChart = (PieChart)view.findViewById(R.id.mainChart);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
+        loadData();
+        return view;
+    }
+    public void loadData(){
         final SQLiteDataController data = new SQLiteDataController(getContext());
         try {
             data.isCreatedDatabase();
@@ -112,20 +119,23 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         dataSet.setDrawValues(false);   //hide value
         dataSet.setSliceSpace(3);
         dataSet.setSelectionShift(5);
-        dataSet.setColors(new int[] {Color.parseColor("#607D8B"), Color.parseColor("#FFC107"), Color.parseColor("#3F51B5"), Color.parseColor("#00BCD4"), Color.parseColor("#4CAF50")});
+        dataSet.setColors(new int[] {
+                ContextCompat.getColor(getContext(), R.color.diemF),
+                ContextCompat.getColor(getContext(), R.color.diemD),
+                ContextCompat.getColor(getContext(), R.color.diemC),
+                ContextCompat.getColor(getContext(), R.color.diemB),
+                ContextCompat.getColor(getContext(), R.color.diemA)});
         ArrayList<Integer> colors = new ArrayList<Integer>();
         //pie data object
         PieData chartData = new PieData(xVals, dataSet);
         chartData.setValueTextSize(12);
         chartData.setValueTextColor(Color.WHITE);
-        //get chart
-        mainChart = (PieChart)view.findViewById(R.id.mainChart);
         mainChart.setNoDataTextDescription("no data");
         mainChart.setDrawSliceText(false);  //hide title
         mainChart.setHoleColor(Color.TRANSPARENT);
         mainChart.setHoleRadius(60);
         mainChart.setTransparentCircleRadius(65);
-        mainChart.setCenterTextRadiusPercent(60);
+        //mainChart.setCenterTextRadiusPercent(60);
         mainChart.setDescription("Điểm số");
         mainChart.setDescriptionTypeface(light);
         mainChart.setDescriptionTextSize(20);
@@ -157,15 +167,26 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         Legend legend = mainChart.getLegend();
         legend.setForm(Legend.LegendForm.SQUARE);
         legend.setDirection(Legend.LegendDirection.RIGHT_TO_LEFT);
+        legend.setPosition(Legend.LegendPosition.BELOW_CHART_RIGHT);
         //set pie data and refresh
         mainChart.setData(chartData);
         mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
         mainChart.invalidate();
-        return view;
     }
-
-    public void loadAnimation(){
-        mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
+    public void reloadView(Context context){
+        SharedPreferences currentUserData = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String new_user = currentUserData.getString("user_mssv", null);
+        if(current_user!=null){
+            if(new_user.equals(current_user)){
+                mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
+            } else {
+                current_user = new_user;
+                loadData();
+            }
+        } else {
+            current_user = new_user;
+            loadData();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

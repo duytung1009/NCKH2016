@@ -10,6 +10,7 @@
     <!-- TODO: Remove or change this placeholder text -->
 
     <string name="btndangky">thêm hồ sơ</string>
+    <string name="btnxem">xem</string>
     <string name="editmasv">mã sinh viên</string>
     <string name="edithoten">họ và tên</string>
     <string name="editemail">email</string>
@@ -33,8 +34,15 @@
     <string name="title_activity_tao_tai_khoan">TaoTaiKhoanActivity</string>
     <string name="title_activity_ke_hoach_hoc_tap">KeHoachHocTapActivity</string>
     <string name="title_activity_chi_tiet_mon_hoc">ChiTietMonHocActivity</string>
+    <string name="title_activity_bo_mon">BoMonActivity</string>
+    <string name="title_activity_nganh">NganhActivity</string>
 
     <string name="khong">Chưa có thông tin mô tả</string>
+
+    <string name="txtKhoa">Khoa</string>
+    <string name="txtNganh">Ngành</string>
+    <string name="txtBoMon">Bộ môn</string>
+    <string name="txtdanhsachmonhoc">Danh sách môn học</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -3,38 +3,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:colorBackground"
-    tools:context=".KeHoachHocTap1Fragment">
+    tools:context=".BoMon2Fragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
+
+        <RelativeLayout
+            android:id="@+id/layoutTieuDe"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true">
+
             <TextView
-                style="@style/bigText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ngành "/>
-            <TextView
-                android:id="@+id/txtTenNganh"
                 style="@style/bigText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"/>
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="10dp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/txtdanhsachmonhoc"/>
+
+        </RelativeLayout>
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:background="#c0c0c0"/>
         <ListView
-            android:id="@+id/list_view_hoctap"
+            android:id="@+id/list_view_chonmonhoc"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
         </ListView>
+
     </LinearLayout>
 </FrameLayout>

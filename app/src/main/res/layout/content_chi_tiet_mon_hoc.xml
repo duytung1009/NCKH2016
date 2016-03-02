@@ -16,22 +16,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                style="@style/bigText"
-                android:id="@+id/txtTenMonHoc"
+            <LinearLayout
+                android:id="@+id/topLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:padding="10dp"
-                android:singleLine="false" />
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="10dp"
+                    android:src="@drawable/literature"/>
+                
+                <TextView
+                    style="@style/bigText"
+                    android:id="@+id/txtTenMonHoc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:layout_alignParentTop="true"
+                    android:paddingLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:singleLine="false" />
+            </LinearLayout>
             <View
                 android:id="@+id/line"
-                android:layout_below="@+id/txtTenMonHoc"
+                android:layout_below="@+id/topLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="#c0c0c0"/>
             <LinearLayout
-                android:id="@+id/topLayout"
+                android:id="@+id/topLayout2"
                 android:layout_below="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,7 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/topLayout"
+                android:layout_below="@+id/topLayout2"
                 android:layout_toLeftOf="@+id/rightLayout"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -148,7 +163,7 @@
                 android:id="@+id/rightLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/topLayout"
+                android:layout_below="@+id/topLayout2"
                 android:layout_alignParentRight="true"
                 android:orientation="vertical">
 

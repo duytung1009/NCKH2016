@@ -41,6 +41,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
     public String current_user = null;
     public PieChart mainChart;
     Typeface light = Typeface.create("sans-serif-light", Typeface.NORMAL);
+    int tongTinChi;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -107,6 +108,10 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         final Double tongDiem = data.tongDiem(current_user);
         int[] yData = data.soTinChi(current_user);
         final String[] xData = {"F","D","C","B","A"};
+        tongTinChi = 0;
+        for(int value : yData){
+            tongTinChi += value;
+        }
         ArrayList<Entry> yVals = new ArrayList<Entry>();
         for(int i=0; i<yData.length; i++){
             yVals.add(new Entry(yData[i], i));
@@ -143,7 +148,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         if(Double.isNaN(tongDiem)){
             mainChart.setCenterText("Chưa có dữ liệu");
         } else{
-            mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem));
+            mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem) + "\n" + tongTinChi + " tín chỉ");
         }
         mainChart.setCenterTextTypeface(light);
         mainChart.setCenterTextSize(24);
@@ -151,7 +156,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         mainChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-                mainChart.setCenterText("Điểm " + xData[e.getXIndex()] + "\n" + e.getVal() + " tín chỉ");
+                mainChart.setCenterText("Điểm " + xData[e.getXIndex()] + "\n" + new DecimalFormat("####0").format(e.getVal()) + " tín chỉ");
             }
 
             @Override
@@ -159,7 +164,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
                 if(Double.isNaN(tongDiem)){
                     mainChart.setCenterText("Chưa có dữ liệu");
                 } else{
-                    mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem));
+                    mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem) + "\n" + tongTinChi + " tín chỉ");
                 }
             }
         });

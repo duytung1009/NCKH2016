@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectMonHoc;
@@ -36,6 +37,7 @@ public class BoMon2Fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bo_mon_2, container, false);
         String maBoMon = getArguments().getString("MaBoMon");
+        String tenBoMon = getArguments().getString("TenBoMon");
         SQLiteDataController data = new SQLiteDataController(getContext());
         try{
             data.isCreatedDatabase();
@@ -50,12 +52,14 @@ public class BoMon2Fragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
-                intent.putExtra("MaMonHoc", ((ObjectMonHoc)mListMonHoc.get(position)).getMamh());
+                intent.putExtra("MaMonHoc", ((ObjectMonHoc) mListMonHoc.get(position)).getMamh());
                 intent.putExtra("caller", "BoMonActivity");
                 startActivity(intent);
             }
         });
         mMonHoc.setAdapter(mAdapter);
+        TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
+        txtTieuDe.setText(tenBoMon + " - " + mListMonHoc.size() + " môn học");
         return view;
     }
 

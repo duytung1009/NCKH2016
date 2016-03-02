@@ -80,7 +80,7 @@ public class BoMon1Fragment extends Fragment {
         btnXem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((BoMonActivity) getActivity()).loadFragment2(((ObjectBoMon)mListBoMon.get(mSpinnerBoMon.getSelectedItemPosition())).getMabomon());
+                ((BoMonActivity) getActivity()).loadFragment2(((ObjectBoMon)mListBoMon.get(mSpinnerBoMon.getSelectedItemPosition())).getMabomon(), ((ObjectBoMon)mListBoMon.get(mSpinnerBoMon.getSelectedItemPosition())).getTenbomon());
             }
         });
         return view;

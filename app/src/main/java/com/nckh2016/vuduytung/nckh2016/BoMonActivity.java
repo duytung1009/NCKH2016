@@ -17,10 +17,11 @@ public class BoMonActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public void loadFragment2(String maBoMon){
+    public void loadFragment2(String maBoMon, String tenBoMon){
         String tag = "fragment_bo_mon_2";
         Bundle bundle = new Bundle();
         bundle.putString("MaBoMon", maBoMon);
+        bundle.putString("TenBoMon", tenBoMon);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment frag2 = new BoMon2Fragment();
         frag2.setArguments(bundle);

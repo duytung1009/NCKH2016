@@ -24,6 +24,11 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
     private ArrayList<Object> objects;
     private ArrayList<String> selectedMonHoc = new ArrayList<String>();
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
+
     public AdapterMonHoc2(KeHoachHocTap2Fragment abc, int resource, ArrayList<Object> objects) {
         super(abc.getContext(), resource, objects);
         this.mainFragment = abc;
@@ -68,6 +73,10 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
         }
 
         return view;
+    }
+
+    public void removeAll(){
+        selectedMonHoc.clear();
     }
 
     public ArrayList<String> getSelectedMonHoc(){

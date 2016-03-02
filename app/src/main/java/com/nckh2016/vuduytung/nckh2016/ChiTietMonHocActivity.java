@@ -79,6 +79,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                     txtDiem.setPadding(40,0,60,0);
                     txtDiem.setTypeface(light);
                     txtDiem2 = (TextView) findViewById(R.id.txtDiem2);
+                    txtDiem2.setPadding(40,0,60,0);
                     txtDiem2.setText(new DecimalFormat("####0.00").format(diemSo));
                     if(diemSo < 4){
                         txtDiem.setText("F");

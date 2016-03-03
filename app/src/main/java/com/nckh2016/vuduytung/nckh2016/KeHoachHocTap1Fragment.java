@@ -53,22 +53,18 @@ public class KeHoachHocTap1Fragment extends Fragment {
         txtTenNganh.setText(data.getTenNganh(cUser.getManganh()));
         listViewHocTap = (ListView)view.findViewById(R.id.list_view_hoctap);
         hocKyAdapter = new AdapterHocKy(getContext());
-        for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
+        for(int i=0; i<Integer.parseInt(cUser.getNamhoc())- 1; i++){
+            //add nam hoc
             hocKyAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
-            //add 2 hoc ky
-            for(int j=0; j<Integer.parseInt(cUser.getKyhoc()); j++){
-                hocKyAdapter.addItem(new ObjectHocKy(i+1, j+1, cUser.getManganh()));
-            }
-            //add 4 hoc ky
-            /*if(i+1 != Integer.parseInt(cUser.getNamhoc())){
-                for(int j=0; j<4; j++){
-                    hocKyAdapter.addItem(new ObjectHocKy(i+1, j+1, cUser.getManganh()));
-                }
-            } else{
-                for(int j=0; j<Integer.parseInt(cUser.getKyhoc()); j++){
-                    hocKyAdapter.addItem(new ObjectHocKy(i+1, j+1, cUser.getManganh()));
-                }
-            }*/
+            //add hoc ky 1
+            hocKyAdapter.addItem(new ObjectHocKy(i+1, 1, cUser.getManganh()));
+            //add hoc ky 2
+            hocKyAdapter.addItem(new ObjectHocKy(i+1, 2, cUser.getManganh()));
+        }
+        //add nam cuoi cung
+        hocKyAdapter.addItem(new ObjectHocKy(Integer.parseInt(cUser.getNamhoc()), 0, cUser.getManganh()));
+        for(int j=0; j<Integer.parseInt(cUser.getKyhoc()); j++){
+            hocKyAdapter.addItem(new ObjectHocKy(Integer.parseInt(cUser.getNamhoc()), j+1, cUser.getManganh()));
         }
         listViewHocTap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

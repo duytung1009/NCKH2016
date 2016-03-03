@@ -3,7 +3,7 @@ package com.nckh2016.vuduytung.nckh2016.Data;
 /**
  * Created by Tung on 24/2/2016.
  */
-public class ObjectMonHoc {
+public class ObjectMonHoc implements Items{
     String mamh;
     String mabm;
     String tenmh;
@@ -11,8 +11,15 @@ public class ObjectMonHoc {
     String dieukien;
     String noidung;
     String tailieu;
+    String tuchon;
+    boolean isHocKy = false;
 
-    public ObjectMonHoc(String mamh, String mabm, String tenmh, String tinchi, String dieukien, String noidung, String tailieu){
+    @Override
+    public boolean isHocKy() {
+        return isHocKy;
+    }
+
+    public ObjectMonHoc(String mamh, String mabm, String tenmh, String tinchi, String dieukien, String noidung, String tailieu, String tuchon){
         this.mamh = mamh;
         this.mabm = mabm;
         this.tenmh = tenmh;
@@ -20,6 +27,7 @@ public class ObjectMonHoc {
         this.dieukien = dieukien;
         this.noidung = noidung;
         this.tailieu = tailieu;
+        this.tuchon = tuchon;
     }
 
     public String getMamh() {
@@ -76,5 +84,17 @@ public class ObjectMonHoc {
 
     public void setTailieu(String tailieu) {
         this.tailieu = tailieu;
+    }
+
+    public String getTuchon() {
+        return tuchon;
+    }
+
+    public void setTuchon(String tuchon) {
+        this.tuchon = tuchon;
+    }
+
+    public void setIsHocKy(boolean isHocKy) {
+        this.isHocKy = isHocKy;
     }
 }

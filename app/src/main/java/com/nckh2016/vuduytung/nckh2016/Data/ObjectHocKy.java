@@ -3,10 +3,15 @@ package com.nckh2016.vuduytung.nckh2016.Data;
 /**
  * Created by Tung on 26/2/2016.
  */
-public class ObjectHocKy {
+public class ObjectHocKy implements Items {
     int namHoc;
     int hocKy;
     String nganh;
+
+    @Override
+    public boolean isHocKy() {
+        return true;
+    }
 
     public ObjectHocKy(int namHoc, int hocKy, String nganh) {
         this.namHoc = namHoc;

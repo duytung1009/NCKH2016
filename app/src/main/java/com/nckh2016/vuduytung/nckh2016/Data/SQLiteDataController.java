@@ -9,11 +9,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.BoMonEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuongTrinhDaoTaoEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.KhoaEntry;
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.NganhEntry;
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.BoMonEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.MonHocEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.NganhEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuyenSauEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserDataEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
 
@@ -188,7 +189,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 userData.put(UserDataEntry.COLUMN_NAM_THU, value.getNamthu());
                 userData.put(UserDataEntry.COLUMN_DIEM_SO, value.getDiemso());
                 long num = -1;
-                mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + value.getMasv() + " AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + value.getMamonhoc(), null);
+                mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
+                        + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + value.getMasv()
+                        + " AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + value.getMamonhoc(), null);
                 if(mCursor.moveToFirst()) {
                     num = database.update(UserDataEntry.TABLE_NAME, userData, UserDataEntry.COLUMN_MA_SV + " = ? AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = ?", new String[]{value.getMasv(), value.getMamonhoc()});
                 } else{
@@ -214,7 +217,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME + " WHERE " + UserEntry.COLUMN_MA_SV + " = " + masv, null);
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
+                    + " WHERE " + UserEntry.COLUMN_MA_SV + " = " + masv, null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     diemSo = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
@@ -237,7 +241,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME + " WHERE " + UserEntry.COLUMN_MA_SV + " = " + masv, null);
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
+                    + " WHERE " + UserEntry.COLUMN_MA_SV + " = " + masv, null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     double diem = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
@@ -284,7 +289,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
-                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU))
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU)),
+                            null
                     ));
                 }
             }
@@ -301,7 +307,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT * FROM " + MonHocEntry.TABLE_NAME + " WHERE " + MonHocEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc, null);
+            mCursor = database.rawQuery("SELECT * FROM " + MonHocEntry.TABLE_NAME
+                    + " WHERE " + MonHocEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc, null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     result.add(new ObjectMonHoc(
@@ -311,7 +318,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
-                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU))
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU)),
+                            null
                     ));
                 }
             }
@@ -337,7 +345,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 }
             }
             ids.append(")");
-            mCursor = database.rawQuery("SELECT * FROM " + MonHocEntry.TABLE_NAME + " WHERE " + MonHocEntry.COLUMN_MA_MON_HOC + " in " + ids.toString(), null);
+            mCursor = database.rawQuery("SELECT * FROM " + MonHocEntry.TABLE_NAME
+                    + " WHERE " + MonHocEntry.COLUMN_MA_MON_HOC + " IN " + ids.toString(), null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     result.add(new ObjectMonHoc(
@@ -347,7 +356,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
-                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU))
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU)),
+                            null
                     ));
                 }
             }
@@ -365,7 +375,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT * FROM " + MonHocEntry.TABLE_NAME + " WHERE " + MonHocEntry.COLUMN_MA_BO_MON + " = " + maBoMon, null);
+            mCursor = database.rawQuery("SELECT * FROM " + MonHocEntry.TABLE_NAME
+                    + " WHERE " + MonHocEntry.COLUMN_MA_BO_MON + " = " + maBoMon, null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     result.add(new ObjectMonHoc(
@@ -375,7 +386,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
-                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU))
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU)),
+                            null
                     ));
                 }
             }
@@ -388,20 +400,118 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    //tự chọn A - theo ngành
+    public ArrayList<Object> getTuChonA(String manganh){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME
+                    + " WHERE " + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + manganh
+                    + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " = -3", null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC))).get(0));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+    //tự chọn B - theo khoa
+    //tự chọn C - theo toàn trường
+    public ArrayList<Items> getChuongTrinhDaoTao(String manganh){
+        ArrayList<Items> result = new ArrayList<Items>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT " + ChuongTrinhDaoTaoEntry.TABLE_NAME + ".*,"
+                    + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_TEN_MON_HOC + ","
+                    + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_TIN_CHI
+                    + " FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME
+                    + " LEFT JOIN " + MonHocEntry.TABLE_NAME
+                    + " ON " + ChuongTrinhDaoTaoEntry.TABLE_NAME + "." + ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC + " = " + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_MA_MON_HOC
+                    + " WHERE " + ChuongTrinhDaoTaoEntry.TABLE_NAME + "." + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + manganh, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectCTDT(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getInt(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY)),
+                            mCursor.getInt(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_CHUYEN_NGANH)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_TU_CHON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TEN_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+    public ArrayList<Items> getChuongTrinhDaoTao(String manganh, int hocKy, int chuyenSau){
+        ArrayList<Items> result = new ArrayList<Items>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT " + ChuongTrinhDaoTaoEntry.TABLE_NAME + ".*,"
+                    + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_TEN_MON_HOC + ","
+                    + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_TIN_CHI
+                    + " FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME
+                    + " LEFT JOIN " + MonHocEntry.TABLE_NAME
+                    + " ON " + ChuongTrinhDaoTaoEntry.TABLE_NAME + "." + ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC + " = " + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_MA_MON_HOC
+                    + " WHERE " + ChuongTrinhDaoTaoEntry.TABLE_NAME + "." + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + manganh
+                    + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " = " + hocKy
+                    + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_CHUYEN_NGANH + " = " + chuyenSau, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectCTDT(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getInt(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY)),
+                            mCursor.getInt(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_CHUYEN_NGANH)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_TU_CHON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TEN_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
     public ArrayList<Object> getChuongTrinhDaoTao(String mabm, int namHoc, int hocKy, int chuyenSau){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
         try{
             openDataBase();
             if(hocKy == 0){
-                mCursor = database.rawQuery("SELECT * FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME + " WHERE " + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + mabm + " and " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " in (" + ((namHoc*2)-1) + " , " + (namHoc*2) + ") and " + ChuongTrinhDaoTaoEntry.COLUMN_CHUYEN_NGANH + " = " + chuyenSau, null);
+                mCursor = database.rawQuery("SELECT * FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME
+                        + " WHERE " + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + mabm
+                        + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " IN (" + ((namHoc*2)-1) + " , " + (namHoc*2)
+                        + ") AND " + ChuongTrinhDaoTaoEntry.COLUMN_CHUYEN_NGANH + " = " + chuyenSau, null);
                 if(mCursor != null) {
                     while(mCursor.moveToNext()){
                         result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC))).get(0));
                     }
                 }
             } else{
-                mCursor = database.rawQuery("SELECT * FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME + " WHERE " + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + mabm + " and " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " = " + hocKy  + " and " + ChuongTrinhDaoTaoEntry.COLUMN_CHUYEN_NGANH + " = " + chuyenSau, null);
+                mCursor = database.rawQuery("SELECT * FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME
+                        + " WHERE " + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + mabm
+                        + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " = " + hocKy
+                        + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_CHUYEN_NGANH + " = " + chuyenSau, null);
                 if(mCursor != null) {
                     while(mCursor.moveToNext()){
                         result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC))).get(0));
@@ -431,7 +541,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + maSinhVien + " and " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc + " and " + UserDataEntry.COLUMN_DIEM_SO + " >= 4", null);
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
+                    + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + maSinhVien
+                    + " AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc
+                    + " AND " + UserDataEntry.COLUMN_DIEM_SO + " >= 4", null);
             if(mCursor.moveToFirst()) {
                 flag = true;
             }
@@ -448,7 +561,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + maSinhVien + " and " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc, null);
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
+                    + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + maSinhVien
+                    + " AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc, null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     diem = mCursor.getFloat(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)) > diem ? mCursor.getFloat(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)) : diem;
@@ -468,7 +583,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + KhoaEntry.TABLE_NAME + " WHERE makhoa NOT IN (1,2,12,13,14)", null);
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + KhoaEntry.TABLE_NAME
+                    + " WHERE " + KhoaEntry.COLUMN_MA_KHOA + " NOT IN (1,2,12,13,14)", null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     result.add(new ObjectKhoa(
@@ -486,6 +602,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result;
     }
+
     public ArrayList<Object> getKhoa(){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -510,12 +627,59 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    public ArrayList<Object> getNganh() {
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + NganhEntry.TABLE_NAME, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectNganh(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_MA_NGANH)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_MA_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_TEN_NGANH))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+    public ArrayList<Object> getNganh(String maNganh){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + NganhEntry.TABLE_NAME + " WHERE " + NganhEntry.COLUMN_MA_NGANH + " = " + maNganh, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectNganh(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_MA_NGANH)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_MA_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(NganhEntry.COLUMN_TEN_NGANH))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
     public ArrayList<Object> getNganhTheoKhoa(String maKhoa){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + NganhEntry.TABLE_NAME + " WHERE makhoa = " + maKhoa, null);
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + NganhEntry.TABLE_NAME
+                    + " WHERE " + NganhEntry.COLUMN_MA_KHOA + " = " + maKhoa, null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     result.add(new ObjectNganh(
@@ -539,7 +703,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + BoMonEntry.TABLE_NAME + " WHERE makhoa = " + maKhoa, null);
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + BoMonEntry.TABLE_NAME
+                    + " WHERE makhoa = " + maKhoa, null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     result.add(new ObjectBoMon(
@@ -590,7 +755,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT * FROM " + UserEntry.TABLE_NAME + " WHERE " + UserEntry.COLUMN_MA_SV + " = '" + masv + "'", null);
+            mCursor = database.rawQuery("SELECT * FROM " + UserEntry.TABLE_NAME
+                    + " WHERE " + UserEntry.COLUMN_MA_SV + " = '" + masv + "'", null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     result.add(new ObjectUser(
@@ -617,7 +783,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor mCursor = null;
         try{
             openDataBase();
-            mCursor = database.rawQuery("SELECT * FROM " + UserEntry.TABLE_NAME + " WHERE " + UserEntry.COLUMN_MA_SV + " = '" + masv + "'", null);
+            mCursor = database.rawQuery("SELECT * FROM " + UserEntry.TABLE_NAME
+                    + " WHERE " + UserEntry.COLUMN_MA_SV + " = '" + masv + "'", null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     if((mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_SV)).equals(masv))) {
@@ -640,9 +807,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try {
             // Mở kết nối
             openDataBase();
-            cursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_KHOA + " WHERE makhoa = " + maKhoa, null);
+            cursor = database.rawQuery("SELECT rowid as _id,* FROM " + KhoaEntry.TABLE_NAME
+                    + " WHERE " + KhoaEntry.COLUMN_MA_KHOA + " = " + maKhoa, null);
             while (cursor.moveToNext()) {
-                tenKhoa = cursor.getString(cursor.getColumnIndex("tenkhoa"));
+                tenKhoa = cursor.getString(cursor.getColumnIndex(KhoaEntry.COLUMN_TEN_KHOA));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -658,9 +826,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try {
             // Mở kết nối
             openDataBase();
-            cursor = database.rawQuery("SELECT rowid as _id,* FROM " + TB_NGANH + " WHERE manganh = " + maNganh, null);
+            cursor = database.rawQuery("SELECT rowid as _id,* FROM " + NganhEntry.TABLE_NAME
+                    + " WHERE " + NganhEntry.COLUMN_MA_NGANH + " = " + maNganh, null);
             while (cursor.moveToNext()) {
-                tenNganh = cursor.getString(cursor.getColumnIndex("tennganh"));
+                tenNganh = cursor.getString(cursor.getColumnIndex(NganhEntry.COLUMN_TEN_NGANH));
             }
             cursor.close();
         } catch (Exception e) {
@@ -670,6 +839,28 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             close();
         }
         return tenNganh;
+    }
+
+    public String getTenChuyenSau(String mabm, int chuyenSau){
+        String tenChuyenSau = null;
+        Cursor cursor = null;
+        try {
+            // Mở kết nối
+            openDataBase();
+            cursor = database.rawQuery("SELECT rowid as _id,* FROM " + ChuyenSauEntry.TABLE_NAME
+                    + " WHERE " + ChuyenSauEntry.COLUMN_MA_BO_MON + " = " + mabm
+                    + " AND " + ChuyenSauEntry.COLUMN_SO + " = " + chuyenSau, null);
+            while (cursor.moveToNext()) {
+                tenChuyenSau = cursor.getString(cursor.getColumnIndex(ChuyenSauEntry.COLUMN_TEN));
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+            close();
+        }
+        return tenChuyenSau;
     }
 
     /*public Cursor getAllKhoa(){

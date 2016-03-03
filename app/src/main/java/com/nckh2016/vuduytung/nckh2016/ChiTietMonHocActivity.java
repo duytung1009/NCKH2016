@@ -72,7 +72,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
             txtTaiLieu.setText(mMonHoc.getTailieu());
             SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             current_user = currentUserData.getString("user_mssv", null);
-            if(!current_user.isEmpty()){
+            if(current_user != null){
                 float diemSo = data.getDiem(current_user, mMonHoc.getMamh());
                 if(diemSo != -1){
                     txtDiem = (TextView) findViewById(R.id.txtDiem);

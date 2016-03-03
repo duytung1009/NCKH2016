@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:colorBackground"
-    tools:context="com.nckh2016.vuduytung.nckh2016.Nganh2Fragment">
+    tools:context="com.nckh2016.vuduytung.nckh2016.Nganh3Fragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,21 +22,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:paddingLeft="10dp"
                 android:gravity="center_vertical"
+                android:paddingLeft="10dp"
                 android:singleLine="true"
-                android:text="@string/txtdanhsachmonhoc"/>
+                android:text="@string/txtdanhsachmonhoc" />
 
         </RelativeLayout>
+
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="#c0c0c0"/>
+            android:background="#c0c0c0" />
+
         <ListView
-            android:id="@+id/list_view_chonmonhoc"
+            android:id="@+id/list_view_chonmonhoc_2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ListView>
+            android:layout_height="match_parent"></ListView>
 
     </LinearLayout>
+
 </FrameLayout>

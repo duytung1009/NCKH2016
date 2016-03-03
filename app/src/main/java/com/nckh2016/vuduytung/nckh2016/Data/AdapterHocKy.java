@@ -23,7 +23,7 @@ public class AdapterHocKy extends BaseAdapter {
     private LayoutInflater mInflater;
 
     public AdapterHocKy(Context mContext) {
-        mInflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public void addItem(ObjectHocKy item) {
@@ -33,7 +33,7 @@ public class AdapterHocKy extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if(mData.get(position).getHocKy() == 0)
+        if (mData.get(position).getHocKy() == 0)
             return LIST_ITEM_TYPE_1;
         else
             return LIST_ITEM_TYPE_2;
@@ -65,23 +65,21 @@ public class AdapterHocKy extends BaseAdapter {
         int type = getItemViewType(position);
         if (convertView == null) {
             holder = new ViewHolder();
-            switch(type) {
+            switch (type) {
                 case LIST_ITEM_TYPE_1:
-                    convertView = mInflater.inflate(R.layout.item_namhoc, null);
-                    holder.textView = (TextView)convertView.findViewById(R.id.txtNamHoc);
-                    //holder.textView.setText("Năm " + mData.get(position).getNamHoc());
+                    convertView = mInflater.inflate(R.layout.item_smalltitle, null);
+                    holder.textView = (TextView) convertView.findViewById(R.id.txtNamHoc);
                     break;
                 case LIST_ITEM_TYPE_2:
                     convertView = mInflater.inflate(R.layout.item_hocky, null);
-                    holder.textView = (TextView)convertView.findViewById(R.id.txtHocKy);
-                    //holder.textView.setText("Học kỳ " + mData.get(position).getHocKy());
+                    holder.textView = (TextView) convertView.findViewById(R.id.txtHocKy);
                     break;
             }
             convertView.setTag(holder);
         } else {
-            holder = (ViewHolder)convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
-        switch(type) {
+        switch (type) {
             case LIST_ITEM_TYPE_1:
                 holder.textView.setText("Năm " + mData.get(position).getNamHoc());
                 break;

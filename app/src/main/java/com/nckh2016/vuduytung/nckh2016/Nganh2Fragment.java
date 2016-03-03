@@ -3,9 +3,24 @@ package com.nckh2016.vuduytung.nckh2016;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.nckh2016.vuduytung.nckh2016.Data.AdapterCTDT;
+import com.nckh2016.vuduytung.nckh2016.Data.Items;
+import com.nckh2016.vuduytung.nckh2016.Data.ObjectCTDT;
+import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy2;
+import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 /**
@@ -24,9 +39,74 @@ public class Nganh2Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_nganh_2, container, false);
+        String maNganh = getArguments().getString("MaNganh");
+        String tenNganh = getArguments().getString("TenNganh");
+        SQLiteDataController data = new SQLiteDataController(getContext());
+        try{
+            data.isCreatedDatabase();
+        }
+        catch (IOException e){
+            Log.e("tag", e.getMessage());
+        }
+        final ArrayList<Items> mListCTDT = data.getChuongTrinhDaoTao(maNganh);
+        ListView mMonHoc = (ListView)view.findViewById(R.id.list_view_chonmonhoc);
+        AdapterCTDT mAdapter = new AdapterCTDT(getContext());
+        //lấy học kỳ + chuyên sâu
+        //ArrayList<ObjectHocKy2> listHocKy = new ArrayList<ObjectHocKy2>();
 
 
+        LinkedHashMap<String ,LinkedHashMap<Integer ,Integer>> mainMap = new LinkedHashMap<>();
+        for(Items a : mListCTDT){
+            ObjectCTDT value = (ObjectCTDT)a;
+            LinkedHashMap<Integer ,Integer> map2 = new LinkedHashMap<>();
+            map2.put(value.getHocky(), value.getChuyennganh());
+            mainMap.put(String.valueOf(value.getHocky() + "." + value.getChuyennganh()), map2);
+            //ObjectHocKy2 valueHocKy = new ObjectHocKy2(maNganh, value.getHocky(), value.getChuyennganh());
+        }
 
+        final ArrayList<Items> finalCTDT = new ArrayList<Items>();
+        for(Map.Entry<String ,LinkedHashMap<Integer ,Integer>> entry : mainMap.entrySet()){
+            String key = entry.getKey();
+            LinkedHashMap<Integer ,Integer> value = entry.getValue();
+            for(Map.Entry<Integer ,Integer> entry2 : value.entrySet()){
+                int hocKy = entry2.getKey();
+                int chuyenSau = entry2.getValue();
+                if(hocKy > 0){
+                    final ArrayList<Items> mListCTDTHocKy = data.getChuongTrinhDaoTao(maNganh, hocKy, chuyenSau);
+                    finalCTDT.add(new ObjectHocKy2(maNganh, hocKy, chuyenSau, data.getTenChuyenSau(maNganh, chuyenSau)));
+                    for(Items a : mListCTDTHocKy){
+                        ObjectCTDT valueHocKy = (ObjectCTDT)a;
+                        finalCTDT.add(valueHocKy);
+                    }
+                }
+            }
+        }
+        /*for(Items a : listHocKy){
+            ObjectHocKy2 cHocKy = (ObjectHocKy2)a;
+            if(cHocKy.getHocky() > 0){
+                finalCTDT.add(a);
+                final ArrayList<Items> mListCTDTHocKy = data.getChuongTrinhDaoTao(maNganh, cHocKy.getHocky(), cHocKy.getChuyensau());
+                for(Items b : mListCTDTHocKy){
+                    finalCTDT.add(b);
+                }
+            }
+        }*/
+
+        mAdapter.addItem(finalCTDT);
+        mMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ((NganhActivity) getActivity()).loadFragment3((ObjectCTDT)finalCTDT.get(position));
+
+                /*Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
+                intent.putExtra("MaMonHoc", ((ObjectCTDT) mListCTDT.get(position)).getMamh());
+                intent.putExtra("caller", "BoMonActivity");
+                startActivity(intent);*/
+            }
+        });
+        mMonHoc.setAdapter(mAdapter);
+        TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
+        txtTieuDe.setText("Ngành " + tenNganh);
         return view;
     }
 

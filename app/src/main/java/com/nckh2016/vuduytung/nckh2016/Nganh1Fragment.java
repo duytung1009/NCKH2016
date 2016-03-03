@@ -1,13 +1,14 @@
 package com.nckh2016.vuduytung.nckh2016;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectKhoa;
@@ -75,6 +76,13 @@ public class Nganh1Fragment extends Fragment {
             }
         });
         mSpinnerKhoa.setAdapter(mKhoaAdapter);
+        Button btnXem = (Button)view.findViewById(R.id.btnXem);
+        btnXem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((NganhActivity) getActivity()).loadFragment2(((ObjectNganh) mListNganh.get(mSpinnerNganh.getSelectedItemPosition())).getManganh(), ((ObjectNganh) mListNganh.get(mSpinnerNganh.getSelectedItemPosition())).getTennganh());
+            }
+        });
         return view;
     }
 }

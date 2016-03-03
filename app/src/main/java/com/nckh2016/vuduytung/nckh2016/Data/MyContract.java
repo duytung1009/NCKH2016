@@ -34,6 +34,7 @@ public class MyContract {
         public static final String COLUMN_MA_MON_HOC = "mamh";
         public static final String COLUMN_HOC_KY = "hocky";
         public static final String COLUMN_CHUYEN_NGANH = "chuyennganh";
+        public static final String COLUMN_TU_CHON = "tuchon";
     }
 
     public static final class ChuyenSauEntry implements BaseColumns {

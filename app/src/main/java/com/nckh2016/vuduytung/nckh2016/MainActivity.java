@@ -179,7 +179,8 @@ public class MainActivity extends AppCompatActivity
                     SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putString("user_mssv", ((ObjectUser)mListUser.get(position)).getMasv());
-                    editor.putString("user_name", ((ObjectUser) mListUser.get(position)).getHoten());
+                    editor.putString("user_name", ((ObjectUser)mListUser.get(position)).getHoten());
+                    editor.putString("user_data", ((ObjectUser)mListUser.get(position)).getHocky());
                     editor.commit();
                     if(tabLayout.getTabCount() > 0){
                         (tabLayout.getTabAt(0)).select();

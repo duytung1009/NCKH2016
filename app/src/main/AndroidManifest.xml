@@ -49,11 +49,11 @@
         <activity
             android:name=".KeHoachHocTapActivity"
             android:label="@string/title_activity_ke_hoach_hoc_tap"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".QuanLyKeHoachHocTapActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
+                android:value="com.nckh2016.vuduytung.nckh2016.QuanLyKeHoachHocTapActivity" />
         </activity>
         <activity
             android:name=".ChiTietMonHocActivity"
@@ -76,6 +76,15 @@
         <activity
             android:name=".NganhActivity"
             android:label="@string/title_activity_nganh"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
+        </activity>
+        <activity
+            android:name=".QuanLyKeHoachHocTapActivity"
+            android:label="@string/title_activity_quan_ly_ke_hoach_hoc_tap"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

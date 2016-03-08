@@ -81,8 +81,8 @@ public class MyContract {
         public static final String COLUMN_MA_NGANH = "manganh";
         public static final String COLUMN_HO_TEN = "hoten";
         public static final String COLUMN_NAM_HOC = "namhoc";
-        public static final String COLUMN_KY_HOC = "kyhoc";
         public static final String COLUMN_EMAIL = "email";
+        public static final String COLUMN_HOC_KY = "hocky";
     }
 
     public static final class UserDataEntry implements BaseColumns {

@@ -3,53 +3,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:colorBackground"
-    tools:context=".KeHoachHocTap2Fragment">
+    tools:context="com.nckh2016.vuduytung.nckh2016.QuanLyKeHoachHocTap2Fragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/layoutTieuDe"
+        <LinearLayout
+            android:id="@+id/layoutTitle"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_alignParentTop="true">
-
+            android:orientation="horizontal">
             <TextView
+                android:id="@+id/txtTenHocKy"
                 style="@style/bigText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/selectAllCheckBox"
                 android:paddingLeft="10dp"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="@string/txtDanhSachMonHoc"/>
-
-            <CheckBox
-                android:id="@+id/selectAllCheckBox"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_alignParentRight="true"/>
-
-        </RelativeLayout>
-
+                android:gravity="center_vertical" />
+        </LinearLayout>
         <View
-            android:id="@+id/objLine"
+            android:id="@+id/line"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/layoutTieuDe"
+            android:layout_below="@+id/layoutTitle"
             android:background="#c0c0c0"/>
-
         <ListView
-            android:id="@+id/list_view_chonmonhoc"
+            android:id="@+id/lvMonHoc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/objLine"
+            android:layout_below="@+id/line"
             android:layout_above="@+id/btnThemMonHoc">
         </ListView>
-
         <Button
             android:id="@+id/btnThemMonHoc"
             android:layout_width="match_parent"
@@ -58,5 +43,7 @@
             android:padding="20dp"
             android:text="@string/btn_themmonhoc"
             android:textColor="@android:color/white" />
+
     </RelativeLayout>
+
 </FrameLayout>

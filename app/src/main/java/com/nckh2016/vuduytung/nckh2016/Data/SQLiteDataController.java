@@ -9,12 +9,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.BoMonEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuongTrinhDaoTaoEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.KhoaEntry;
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.MonHocEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.NganhEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.BoMonEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuyenSauEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.MonHocEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserDataEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
 
@@ -36,16 +36,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private SQLiteDatabase database;
     private final Context mContext;
-    //nien giam
-    public static final String TB_CTDT = "CTDT";
-    public static final String TB_BOMON = "bomon";
-    public static final String TB_CHUYENSAU = "chuyensau";
-    public static final String TB_KHOA = "khoa";
-    public static final String TB_MONHOC = "monhoc";
-    public static final String TB_NGANH = "nganh";
-    //user
-    public static final String TB_USER = "user";
-    public static final String TB_USERDATA = "user_data";
 
     public SQLiteDataController(Context cont) {
         super(cont, DB_NAME, null, DATABASE_VERSION);
@@ -162,8 +152,13 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 SQLiteDatabase.OPEN_READWRITE);
     }
 
-    //sql methods
+    //phương thức truy vấn CSDL
 
+    /**
+     * thêm người dùng
+     * @param values thông tin cần thêm (ContentValues)
+     * @return
+     */
     public long insertNguoiDung(ContentValues values){
         long flag = -1;
         try{
@@ -176,6 +171,32 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             return flag;
         }
     }
+
+    /**
+     * cập nhật người dùng đã có
+     * @param masv mã sinh viên (String)
+     * @param values thông tin cần cập nhật (ContentValues)
+     * @return
+     */
+    public long updateNguoiDung(String masv, ContentValues values){
+        long flag = -1;
+        try{
+            openDataBase();
+            String[] args = new String[]{masv};
+            flag = database.update(UserEntry.TABLE_NAME, values, UserEntry.COLUMN_MA_SV + "=?", args);
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            close();
+            return flag;
+        }
+    }
+
+    /**
+     * thêm điểm số của người dùng
+     * @param values mảng dữ liệu (ObjectUserData)
+     * @return
+     */
     public boolean insertUserData(ArrayList<ObjectUserData> values){
         boolean flag = true;
         Cursor mCursor = null;
@@ -191,7 +212,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 long num = -1;
                 mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
                         + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + value.getMasv()
-                        + " AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + value.getMamonhoc(), null);
+                        + " AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + value.getMamonhoc()
+                        , null);
+                //insert (thay vì update) những môn chưa qua - cần cập nhật lại hàm tính điểm + tính tổng số tín chỉ
+                //+ " AND " + UserDataEntry.COLUMN_HOC_KY + " = " + value.getHocky()
+                //+ " AND " + UserDataEntry.COLUMN_NAM_THU + " = " + value.getNamthu()
                 if(mCursor.moveToFirst()) {
                     num = database.update(UserDataEntry.TABLE_NAME, userData, UserDataEntry.COLUMN_MA_SV + " = ? AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = ?", new String[]{value.getMasv(), value.getMamonhoc()});
                 } else{
@@ -209,6 +234,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             return flag;
         }
     }
+
+    /**
+     * tính tổng điểm của người dùng
+     * @param masv mã sinh viên (String)
+     * @return
+     */
     public Double tongDiem(String masv){
         double tongDiem = 0;
         double tongTinChi = 0;
@@ -236,6 +267,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return (tongDiem / tongTinChi)/10*4;
     }
+
+    /**
+     * tính tổng số tín chỉ của người dùng, phân loại A,B,C,D,F
+     * @param masv mã sinh viên (String)
+     * @return
+     */
     public int[] soTinChi(String masv){
         int[] soTinChi = {0,0,0,0,0};
         Cursor mCursor = null;
@@ -270,7 +307,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     /**
-     * Lấy danh sách tất cả các môn học
+     * lấy danh sách tất cả các môn học
      *
      * @return
      */
@@ -302,6 +339,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result;
     }
+
+    /**
+     * lấy thông tin 1 môn học
+     * @param maMonHoc mã môn học (String)
+     * @return
+     */
     public ArrayList<Object> getMonHoc(String maMonHoc){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -331,6 +374,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result;
     }
+
+    /**
+     * lấy thông tin nhiều môn học
+     * @param maMonHoc mã môn học (ArrayList<String>)
+     * @return
+     */
     public ArrayList<Object> getMonHoc(ArrayList<String> maMonHoc){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -370,6 +419,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    /**
+     * lấy thông tin các môn học theo bộ môn
+     * @param maBoMon mã bộ môn (String)
+     * @return
+     */
     public ArrayList<Object> getMonHocTheoBoMon(String maBoMon){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -400,7 +454,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
-    //tự chọn A - theo ngành
+    /**
+     * lấy các môn tự chọn A (lọc theo ngành)
+     * @param manganh mã ngành (String)
+     * @return
+     */
     public ArrayList<Object> getTuChonA(String manganh){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -424,6 +482,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
     //tự chọn B - theo khoa
     //tự chọn C - theo toàn trường
+
+    /**
+     * lấy chương trình đào tạo theo ngành
+     * @param manganh mã ngành (String)
+     * @return
+     */
     public ArrayList<Items> getChuongTrinhDaoTao(String manganh){
         ArrayList<Items> result = new ArrayList<Items>();
         Cursor mCursor = null;
@@ -457,6 +521,14 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result;
     }
+
+    /**
+     * lấy chương trình đào tạo theo ngành, theo từng học kỳ
+     * @param manganh mã ngành (String)
+     * @param hocKy mã học kỳ (int)
+     * @param chuyenSau mã chuyên sâu (int)
+     * @return
+     */
     public ArrayList<Items> getChuongTrinhDaoTao(String manganh, int hocKy, int chuyenSau){
         ArrayList<Items> result = new ArrayList<Items>();
         Cursor mCursor = null;
@@ -492,6 +564,15 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result;
     }
+
+    /**
+     * lấy chương trình đào tạo theo ngành (có kế hoạch thay thế)
+     * @param mabm
+     * @param namHoc
+     * @param hocKy
+     * @param chuyenSau
+     * @return
+     */
     public ArrayList<Object> getChuongTrinhDaoTao(String mabm, int namHoc, int hocKy, int chuyenSau){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -527,26 +608,44 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    /**
+     * lấy danh sách các môn học chưa qua
+     * @param maSinhVien mã sinh viên (String)
+     * @param danhSachMonHoc danh sách môn đã học (ArrayList<Object>)
+     * @return
+     */
     public ArrayList<Object> getMonHocChuaQua(String maSinhVien, ArrayList<Object> danhSachMonHoc){
         ArrayList<Object> monHocChuaQua = new ArrayList<Object>();
         for (Object value:danhSachMonHoc) {
-            if(!checkMonHocChuaQua(maSinhVien, ((ObjectMonHoc)value).getMamh())){
+            if(checkMonHocChuaQua(maSinhVien, ((ObjectMonHoc)value).getMamh())){
                 monHocChuaQua.add(value);
             }
         }
         return monHocChuaQua;
     }
+
+    /**
+     * kiểm tra xem môn học đã qua chưa
+     * @param maSinhVien mã sinh viên (String)
+     * @param maMonHoc mã môn học (String)
+     * @return
+     */
     public boolean checkMonHocChuaQua(String maSinhVien, String maMonHoc){
-        boolean flag = false;
+        boolean flag = true;
+        double diem = -1;
         Cursor mCursor = null;
         try{
             openDataBase();
             mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
                     + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + maSinhVien
-                    + " AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc
-                    + " AND " + UserDataEntry.COLUMN_DIEM_SO + " >= 4", null);
-            if(mCursor.moveToFirst()) {
-                flag = true;
+                    + " AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    diem = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)) > diem ? mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)) : diem;
+                }
+                if(diem >= 4){
+                    flag = false;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -556,6 +655,13 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return flag;
     }
+
+    /**
+     * lấy điểm của một môn học
+     * @param maSinhVien mã sinh viên (String)
+     * @param maMonHoc mã môn học (String)
+     * @return
+     */
     public float getDiem(String maSinhVien, String maMonHoc){
         float diem = -1;
         Cursor mCursor = null;
@@ -578,6 +684,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return diem;
     }
 
+    /**
+     * lấy danh sách khoa có ngành đào tạo
+     * @return
+     */
     public ArrayList<Object> getKhoaCoNganh(){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -603,6 +713,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    /**
+     * lấy danh sách toàn bộ các khoa
+     * @return
+     */
     public ArrayList<Object> getKhoa(){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -627,6 +741,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    /**
+     * lấy danh sách toàn bộ các ngành
+     * @return
+     */
     public ArrayList<Object> getNganh() {
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -650,6 +768,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result;
     }
+
+    /**
+     * lấy thông tin một ngành
+     * @param maNganh mã ngành (String)
+     * @return
+     */
     public ArrayList<Object> getNganh(String maNganh){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -673,6 +797,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result;
     }
+
+    /**
+     * lấy thông tin các ngành theo khoa
+     * @param maKhoa mã khoa (String)
+     * @return
+     */
     public ArrayList<Object> getNganhTheoKhoa(String maKhoa){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -698,6 +828,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    /**
+     * lấy thông tin bộ môn theo khoa
+     * @param maKhoa mã khoa (String)
+     * @return
+     */
     public ArrayList<Object> getBoMonTheoKhoa(String maKhoa){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -723,6 +858,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    /**
+     * lấy thông tin toàn bộ người dùng
+     * @return
+     */
     public ArrayList<Object> getUser(){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -737,8 +876,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_NGANH)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HO_TEN)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_NAM_HOC)),
-                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_KY_HOC)),
-                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_EMAIL))
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_EMAIL)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HOC_KY))
                     ));
                 }
             }
@@ -750,6 +889,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result;
     }
+
+    /**
+     * lấy thông tin của 1 người dùng
+     * @param masv mã sinh viên (String)
+     * @return
+     */
     public ArrayList<Object> getUser(String masv){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
@@ -765,8 +910,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_NGANH)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HO_TEN)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_NAM_HOC)),
-                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_KY_HOC)),
-                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_EMAIL))
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_EMAIL)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HOC_KY))
                     ));
                 }
             }
@@ -778,6 +923,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result;
     }
+
+    /**
+     * kiểm tra xem người dùng có tồn tại không
+     * @param masv mã sinh viên (String)
+     * @return
+     */
     public boolean checkUser(String masv){
         boolean flag = false;
         Cursor mCursor = null;
@@ -801,6 +952,87 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return flag;
     }
 
+    /**
+     * lấy thông tin điểm số của 1 người dùng
+     * @param masv mã sinh viên (String)
+     * @return
+     */
+    public ArrayList<Object> getUserData(String masv){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
+                    + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = '" + masv + "'", null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectUserData(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_SV)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_HOC_KY)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_NAM_THU)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+
+    /**
+     * lấy thông tin điểm số trong 1 học kỳ của 1 người dùng
+     * @param masv mã sinh viên (String)
+     * @param namhoc năm học (int)
+     * @param hocky học kỳ (int)
+     * @return
+     */
+    public ArrayList<Object> getUserData(String masv, int namhoc, int hocky) {
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT " + MonHocEntry.TABLE_NAME + ".*,"
+                    + UserDataEntry.COLUMN_DIEM_SO
+                    + " FROM " + UserDataEntry.TABLE_NAME
+                    + " LEFT JOIN " + MonHocEntry.TABLE_NAME
+                    + " ON " + UserDataEntry.TABLE_NAME + "." + UserDataEntry.COLUMN_MA_MON_HOC + " = " + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_MA_MON_HOC
+                    + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = '" + masv + "'"
+                    + " AND " + UserDataEntry.COLUMN_HOC_KY + " = " + hocky
+                    + " AND " + UserDataEntry.COLUMN_NAM_THU + " = " + namhoc, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectMonHoc(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TEN_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU)),
+                            null,
+                            mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+
+    /**
+     * lấy tên khoa
+     * @param maKhoa mã khoa (String)
+     * @return
+     */
     public String getTenKhoa(String maKhoa){
         String tenKhoa = null;
         Cursor cursor = null;
@@ -820,6 +1052,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return tenKhoa;
     }
+
+    /**
+     * lấy tên ngành
+     * @param maNganh mã ngành (String)
+     * @return
+     */
     public String getTenNganh(String maNganh){
         String tenNganh = null;
         Cursor cursor = null;
@@ -841,6 +1079,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return tenNganh;
     }
 
+    /**
+     * lấy tên hướng chuyên sâu
+     * @param mabm mã bộ môn (String)
+     * @param chuyenSau hướng chuyên sâu (int)
+     * @return
+     */
     public String getTenChuyenSau(String mabm, int chuyenSau){
         String tenChuyenSau = null;
         Cursor cursor = null;

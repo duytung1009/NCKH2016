@@ -1,7 +1,6 @@
 package com.nckh2016.vuduytung.nckh2016.Data;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,20 +94,17 @@ public class AdapterCTDT extends BaseAdapter {
                         TextView txtSoTinChi = (TextView)view.findViewById(R.id.txtSoTinChi);
                         TextView txtTinChi = (TextView)view.findViewById(R.id.txtTinChi);
                         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
-                        TextView txtIcon = (TextView)view.findViewById(R.id.txtIcon);
                         txtMaMonHoc.setText(monHoc.getMamh());
                         txtTenMonHoc.setText(monHoc.getTenmh());
                         txtSoTinChi.setText(monHoc.getTinchi());
                         if(monHoc.getTuchon()!=null){
                             switch (monHoc.getTuchon()){
                                 case "A":
-                                    imageView.setVisibility(View.GONE);
+                                    imageView.setImageResource(R.drawable.tuchon_a);
                                     txtMaMonHoc.setVisibility(View.GONE);
                                     txtTinChi.setVisibility(View.GONE);
                                     txtTenMonHoc.setText("Tự chọn A");
                                     txtTenMonHoc.setPadding(0, 0, 0, 0);
-                                    txtIcon.setText("A");
-                                    txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonA));
                                     /*view.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -117,13 +113,11 @@ public class AdapterCTDT extends BaseAdapter {
                                     });*/
                                     break;
                                 case "B":
-                                    imageView.setVisibility(View.GONE);
+                                    imageView.setImageResource(R.drawable.tuchon_b);
                                     txtMaMonHoc.setVisibility(View.GONE);
                                     txtTinChi.setVisibility(View.GONE);
                                     txtTenMonHoc.setText("Tự chọn B");
                                     txtTenMonHoc.setPadding(0, 0, 0, 0);
-                                    txtIcon.setText("B");
-                                    txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonB));
                                     /*view.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -132,13 +126,11 @@ public class AdapterCTDT extends BaseAdapter {
                                     });*/
                                     break;
                                 case "C":
-                                    imageView.setVisibility(View.GONE);
+                                    imageView.setImageResource(R.drawable.tuchon_c);
                                     txtMaMonHoc.setVisibility(View.GONE);
                                     txtTinChi.setVisibility(View.GONE);
                                     txtTenMonHoc.setText("Tự chọn C");
                                     txtTenMonHoc.setPadding(0, 0, 0, 0);
-                                    txtIcon.setText("C");
-                                    txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonC));
                                     /*view.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -147,7 +139,6 @@ public class AdapterCTDT extends BaseAdapter {
                                     });*/
                                     break;
                                 default:
-                                    txtIcon.setVisibility(View.GONE);
                                     /*view.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -160,7 +151,6 @@ public class AdapterCTDT extends BaseAdapter {
                                     break;
                             }
                         } else {
-                            txtIcon.setVisibility(View.GONE);
                             /*view.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

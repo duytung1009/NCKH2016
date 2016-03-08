@@ -15,9 +15,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectKhoa;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectNganh;
+import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
@@ -30,7 +33,7 @@ import java.util.List;
 public class TaoTaiKhoan1Fragment extends Fragment {
     public static final String PREFS_NAME = "current_user";
     ArrayList<Object> mListKhoa, mListNganh;
-    Spinner mSpinnerKhoa, mSpinnerNganh, mSpinnerNamHoc, mSpinnerHocKy;
+    Spinner mSpinnerKhoa, mSpinnerNganh, mSpinnerNamHoc;
 
     public TaoTaiKhoan1Fragment() {
     }
@@ -42,12 +45,9 @@ public class TaoTaiKhoan1Fragment extends Fragment {
         mSpinnerKhoa = (Spinner)view.findViewById(R.id.spinnerKhoa);
         mSpinnerNganh = (Spinner)view.findViewById(R.id.spinnerNganh);
         mSpinnerNamHoc = (Spinner)view.findViewById(R.id.spinnerNamHoc);
-        mSpinnerHocKy = (Spinner)view.findViewById(R.id.spinnerHocKy);
 
         ArrayAdapter<String> mNamHocAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, new String[] {"1","2","3","4","5"});
         mSpinnerNamHoc.setAdapter(mNamHocAdapter);
-        ArrayAdapter<String> mHocKyAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, new String[] {"1","2"});
-        mSpinnerHocKy.setAdapter(mHocKyAdapter);
 
         SQLiteDataController data = new SQLiteDataController(getContext());
         try{
@@ -107,13 +107,14 @@ public class TaoTaiKhoan1Fragment extends Fragment {
                 if(mSpinnerNamHoc.getSelectedItem() != null){
                     namthu = mSpinnerNamHoc.getSelectedItem().toString();
                 }
-                if(mSpinnerHocKy.getSelectedItem() != null){
-                    hocky = mSpinnerHocKy.getSelectedItem().toString();
-                }
 
-                if(masv.isEmpty() || hoten.isEmpty() || makhoa == null || manganh == null || namthu == null || hocky == null){
+                if(masv.isEmpty() || hoten.isEmpty() || makhoa == null || manganh == null || namthu == null){
                     Toast.makeText(getContext(), "bổ sung thêm thông tin", Toast.LENGTH_SHORT).show();
                 } else {
+                    ObjectUserHocKy newUserHocKy = new ObjectUserHocKy();
+                    for(int i=0; i<Integer.parseInt(namthu); i++){
+                        newUserHocKy.addHocKy(new ObjectHocKy(i+1, 0, manganh));
+                    }
                     ContentValues newUser = new ContentValues();
 
                     newUser.put(UserEntry.COLUMN_MA_SV, masv);
@@ -122,7 +123,7 @@ public class TaoTaiKhoan1Fragment extends Fragment {
                     newUser.put(UserEntry.COLUMN_MA_KHOA, makhoa);
                     newUser.put(UserEntry.COLUMN_MA_NGANH, manganh);
                     newUser.put(UserEntry.COLUMN_NAM_HOC, namthu);
-                    newUser.put(UserEntry.COLUMN_KY_HOC, hocky);
+                    newUser.put(UserEntry.COLUMN_HOC_KY, new Gson().toJson(newUserHocKy));
 
                     SQLiteDataController data = new SQLiteDataController(getContext());
                     try{
@@ -143,6 +144,7 @@ public class TaoTaiKhoan1Fragment extends Fragment {
                             SharedPreferences.Editor editor = settings.edit();
                             editor.putString("user_mssv", masv);
                             editor.putString("user_name", hoten);
+                            editor.putString("user_data", new Gson().toJson(newUserHocKy));
                             editor.commit();
                             getActivity().setResult(1);
                             ((TaoTaiKhoanActivity)getActivity()).finish();

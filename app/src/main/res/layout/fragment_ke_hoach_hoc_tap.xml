@@ -11,19 +11,21 @@
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:layout_height="50dp"
+            android:orientation="horizontal">
             <TextView
                 style="@style/bigText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:gravity="center_vertical"
                 android:text="Ngành "/>
             <TextView
                 android:id="@+id/txtTenNganh"
                 style="@style/bigText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
                 android:textColor="@color/colorPrimaryDark"/>
         </LinearLayout>
         <View

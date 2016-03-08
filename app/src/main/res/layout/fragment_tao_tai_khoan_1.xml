@@ -97,26 +97,6 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="Học kỳ" />
-
-                        <Spinner
-                            android:id="@+id/spinnerHocKy"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"></Spinner>
-                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

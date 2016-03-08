@@ -1,7 +1,6 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,9 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHocNhapDiem;
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserDataEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserData;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
@@ -33,7 +30,7 @@ import java.util.Map;
 public class KeHoachHocTap3Fragment extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
-    ObjectHocKy selectedHocKy;
+    ObjectHocKy selectedHocKy, userHocKy;
     AdapterMonHocNhapDiem monHocAdapter;
     ListView mListMonHoc;
     Button btnLuuMonHoc;
@@ -59,6 +56,7 @@ public class KeHoachHocTap3Fragment extends Fragment {
         }
         ArrayList<Object> mArrayList = data.getMonHoc(getArguments().getStringArrayList("mamonhoc"));
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
+        userHocKy = new ObjectHocKy(getArguments().getInt("user_namhoc"), getArguments().getInt("user_hocky"), getArguments().getString("nganh"));
         monHocAdapter = new AdapterMonHocNhapDiem(getActivity(), 0, mArrayList);
         mListMonHoc = (ListView)view.findViewById(R.id.list_view_monhoc_nhapdiem);
         mListMonHoc.setAdapter(monHocAdapter);
@@ -74,16 +72,16 @@ public class KeHoachHocTap3Fragment extends Fragment {
                     values.add(new ObjectUserData(
                             current_user,
                             key,
-                            String.valueOf(selectedHocKy.getHocKy()),
-                            String.valueOf(selectedHocKy.getNamHoc()),
+                            String.valueOf(userHocKy.getHocKy()),
+                            String.valueOf(userHocKy.getNamHoc()),
                             value.toString()
                     ));
                 }
                 boolean flag = data.insertUserData(values);
                 if (flag) {
-                    Toast.makeText(getContext(), "ngon", Toast.LENGTH_SHORT).show();
+                    ((KeHoachHocTapActivity)getActivity()).finish();
                 } else {
-                    Toast.makeText(getContext(), "toach", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Lỗi", Toast.LENGTH_SHORT).show();
                 }
             }
         });

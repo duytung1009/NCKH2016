@@ -9,17 +9,17 @@ public class ObjectUser {
     String manganh;
     String hoten;
     String namhoc;
-    String kyhoc;
     String email;
+    String hocky;
 
-    public ObjectUser(String masv, String makhoa, String manganh, String hoten, String namhoc, String kyhoc, String email) {
+    public ObjectUser(String masv, String makhoa, String manganh, String hoten, String namhoc, String email, String hocky) {
         this.masv = masv;
         this.makhoa = makhoa;
         this.manganh = manganh;
         this.hoten = hoten;
         this.namhoc = namhoc;
-        this.kyhoc = kyhoc;
         this.email = email;
+        this.hocky = hocky;
     }
 
     public String getMasv() {
@@ -62,19 +62,19 @@ public class ObjectUser {
         this.namhoc = namhoc;
     }
 
-    public String getKyhoc() {
-        return kyhoc;
-    }
-
-    public void setKyhoc(String kyhoc) {
-        this.kyhoc = kyhoc;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getHocky() {
+        return hocky;
+    }
+
+    public void setHocky(String hocky) {
+        this.hocky = hocky;
     }
 }

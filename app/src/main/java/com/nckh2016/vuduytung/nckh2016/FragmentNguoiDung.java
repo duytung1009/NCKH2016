@@ -79,6 +79,14 @@ public class FragmentNguoiDung extends Fragment {
         layout_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getContext(), QuanLyKeHoachHocTapActivity.class);
+                startActivity(intent);
+            }
+        });
+        LinearLayout layout_3 = (LinearLayout)view.findViewById(R.id.layout_3);
+        layout_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(getContext(), KeHoachHocTapActivity.class);
                 startActivity(intent);
             }

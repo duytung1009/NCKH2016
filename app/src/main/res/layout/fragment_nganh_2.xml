@@ -25,7 +25,7 @@
                 android:paddingLeft="10dp"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text="@string/txtdanhsachmonhoc"/>
+                android:text="@string/txtDanhSachMonHoc"/>
 
         </RelativeLayout>
         <View

@@ -30,7 +30,6 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
         TextView tvKhoa = (TextView)findViewById(R.id.tvKhoa);
         TextView tvNganh = (TextView)findViewById(R.id.tvNganh);
         TextView tvNamThu = (TextView)findViewById(R.id.tvNamThu);
-        TextView tvHocKy = (TextView)findViewById(R.id.tvHocKy);
         SQLiteDataController data = new SQLiteDataController(this);
         try{
             data.isCreatedDatabase();
@@ -52,7 +51,6 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
         tvKhoa.setText(data.getTenKhoa(currentUser.getMakhoa()));
         tvNganh.setText(data.getTenNganh(currentUser.getManganh()));
         tvNamThu.setText(currentUser.getNamhoc());
-        tvHocKy.setText(currentUser.getKyhoc());
 
         /*Cursor cUser = data.getAllUserData();
         while(cUser.moveToNext()){

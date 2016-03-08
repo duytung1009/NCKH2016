@@ -13,6 +13,7 @@ public class ObjectMonHoc implements Items{
     String tailieu;
     String tuchon;
     boolean isHocKy = false;
+    double diem = -1;
 
     @Override
     public boolean isHocKy() {
@@ -28,6 +29,18 @@ public class ObjectMonHoc implements Items{
         this.noidung = noidung;
         this.tailieu = tailieu;
         this.tuchon = tuchon;
+    }
+
+    public ObjectMonHoc(String mamh, String mabm, String tenmh, String tinchi, String dieukien, String noidung, String tailieu, String tuchon, double diem){
+        this.mamh = mamh;
+        this.mabm = mabm;
+        this.tenmh = tenmh;
+        this.tinchi = tinchi;
+        this.dieukien = dieukien;
+        this.noidung = noidung;
+        this.tailieu = tailieu;
+        this.tuchon = tuchon;
+        this.diem = diem;
     }
 
     public String getMamh() {
@@ -96,5 +109,13 @@ public class ObjectMonHoc implements Items{
 
     public void setIsHocKy(boolean isHocKy) {
         this.isHocKy = isHocKy;
+    }
+
+    public double getDiem() {
+        return diem;
+    }
+
+    public void setDiem(double diem) {
+        this.diem = diem;
     }
 }

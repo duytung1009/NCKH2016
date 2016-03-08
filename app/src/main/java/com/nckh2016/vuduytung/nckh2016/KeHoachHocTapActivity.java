@@ -44,6 +44,8 @@ public class KeHoachHocTapActivity extends AppCompatActivity {
         bundle.putString("nganh", hocKy.getNganh());
         bundle.putInt("namhoc", hocKy.getNamHoc());
         bundle.putInt("hocky", hocKy.getHocKy());
+        bundle.putInt("user_namhoc", getIntent().getIntExtra("NamHoc", -1));
+        bundle.putInt("user_hocky", getIntent().getIntExtra("HocKy", -1));
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment frag3 = new KeHoachHocTap3Fragment();
         frag3.setArguments(bundle);

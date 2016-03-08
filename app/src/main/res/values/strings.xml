@@ -36,13 +36,14 @@
     <string name="title_activity_chi_tiet_mon_hoc">ChiTietMonHocActivity</string>
     <string name="title_activity_bo_mon">BoMonActivity</string>
     <string name="title_activity_nganh">NganhActivity</string>
+    <string name="title_activity_quan_ly_ke_hoach_hoc_tap">QuanLyKeHoachHocTapActivity</string>
 
-    <string name="khong">Chưa có thông tin mô tả</string>
+    <string name="khong">Chưa có dữ liệu</string>
 
     <string name="txtKhoa">Khoa</string>
-    <string name="txtNganh">Ngành</string>
+    <string name="txtNganh">Chuyên ngành</string>
     <string name="txtBoMon">Bộ môn</string>
-    <string name="txtdanhsachmonhoc">Danh sách môn học</string>
+    <string name="txtDanhSachMonHoc">Danh sách môn học</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

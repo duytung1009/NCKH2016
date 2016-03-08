@@ -8,33 +8,38 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.nckh2016.vuduytung.nckh2016.Data.AdapterHocKy;
+import com.google.gson.Gson;
+import com.nckh2016.vuduytung.nckh2016.Data.AdapterNamHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
+import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class KeHoachHocTap1Fragment extends Fragment {
+public class QuanLyKeHoachHocTapFragment extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
+    public ObjectUserHocKy user_data;
 
-    public KeHoachHocTap1Fragment() {
+    public QuanLyKeHoachHocTapFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ke_hoach_hoc_tap, container, false);
+        View view = inflater.inflate(R.layout.fragment_quan_ly_ke_hoach_hoc_tap, container, false);
+        ArrayList<String> list_hocKy = new ArrayList<String>();
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
+        Gson gson = new Gson();
+        user_data = gson.fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);
         SQLiteDataController data = new SQLiteDataController(getContext());
         try{
             data.isCreatedDatabase();
@@ -43,27 +48,25 @@ public class KeHoachHocTap1Fragment extends Fragment {
             Log.e("tag", e.getMessage());
         }
         final ObjectUser cUser = (ObjectUser)data.getUser(current_user).get(0);
-        TextView txtTenNganh = (TextView)view.findViewById(R.id.txtTenNganh);
-        txtTenNganh.setText(data.getTenNganh(cUser.getManganh()));
-        final ListView listViewHocTap = (ListView)view.findViewById(R.id.list_view_hoctap);
-        final AdapterHocKy hocKyAdapter = new AdapterHocKy(getContext());
+
+        final ListView listViewHocTap = (ListView)view.findViewById(R.id.listview_user_data);
+        final AdapterNamHoc hocTapAdapter = new AdapterNamHoc(getContext());
         for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
             //add nam hoc
-            hocKyAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
-            //add hoc ky 1
-            hocKyAdapter.addItem(new ObjectHocKy(i+1, 1, cUser.getManganh()));
-            //add hoc ky 2
-            hocKyAdapter.addItem(new ObjectHocKy(i+1, 2, cUser.getManganh()));
-        }
-        listViewHocTap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(hocKyAdapter.getItem(position).getHocKy() != 0){
-                    ((KeHoachHocTapActivity) getActivity()).loadFragment2(hocKyAdapter.getItem(position));
+            hocTapAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
+            if(user_data != null){
+                for(ObjectHocKy value : user_data.getUserData()){
+                    if(value.getNamHoc() == i+1){
+                        if(value.getHocKy() != 0){
+                            hocTapAdapter.addItem(new ObjectHocKy(i+1, value.getHocKy(), cUser.getManganh()));
+                        }
+                    }
                 }
             }
-        });
-        listViewHocTap.setAdapter(hocKyAdapter);
+        }
+        listViewHocTap.setAdapter(hocTapAdapter);
+
+
         return view;
     }
 }

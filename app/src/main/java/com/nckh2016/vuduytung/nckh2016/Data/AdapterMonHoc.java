@@ -1,7 +1,6 @@
 package com.nckh2016.vuduytung.nckh2016.Data;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -39,45 +39,64 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
             TextView txtSoTinChi = (TextView) view.findViewById(R.id.txtSoTinChi);
             TextView txtTinChi = (TextView)view.findViewById(R.id.txtTinChi);
             ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
-            TextView txtIcon = (TextView)view.findViewById(R.id.txtIcon);
+            //TextView txtIcon = (TextView)view.findViewById(R.id.txtIcon);
             txtMaMonHoc.setText(mMonHoc.getMamh());
             txtTenMonHoc.setText(mMonHoc.getTenmh());
             txtSoTinChi.setText(mMonHoc.getTinchi());
             if(mMonHoc.getTuchon()!=null){
                 switch (mMonHoc.getTuchon()){
                     case "A":
-                        imageView.setVisibility(View.GONE);
+                        imageView.setImageResource(R.drawable.tuchon_a);
+                        txtMaMonHoc.setVisibility(View.GONE);
+                        txtTinChi.setVisibility(View.GONE);
+                        txtTenMonHoc.setText("Tự chọn A");
+                        txtTenMonHoc.setPadding(0,0,0,0);
+                        /*imageView.setVisibility(View.GONE);
                         txtMaMonHoc.setVisibility(View.GONE);
                         txtTinChi.setVisibility(View.GONE);
                         txtTenMonHoc.setText("Tự chọn A");
                         txtTenMonHoc.setPadding(0,0,0,0);
                         txtIcon.setText("A");
-                        txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonA));
+                        txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonA));*/
                         break;
                     case "B":
-                        imageView.setVisibility(View.GONE);
+                        imageView.setImageResource(R.drawable.tuchon_b);
+                        txtMaMonHoc.setVisibility(View.GONE);
+                        txtTinChi.setVisibility(View.GONE);
+                        txtTenMonHoc.setText("Tự chọn B");
+                        txtTenMonHoc.setPadding(0,0,0,0);
+                        /*imageView.setVisibility(View.GONE);
                         txtMaMonHoc.setVisibility(View.GONE);
                         txtTinChi.setVisibility(View.GONE);
                         txtTenMonHoc.setText("Tự chọn B");
                         txtTenMonHoc.setPadding(0, 0, 0, 0);
                         txtIcon.setText("B");
-                        txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonB));
+                        txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonB));*/
                         break;
                     case "C":
-                        imageView.setVisibility(View.GONE);
+                        imageView.setImageResource(R.drawable.tuchon_c);
+                        txtMaMonHoc.setVisibility(View.GONE);
+                        txtTinChi.setVisibility(View.GONE);
+                        txtTenMonHoc.setText("Tự chọn C");
+                        txtTenMonHoc.setPadding(0,0,0,0);
+                        /*imageView.setVisibility(View.GONE);
                         txtMaMonHoc.setVisibility(View.GONE);
                         txtTinChi.setVisibility(View.GONE);
                         txtTenMonHoc.setText("Tự chọn C");
                         txtTenMonHoc.setPadding(0, 0, 0, 0);
                         txtIcon.setText("C");
-                        txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonC));
+                        txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonC));*/
                         break;
                     default:
-                        txtIcon.setVisibility(View.GONE);
+                        //txtIcon.setVisibility(View.GONE);
                         break;
                 }
             } else {
-                txtIcon.setVisibility(View.GONE);
+                //txtIcon.setVisibility(View.GONE);
+            }
+            if(mMonHoc.getDiem() != -1){
+                TextView txtDiem = (TextView)view.findViewById(R.id.txtDiem);
+                txtDiem.setText(new DecimalFormat("####0.#").format(mMonHoc.getDiem()));
             }
         }
 

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     ArrayList<Object> mListUser;
     TabLayout tabLayout;
     TabsPagerAdapter mAdapter;
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +69,8 @@ public class MainActivity extends AppCompatActivity
 
     public void loadTabs(){
         tabLayout = (TabLayout)findViewById(R.id.tab_layout);
-        tabLayout.removeAllTabs();
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.removeAllTabs();
 
         // Restore preferences
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -83,19 +84,15 @@ public class MainActivity extends AppCompatActivity
             tabLayout.addTab(tabLayout.newTab().setText("niên giám"), 2);
         }
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(mAdapter);
+        viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                if(tab.getPosition() == 1){
+                if (tab.getPosition() == 1) {
                     mAdapter.notifyDataSetChanged();
-                    //stupid bug
-                    /*FragmentQuaTrinhHocTap frag = (FragmentQuaTrinhHocTap)mAdapter.getItem(mAdapter.getTabPosition(FragmentQuaTrinhHocTap.class.getSimpleName()));
-                    frag.reloadView(getApplicationContext());*/
                 }
             }
 
@@ -108,6 +105,7 @@ public class MainActivity extends AppCompatActivity
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+        viewPager.setAdapter(mAdapter);
     }
 
     @Override
@@ -156,7 +154,7 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
-        SQLiteDataController data = new SQLiteDataController(this);
+        SQLiteDataController data = SQLiteDataController.getInstance(this);
         try{
             data.isCreatedDatabase();
         }
@@ -248,9 +246,24 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == 1){
-            recreate();
-        }
         super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 1){
+            super.onResume();
+            recreate();
+            tabLayout.removeAllTabs();
+            // Restore preferences
+            SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            if((currentUserData.getString("user_mssv", null) == null) || (currentUserData.getString("user_mssv", null).isEmpty())){
+                //form dang ky
+                tabLayout.addTab(tabLayout.newTab().setText("niên giám"), 0);
+            } else{
+                current_user = currentUserData.getString("user_mssv", null);
+                tabLayout.addTab(tabLayout.newTab().setText("chức năng"), 0);
+                tabLayout.addTab(tabLayout.newTab().setText("hồ sơ"), 1);
+                tabLayout.addTab(tabLayout.newTab().setText("niên giám"), 2);
+            }
+            mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+            viewPager.setAdapter(mAdapter);
+        }
     }
 }

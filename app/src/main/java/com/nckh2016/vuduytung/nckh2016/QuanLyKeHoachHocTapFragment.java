@@ -27,6 +27,9 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
     public ObjectUserHocKy user_data;
+    public ObjectUser cUser;
+    AdapterNamHoc hocTapAdapter;
+    ListView listViewHocTap;
 
     public QuanLyKeHoachHocTapFragment() {
     }
@@ -38,19 +41,17 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
         ArrayList<String> list_hocKy = new ArrayList<String>();
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
-        Gson gson = new Gson();
-        user_data = gson.fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);
-        SQLiteDataController data = new SQLiteDataController(getContext());
+        user_data = new Gson().fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);
+        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
             data.isCreatedDatabase();
         }
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        final ObjectUser cUser = (ObjectUser)data.getUser(current_user).get(0);
-
-        final ListView listViewHocTap = (ListView)view.findViewById(R.id.listview_user_data);
-        final AdapterNamHoc hocTapAdapter = new AdapterNamHoc(getContext());
+        cUser = (ObjectUser)data.getUser(current_user).get(0);
+        listViewHocTap = (ListView)view.findViewById(R.id.listview_user_data);
+        hocTapAdapter = new AdapterNamHoc(getContext());
         for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
             //add nam hoc
             hocTapAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
@@ -65,8 +66,26 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
             }
         }
         listViewHocTap.setAdapter(hocTapAdapter);
-
-
         return view;
+    }
+
+    public void refreshView(){
+        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        user_data = new Gson().fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);
+        hocTapAdapter.removeAll();
+        for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
+            //add nam hoc
+            hocTapAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
+            if(user_data != null){
+                for(ObjectHocKy value : user_data.getUserData()){
+                    if(value.getNamHoc() == i+1){
+                        if(value.getHocKy() != 0){
+                            hocTapAdapter.addItem(new ObjectHocKy(i+1, value.getHocKy(), cUser.getManganh()));
+                        }
+                    }
+                }
+            }
+        }
+        hocTapAdapter.notifyDataSetChanged();
     }
 }

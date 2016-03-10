@@ -38,7 +38,7 @@ public class BoMon2Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_bo_mon_2, container, false);
         String maBoMon = getArguments().getString("MaBoMon");
         String tenBoMon = getArguments().getString("TenBoMon");
-        SQLiteDataController data = new SQLiteDataController(getContext());
+        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
             data.isCreatedDatabase();
         }

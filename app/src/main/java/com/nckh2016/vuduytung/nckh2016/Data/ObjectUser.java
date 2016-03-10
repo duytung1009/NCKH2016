@@ -1,5 +1,7 @@
 package com.nckh2016.vuduytung.nckh2016.Data;
 
+import java.util.ArrayList;
+
 /**
  * Created by Tung on 24/2/2016.
  */
@@ -10,7 +12,8 @@ public class ObjectUser {
     String hoten;
     String namhoc;
     String email;
-    String hocky;
+    String hocky;   //dữ liệu học kỳ custom được lưu ở biến này (GSON: ArrayList<ObjectHocKy>)
+    ArrayList<ObjectUserData> userdata;
 
     public ObjectUser(String masv, String makhoa, String manganh, String hoten, String namhoc, String email, String hocky) {
         this.masv = masv;
@@ -20,6 +23,7 @@ public class ObjectUser {
         this.namhoc = namhoc;
         this.email = email;
         this.hocky = hocky;
+        userdata = new ArrayList<ObjectUserData>();
     }
 
     public String getMasv() {

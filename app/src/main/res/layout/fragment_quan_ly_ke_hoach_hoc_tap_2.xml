@@ -9,25 +9,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/layoutTitle"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
+            android:layout_height="50dp">
             <TextView
                 android:id="@+id/txtTenHocKy"
                 style="@style/bigText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/btnXoaHocKy"
                 android:paddingLeft="10dp"
+                android:singleLine="true"
                 android:gravity="center_vertical" />
-        </LinearLayout>
+            <Button
+                android:id="@+id/btnXoaHocKy"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/delete"
+                android:backgroundTint="@android:color/tab_indicator_text"/>
+        </RelativeLayout>
         <View
             android:id="@+id/line"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/layoutTitle"
             android:background="#c0c0c0"/>
+        <TextView
+            android:id="@+id/txtThongBao"
+            style="@style/bigText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/line"
+            android:layout_above="@+id/btnThemMonHoc"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/khong"/>
         <ListView
             android:id="@+id/lvMonHoc"
             android:layout_width="match_parent"

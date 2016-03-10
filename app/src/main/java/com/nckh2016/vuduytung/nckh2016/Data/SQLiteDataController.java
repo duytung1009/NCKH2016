@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * Created by Tung on 20/2/2016.
  */
 public class SQLiteDataController extends SQLiteOpenHelper {
-
+    private static SQLiteDataController mInstance = null;
     // database
     public static String DB_PATH = "/data/data/com.nckh2016.vuduytung.nckh2016/databases/";
     private static String DB_NAME = "nckh2016db.sqlite";
@@ -37,11 +37,19 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     private SQLiteDatabase database;
     private final Context mContext;
 
-    public SQLiteDataController(Context cont) {
+    private SQLiteDataController(Context cont) {
         super(cont, DB_NAME, null, DATABASE_VERSION);
         this.mContext = cont;
         // TODO Auto-generated constructor stub
     }
+
+    public static SQLiteDataController getInstance(Context cont){
+        if (mInstance == null) {
+            mInstance = new SQLiteDataController(cont.getApplicationContext());
+        }
+        return mInstance;
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -54,8 +62,14 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     @Override
+    protected void finalize() throws Throwable {
+        this.close();
+        super.finalize();
+    }
+
+    @Override
     public synchronized void close() {
-        if (database != null)
+        if(database != null)
             database.close();
         super.close();
     }
@@ -148,8 +162,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     public void openDataBase() throws SQLException {
-        database = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null,
-                SQLiteDatabase.OPEN_READWRITE);
+        database = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
     }
 
     //phương thức truy vấn CSDL
@@ -218,7 +231,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 //+ " AND " + UserDataEntry.COLUMN_HOC_KY + " = " + value.getHocky()
                 //+ " AND " + UserDataEntry.COLUMN_NAM_THU + " = " + value.getNamthu()
                 if(mCursor.moveToFirst()) {
-                    num = database.update(UserDataEntry.TABLE_NAME, userData, UserDataEntry.COLUMN_MA_SV + " = ? AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = ?", new String[]{value.getMasv(), value.getMamonhoc()});
+                    num = database.update(UserDataEntry.TABLE_NAME, userData,
+                            UserDataEntry.COLUMN_MA_SV + " = ? AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = ?",
+                            new String[]{value.getMasv(), value.getMamonhoc()});
                 } else{
                     num = database.insert(UserDataEntry.TABLE_NAME, null, userData);
                 }
@@ -1097,7 +1112,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             while (cursor.moveToNext()) {
                 tenChuyenSau = cursor.getString(cursor.getColumnIndex(ChuyenSauEntry.COLUMN_TEN));
             }
-            cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -1105,6 +1119,22 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             close();
         }
         return tenChuyenSau;
+    }
+
+    public int deleteUserData(String masv, int hocky, int namhoc){
+        int result = -1;
+        try{
+            // Mở kết nối
+            openDataBase();
+            result = database.delete(UserDataEntry.TABLE_NAME,
+                    UserDataEntry.COLUMN_MA_SV + " = ? AND " + UserDataEntry.COLUMN_HOC_KY + " = ? AND " + UserDataEntry.COLUMN_NAM_THU + " = ?",
+                    new String[]{masv, String.valueOf(hocky), String.valueOf(namhoc)});
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return result;
     }
 
     /*public Cursor getAllKhoa(){

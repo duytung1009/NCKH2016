@@ -98,7 +98,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         return view;
     }
     public void loadData(){
-        final SQLiteDataController data = new SQLiteDataController(getContext());
+        final SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try {
             data.isCreatedDatabase();
         } catch (IOException e) {
@@ -152,7 +152,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         }
         mainChart.setCenterTextTypeface(light);
         mainChart.setCenterTextSize(24);
-        mainChart.setCenterTextColor(Color.parseColor("#009688"));
+        mainChart.setCenterTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         mainChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
@@ -177,21 +177,6 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         mainChart.setData(chartData);
         mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
         mainChart.invalidate();
-    }
-    public void reloadView(Context context){
-        SharedPreferences currentUserData = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String new_user = currentUserData.getString("user_mssv", null);
-        if(current_user!=null){
-            if(new_user.equals(current_user)){
-                mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
-            } else {
-                current_user = new_user;
-                loadData();
-            }
-        } else {
-            current_user = new_user;
-            loadData();
-        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

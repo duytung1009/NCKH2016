@@ -52,7 +52,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         txtNoiDung = (TextView) findViewById(R.id.txtNoiDung);
         txtTaiLieu = (TextView) findViewById(R.id.txtTaiLieu);
         String maMonHoc = getIntent().getStringExtra("MaMonHoc");
-        SQLiteDataController data = new SQLiteDataController(this);
+        SQLiteDataController data = SQLiteDataController.getInstance(this);
         try{
             data.isCreatedDatabase();
         }

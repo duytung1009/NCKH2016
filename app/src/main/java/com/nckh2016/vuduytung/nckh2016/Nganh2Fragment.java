@@ -41,7 +41,7 @@ public class Nganh2Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_nganh_2, container, false);
         String maNganh = getArguments().getString("MaNganh");
         String tenNganh = getArguments().getString("TenNganh");
-        SQLiteDataController data = new SQLiteDataController(getContext());
+        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
             data.isCreatedDatabase();
         }
@@ -81,27 +81,11 @@ public class Nganh2Fragment extends Fragment {
                 }
             }
         }
-        /*for(Items a : listHocKy){
-            ObjectHocKy2 cHocKy = (ObjectHocKy2)a;
-            if(cHocKy.getHocky() > 0){
-                finalCTDT.add(a);
-                final ArrayList<Items> mListCTDTHocKy = data.getChuongTrinhDaoTao(maNganh, cHocKy.getHocky(), cHocKy.getChuyensau());
-                for(Items b : mListCTDTHocKy){
-                    finalCTDT.add(b);
-                }
-            }
-        }*/
-
         mAdapter.addItem(finalCTDT);
         mMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ((NganhActivity) getActivity()).loadFragment3((ObjectCTDT)finalCTDT.get(position));
-
-                /*Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
-                intent.putExtra("MaMonHoc", ((ObjectCTDT) mListCTDT.get(position)).getMamh());
-                intent.putExtra("caller", "BoMonActivity");
-                startActivity(intent);*/
             }
         });
         mMonHoc.setAdapter(mAdapter);

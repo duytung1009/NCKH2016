@@ -41,6 +41,11 @@ public class AdapterNamHoc extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void removeAll(){
+        mData.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         if (mData.get(position).getHocKy() == 0)
@@ -81,18 +86,37 @@ public class AdapterNamHoc extends BaseAdapter {
                     //view.setOnClickListener(null);
                     int max = 0;
                     boolean maxHocKy = false;
+                    boolean hk1 = false, hk2 = false, hk3 = false, hk4 = false;
+                    //lọc ra học kỳ nào còn trống từ 1->4
+                    //đoạn này hại não vãi...
                     for(ObjectHocKy value : mData){
                         if(value.getNamHoc() == i.getNamHoc()){
-                            if(value.getHocKy() > max){
-                                max = value.getHocKy();
+                            if(value.getHocKy() == 1){
+                                hk1 = true;
+                            } else if(value.getHocKy() == 2){
+                                hk2 = true;
+                            } else if(value.getHocKy() == 3){
+                                hk3 = true;
+                            } else if(value.getHocKy() == 4){
+                                hk4 = true;
                             }
                         }
                     }
-                    if(max >= 4){
+                    if(!hk1 || !hk2 || !hk3 || !hk4){
+                        if(!hk1){
+                            max = 1;
+                        } else if(!hk2){
+                            max = 2;
+                        } else if(!hk3){
+                            max = 3;
+                        } else if(!hk4){
+                            max = 4;
+                        }
+                    } else {
                         maxHocKy = true;
                     }
-                    final int hocKyMoi = max + 1;
-                    final int viTri = position + max + 1;
+                    final int hocKyMoi = max;
+                    final int viTri = position + max;
                     TextView txtTenNamHoc = (TextView)view.findViewById(R.id.txtNamHoc);
                     txtTenNamHoc.setText("Năm thứ " + i.getNamHoc());
                     Button btnThemHocKy = (Button)view.findViewById(R.id.btnThemHocKy);
@@ -112,7 +136,7 @@ public class AdapterNamHoc extends BaseAdapter {
                                 editor.putString("user_data", json);
                                 editor.commit();
 
-                                SQLiteDataController data = new SQLiteDataController(mContext);
+                                SQLiteDataController data = SQLiteDataController.getInstance(mContext);
                                 try{
                                     data.isCreatedDatabase();
                                 }

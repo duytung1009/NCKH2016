@@ -84,7 +84,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/question"
+                    android:src="@drawable/help"
+                    android:tint="#03A9F4"
                     />
                 <TextView
                     android:layout_width="match_parent"
@@ -108,7 +109,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/info"
+                    android:src="@drawable/infomation"
+                    android:tint="#03A9F4"
                     />
                 <TextView
                     android:layout_width="match_parent"

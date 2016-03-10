@@ -40,7 +40,7 @@ public class Nganh3Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_nganh_3, container, false);
         String maNganh = getArguments().getString("MaNganh");
         Integer hocKy = getArguments().getInt("HocKy");
-        SQLiteDataController data = new SQLiteDataController(getContext());
+        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
             data.isCreatedDatabase();
         }

@@ -13,11 +13,5 @@ public class TaoTaiKhoanActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        /*String tag = "frag1";
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment frag1 = new TaoTaiKhoan1Fragment();
-        ft.addToBackStack(tag);
-        ft.replace(R.id.fragment, frag1, tag);
-        ft.commit();*/
     }
 }

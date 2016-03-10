@@ -48,7 +48,7 @@ public class KeHoachHocTap3Fragment extends Fragment {
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         btnLuuMonHoc = (Button)view.findViewById(R.id.btnLuuMonHoc);
-        final SQLiteDataController data = new SQLiteDataController(getContext());
+        final SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try {
             data.isCreatedDatabase();
         } catch (IOException e) {
@@ -79,6 +79,7 @@ public class KeHoachHocTap3Fragment extends Fragment {
                 }
                 boolean flag = data.insertUserData(values);
                 if (flag) {
+                    getActivity().setResult(1);
                     ((KeHoachHocTapActivity)getActivity()).finish();
                 } else {
                     Toast.makeText(getContext(), "Lỗi", Toast.LENGTH_SHORT).show();

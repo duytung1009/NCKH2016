@@ -35,7 +35,7 @@ public class KeHoachHocTap1Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ke_hoach_hoc_tap, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
-        SQLiteDataController data = new SQLiteDataController(getContext());
+        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
             data.isCreatedDatabase();
         }
@@ -47,7 +47,11 @@ public class KeHoachHocTap1Fragment extends Fragment {
         txtTenNganh.setText(data.getTenNganh(cUser.getManganh()));
         final ListView listViewHocTap = (ListView)view.findViewById(R.id.list_view_hoctap);
         final AdapterHocKy hocKyAdapter = new AdapterHocKy(getContext());
-        for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
+        int tongNamHoc = 5;
+        if(cUser.getManganh() == "701" || cUser.getManganh() == "702"){
+            tongNamHoc = 4;
+        }
+        for(int i=0; i<tongNamHoc; i++){
             //add nam hoc
             hocKyAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
             //add hoc ky 1

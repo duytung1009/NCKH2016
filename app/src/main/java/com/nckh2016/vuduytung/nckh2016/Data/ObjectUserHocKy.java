@@ -30,6 +30,20 @@ public class ObjectUserHocKy {
 
     public void removeHocKy(int position){
         userData.remove(position);
+    }
 
+    public ObjectHocKy getHocKy(int position){
+        return userData.get(position);
+    }
+
+    public boolean removeHocKy(ObjectHocKy value){
+        boolean result = false;
+        for(ObjectHocKy obj : userData){
+            if(obj.getHocKy() == value.getHocKy() && obj.getNamHoc() == value.getNamHoc() && obj.getNganh().equals(value.getNganh())){
+                result = userData.remove(obj);
+                break;
+            }
+        }
+        return result;
     }
 }

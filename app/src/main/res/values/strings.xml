@@ -44,6 +44,7 @@
     <string name="txtNganh">Chuyên ngành</string>
     <string name="txtBoMon">Bộ môn</string>
     <string name="txtDanhSachMonHoc">Danh sách môn học</string>
+    <string name="txtKeHoachHocTap">Kế hoạch học tập</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

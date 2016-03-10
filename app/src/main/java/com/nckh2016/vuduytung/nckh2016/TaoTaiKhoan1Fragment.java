@@ -49,7 +49,7 @@ public class TaoTaiKhoan1Fragment extends Fragment {
         ArrayAdapter<String> mNamHocAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, new String[] {"1","2","3","4","5"});
         mSpinnerNamHoc.setAdapter(mNamHocAdapter);
 
-        SQLiteDataController data = new SQLiteDataController(getContext());
+        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
             data.isCreatedDatabase();
         }
@@ -67,7 +67,7 @@ public class TaoTaiKhoan1Fragment extends Fragment {
         mSpinnerKhoa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SQLiteDataController data = new SQLiteDataController(parent.getContext());
+                SQLiteDataController data = SQLiteDataController.getInstance(getContext());
                 try {
                     data.isCreatedDatabase();
                 } catch (IOException e) {
@@ -125,7 +125,7 @@ public class TaoTaiKhoan1Fragment extends Fragment {
                     newUser.put(UserEntry.COLUMN_NAM_HOC, namthu);
                     newUser.put(UserEntry.COLUMN_HOC_KY, new Gson().toJson(newUserHocKy));
 
-                    SQLiteDataController data = new SQLiteDataController(getContext());
+                    SQLiteDataController data = SQLiteDataController.getInstance(getContext());
                     try{
                         data.isCreatedDatabase();
                     }

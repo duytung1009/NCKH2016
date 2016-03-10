@@ -24,7 +24,7 @@
                 android:paddingLeft="10dp"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text="@string/txtDanhSachMonHoc"/>
+                android:text="@string/txtKeHoachHocTap"/>
 
         </RelativeLayout>
         <View

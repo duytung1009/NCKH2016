@@ -35,7 +35,7 @@ public class Nganh1Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_nganh, container, false);
         mSpinnerKhoa = (Spinner)view.findViewById(R.id.spinnerKhoa);
         mSpinnerNganh = (Spinner)view.findViewById(R.id.spinnerNganh);
-        SQLiteDataController data = new SQLiteDataController(getContext());
+        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
             data.isCreatedDatabase();
         }
@@ -53,7 +53,7 @@ public class Nganh1Fragment extends Fragment {
         mSpinnerKhoa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SQLiteDataController data = new SQLiteDataController(parent.getContext());
+                SQLiteDataController data = SQLiteDataController.getInstance(getContext());
                 try {
                     data.isCreatedDatabase();
                 } catch (IOException e) {

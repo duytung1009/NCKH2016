@@ -52,7 +52,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
         mListHocKy = (ListView)view.findViewById(R.id.list_view_chonmonhoc);
         btnThemMonHoc = (Button)view.findViewById(R.id.btnThemMonHoc);
         selectAllCheckBox = (CheckBox)view.findViewById(R.id.selectAllCheckBox);
-        SQLiteDataController data = new SQLiteDataController(getContext());
+        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try {
             data.isCreatedDatabase();
         } catch (IOException e) {

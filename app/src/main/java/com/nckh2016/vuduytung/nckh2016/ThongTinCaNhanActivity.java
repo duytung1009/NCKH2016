@@ -30,7 +30,7 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
         TextView tvKhoa = (TextView)findViewById(R.id.tvKhoa);
         TextView tvNganh = (TextView)findViewById(R.id.tvNganh);
         TextView tvNamThu = (TextView)findViewById(R.id.tvNamThu);
-        SQLiteDataController data = new SQLiteDataController(this);
+        SQLiteDataController data = SQLiteDataController.getInstance(this);
         try{
             data.isCreatedDatabase();
         }

@@ -1,16 +1,21 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
 
 public class QuanLyKeHoachHocTapActivity extends AppCompatActivity {
+    public static final String PREFS_NAME = "current_user";
+    public String current_user = null;
+    public String current_user_name = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +24,12 @@ public class QuanLyKeHoachHocTapActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        current_user = currentUserData.getString("user_mssv", null);
+        current_user_name = currentUserData.getString("user_name", null);
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle(current_user_name);
+        ab.setSubtitle(current_user);
     }
 
     public void loadPreviousFragment(){

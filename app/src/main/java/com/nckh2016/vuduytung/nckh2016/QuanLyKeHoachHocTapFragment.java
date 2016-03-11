@@ -49,7 +49,7 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        cUser = (ObjectUser)data.getUser(current_user).get(0);
+        cUser = data.getUser(current_user);
         listViewHocTap = (ListView)view.findViewById(R.id.listview_user_data);
         hocTapAdapter = new AdapterNamHoc(getContext());
         for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){

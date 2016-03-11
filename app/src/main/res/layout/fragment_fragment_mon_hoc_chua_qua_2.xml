@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nckh2016.vuduytung.nckh2016.MonHocChuaQuaActivityFragment">
+    tools:context="com.nckh2016.vuduytung.nckh2016.FragmentMonHocChuaQua2">
 
     <RelativeLayout
         android:layout_width="match_parent"

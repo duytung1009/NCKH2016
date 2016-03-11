@@ -51,19 +51,6 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    public int getTabPosition(String tabName){
-        switch (tabName) {
-            case "FragmentNguoiDung":
-                return 0;
-            case "FragmentQuaTrinhHocTap":
-                return 1;
-            case "FragmentNienGiam":
-                return 2;
-            default:
-                return 0;
-        }
-    }
-
     @Override
     public int getItemPosition(Object object) {
         return POSITION_NONE;

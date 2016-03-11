@@ -1,12 +1,16 @@
 package com.nckh2016.vuduytung.nckh2016;
 
+import android.animation.LayoutTransition;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -58,6 +62,36 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Transition
+        LinearLayout searchBar = (LinearLayout) searchView.findViewById(R.id.search_bar);
+        searchBar.setLayoutTransition(new LayoutTransition());
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("Tìm kiếm");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                progressBar.setVisibility(View.VISIBLE);
+                mainLayout.setVisibility(View.GONE);
+                new SearchResultTask(getParent()).execute(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         new SearchResultTask(this).execute(query);
@@ -83,6 +117,7 @@ public class SearchResultActivity extends AppCompatActivity {
                 buffer.append(",").append(each);
             String joined = buffer.deleteCharAt(0).toString();
             // database access
+            query = joined;
             SQLiteDataController data = SQLiteDataController.getInstance(mContext);
             try{
                 data.isCreatedDatabase();
@@ -101,8 +136,10 @@ public class SearchResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Object> objects) {
             if(objects != null) {
+                mListResult.clear();
                 mListResult.addAll(objects);
-                txtTieuDe.setText(mListResult.size() + " kết quả");
+                txtTieuDe.setText(query + " - " + mListResult.size() + " kết quả");
+                mAdapterResult.clear();
                 mAdapterResult.addAll(mListResult);
                 mainLayout.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);

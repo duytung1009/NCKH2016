@@ -24,6 +24,7 @@ import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectMonHoc;
+import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
@@ -56,13 +57,14 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
         final SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
-        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+        final SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
             data.isCreatedDatabase();
         }
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
+        final ObjectUser user = data.getUser(current_user);
         userMonHoc = data.getUserData(current_user, selectedHocKy.getNamHoc(), selectedHocKy.getHocKy());
         final Gson gson = new Gson();
         final ObjectUserHocKy userData = gson.fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);
@@ -85,6 +87,8 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), KeHoachHocTapActivity.class);
+                intent.putExtra("Nganh", data.getTenNganh(user.getManganh()));
+                intent.putExtra("ChuyenSau", data.getTenChuyenSau(user.getManganh(), Integer.parseInt(user.getMachuyensau())));
                 intent.putExtra("HocKy", selectedHocKy.getHocKy());
                 intent.putExtra("NamHoc", selectedHocKy.getNamHoc());
                 startActivityForResult(intent, 1);

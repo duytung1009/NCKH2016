@@ -42,7 +42,7 @@ public class KeHoachHocTap1Fragment extends Fragment {
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        final ObjectUser cUser = (ObjectUser)data.getUser(current_user).get(0);
+        final ObjectUser cUser = data.getUser(current_user);
         TextView txtTenNganh = (TextView)view.findViewById(R.id.txtTenNganh);
         txtTenNganh.setText(data.getTenNganh(cUser.getManganh()));
         final ListView listViewHocTap = (ListView)view.findViewById(R.id.list_view_hoctap);

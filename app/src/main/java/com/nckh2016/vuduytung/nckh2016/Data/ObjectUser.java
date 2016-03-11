@@ -16,6 +16,18 @@ public class ObjectUser {
     String machuyensau;
     ArrayList<ObjectUserData> userdata;
 
+    public ObjectUser() {
+        this.masv = null;
+        this.makhoa = null;
+        this.manganh = null;
+        this.hoten = null;
+        this.namhoc = null;
+        this.email = null;
+        this.hocky = null;
+        this.machuyensau = null;
+        userdata = new ArrayList<ObjectUserData>();
+    }
+
     public ObjectUser(String masv, String makhoa, String manganh, String hoten, String namhoc, String email, String hocky, String machuyensau) {
         this.masv = masv;
         this.makhoa = makhoa;

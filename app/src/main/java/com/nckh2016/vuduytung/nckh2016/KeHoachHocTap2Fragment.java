@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc2;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
@@ -127,6 +128,10 @@ public class KeHoachHocTap2Fragment extends Fragment {
                 break;
         }
         ArrayList<Object> mArrayList = data.getChuongTrinhDaoTao(selectedHocKy.getNganh(), selectedHocKy.getNamHoc(), maHocKy, chuyenSau);
+        if(mArrayList.size() == 0){
+            chuyenSau = Integer.parseInt(data.getUser(current_user).getMachuyensau());
+            mArrayList = data.getChuongTrinhDaoTao(selectedHocKy.getNganh(), selectedHocKy.getNamHoc(), maHocKy, chuyenSau);
+        }
         ArrayList<Object> mMonHocChuaQua = data.getMonHocChuaQua(current_user, mArrayList);
         monHocAdapter = new AdapterMonHoc2(this, 0, mMonHocChuaQua);
         selectAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -147,7 +152,11 @@ public class KeHoachHocTap2Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ArrayList<String> selectedMonHoc = monHocAdapter.getSelectedMonHoc();
-                ((KeHoachHocTapActivity) getActivity()).loadFragment3(selectedHocKy, selectedMonHoc);
+                if (selectedMonHoc.size() == 0) {
+                    Toast.makeText(getContext(), "Chưa chọn môn học", Toast.LENGTH_SHORT).show();
+                } else {
+                    ((KeHoachHocTapActivity) getActivity()).loadFragment3(selectedHocKy, selectedMonHoc);
+                }
             }
         });
         return view;

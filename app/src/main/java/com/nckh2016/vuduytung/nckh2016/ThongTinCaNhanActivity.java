@@ -11,7 +11,6 @@ import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class ThongTinCaNhanActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "current_user";
@@ -44,8 +43,7 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
         } else{
             current_user = currentUserData.getString("user_mssv", null);
         }
-        ArrayList<Object> mListUser = data.getUser(current_user);
-        ObjectUser currentUser = (ObjectUser)mListUser.get(0);
+        ObjectUser currentUser = data.getUser(current_user);
         txtMaSinhVien.setText(currentUser.getMasv());
         txtTenSinhVien.setText(currentUser.getHoten());
         txtEmail.setText(currentUser.getEmail());

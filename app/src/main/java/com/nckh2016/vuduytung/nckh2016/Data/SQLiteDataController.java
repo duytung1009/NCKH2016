@@ -9,12 +9,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuongTrinhDaoTaoEntry;
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.KhoaEntry;
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract.NganhEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.BoMonEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuongTrinhDaoTaoEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuyenSauEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.KhoaEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.MonHocEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract.NganhEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserDataEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
 
@@ -983,8 +983,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
      * @param masv mã sinh viên (String)
      * @return
      */
-    public ArrayList<Object> getUser(String masv){
-        ArrayList<Object> result = new ArrayList<Object>();
+    public ObjectUser getUser(String masv){
+        ObjectUser result = new ObjectUser();
         Cursor mCursor = null;
         try{
             openDataBase();
@@ -992,7 +992,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     + " WHERE " + UserEntry.COLUMN_MA_SV + " = '" + masv + "'", null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
-                    result.add(new ObjectUser(
+                    result = new ObjectUser(
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_SV)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_KHOA)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_NGANH)),
@@ -1001,7 +1001,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_EMAIL)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HOC_KY)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_CHUYEN_SAU))
-                    ));
+                    );
                 }
             }
         } catch (Exception e) {
@@ -1128,10 +1128,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     /**
      * lấy danh sách môn học chưa qua (điểm số tùy biến)
      * @param masv mã sinh viên (String)
-     * @param diem điểm số làm mốc (Double)
+     * @param diemMin điểm số làm mốc dưới (Double)
+     * @param diemMax điểm số làm mốc trên (Double)
      * @return
      */
-    public ArrayList<Object> getMonHocChuaQua(String masv, double diem){
+    public ArrayList<Object> getMonHocChuaQua(String masv, double diemMin, double diemMax){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;
         try{
@@ -1142,7 +1143,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     + " LEFT JOIN " + MonHocEntry.TABLE_NAME
                     + " ON " + UserDataEntry.TABLE_NAME + "." + UserDataEntry.COLUMN_MA_MON_HOC + " = " + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_MA_MON_HOC
                     + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = '" + masv + "'"
-                    + " AND " + UserDataEntry.COLUMN_DIEM_SO + " < " + diem, null);
+                    + " AND " + UserDataEntry.COLUMN_DIEM_SO + " >= " + diemMin
+                    + " AND " + UserDataEntry.COLUMN_DIEM_SO + " < " + diemMax, null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     result.add(new ObjectMonHoc(

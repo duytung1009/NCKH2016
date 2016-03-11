@@ -50,11 +50,11 @@ public class AdapterMonHocNhapDiem extends ArrayAdapter<Object> {
             itemLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*edDiem.setFocusableInTouchMode(true);
-                    edDiem.requestFocus();*/
-                    edDiem.requestFocusFromTouch();
                     InputMethodManager lManager = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     lManager.showSoftInput(edDiem, 0);
+                    /*edDiem.setFocusableInTouchMode(true);
+                    edDiem.requestFocus();*/
+                    edDiem.requestFocus();
                 }
             });
             if(diemValues.containsKey(mMonHoc.getMamh())){

@@ -244,7 +244,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e){
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
             return flag;
         }
@@ -277,7 +279,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return (tongDiem / tongTinChi)/10*4;
@@ -315,7 +319,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return soTinChi;
@@ -349,7 +355,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -384,7 +392,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -428,7 +438,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -463,7 +475,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -490,7 +504,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -531,7 +547,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -574,7 +592,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -617,7 +637,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -665,7 +687,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return flag;
@@ -693,7 +717,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return diem;
@@ -722,7 +748,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -750,7 +778,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -778,7 +808,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -807,7 +839,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -837,7 +871,41 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
+            close();
+        }
+        return result;
+    }
+
+    /**
+     * lấy thông tin hướng chuyên sâu theo ngành
+     * @param manganh mã ngành (String)
+     * @return
+     */
+    public ArrayList<Object> getChuyenSauTheoNganh(String manganh){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + ChuyenSauEntry.TABLE_NAME
+                    + " WHERE " + ChuyenSauEntry.COLUMN_MA_BO_MON + " = " + manganh, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectChuyenSau(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(ChuyenSauEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(ChuyenSauEntry.COLUMN_SO)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(ChuyenSauEntry.COLUMN_TEN))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -867,7 +935,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -892,14 +962,17 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HO_TEN)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_NAM_HOC)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_EMAIL)),
-                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HOC_KY))
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HOC_KY)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_CHUYEN_SAU))
                     ));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -926,14 +999,17 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HO_TEN)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_NAM_HOC)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_EMAIL)),
-                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HOC_KY))
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HOC_KY)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_CHUYEN_SAU))
                     ));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -961,7 +1037,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return flag;
@@ -993,7 +1071,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -1037,7 +1117,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -1079,7 +1161,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mCursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return result;
@@ -1092,19 +1176,21 @@ public class SQLiteDataController extends SQLiteOpenHelper {
      */
     public String getTenKhoa(String maKhoa){
         String tenKhoa = null;
-        Cursor cursor = null;
+        Cursor mCursor = null;
         try {
             // Mở kết nối
             openDataBase();
-            cursor = database.rawQuery("SELECT rowid as _id,* FROM " + KhoaEntry.TABLE_NAME
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + KhoaEntry.TABLE_NAME
                     + " WHERE " + KhoaEntry.COLUMN_MA_KHOA + " = " + maKhoa, null);
-            while (cursor.moveToNext()) {
-                tenKhoa = cursor.getString(cursor.getColumnIndex(KhoaEntry.COLUMN_TEN_KHOA));
+            while (mCursor.moveToNext()) {
+                tenKhoa = mCursor.getString(mCursor.getColumnIndex(KhoaEntry.COLUMN_TEN_KHOA));
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            cursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return tenKhoa;
@@ -1117,20 +1203,22 @@ public class SQLiteDataController extends SQLiteOpenHelper {
      */
     public String getTenNganh(String maNganh){
         String tenNganh = null;
-        Cursor cursor = null;
+        Cursor mCursor = null;
         try {
             // Mở kết nối
             openDataBase();
-            cursor = database.rawQuery("SELECT rowid as _id,* FROM " + NganhEntry.TABLE_NAME
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + NganhEntry.TABLE_NAME
                     + " WHERE " + NganhEntry.COLUMN_MA_NGANH + " = " + maNganh, null);
-            while (cursor.moveToNext()) {
-                tenNganh = cursor.getString(cursor.getColumnIndex(NganhEntry.COLUMN_TEN_NGANH));
+            while (mCursor.moveToNext()) {
+                tenNganh = mCursor.getString(mCursor.getColumnIndex(NganhEntry.COLUMN_TEN_NGANH));
             }
-            cursor.close();
+            mCursor.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            cursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return tenNganh;
@@ -1144,25 +1232,67 @@ public class SQLiteDataController extends SQLiteOpenHelper {
      */
     public String getTenChuyenSau(String mabm, int chuyenSau){
         String tenChuyenSau = null;
-        Cursor cursor = null;
+        Cursor mCursor = null;
         try {
             // Mở kết nối
             openDataBase();
-            cursor = database.rawQuery("SELECT rowid as _id,* FROM " + ChuyenSauEntry.TABLE_NAME
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + ChuyenSauEntry.TABLE_NAME
                     + " WHERE " + ChuyenSauEntry.COLUMN_MA_BO_MON + " = " + mabm
                     + " AND " + ChuyenSauEntry.COLUMN_SO + " = " + chuyenSau, null);
-            while (cursor.moveToNext()) {
-                tenChuyenSau = cursor.getString(cursor.getColumnIndex(ChuyenSauEntry.COLUMN_TEN));
+            while (mCursor.moveToNext()) {
+                tenChuyenSau = mCursor.getString(mCursor.getColumnIndex(ChuyenSauEntry.COLUMN_TEN));
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            cursor.close();
+            if(mCursor != null){
+                mCursor.close();
+            }
             close();
         }
         return tenChuyenSau;
     }
 
+    public ArrayList<Object> searchMonHoc(String query){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + MonHocEntry.TABLE_NAME
+                    + " WHERE " + MonHocEntry.COLUMN_MA_MON_HOC + " LIKE '%" + query + "%'"
+                    + " OR " + MonHocEntry.COLUMN_TEN_MON_HOC + " LIKE '%" + query + "%'", null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectMonHoc(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TEN_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU)),
+                            null
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(mCursor != null){
+                mCursor.close();
+            }
+            close();
+        }
+        return result;
+    }
+
+    /**
+     * xóa dữ liệu người dùng ứng với học kỳ cụ thể
+     * @param masv mã sinh viên (String)
+     * @param hocky học kỳ (int)
+     * @param namhoc năm học (int)
+     * @return
+     */
     public int deleteUserData(String masv, int hocky, int namhoc){
         int result = -1;
         try{

@@ -67,7 +67,8 @@ public class Nganh3Fragment extends Fragment {
             mListMaMonHoc.add(value != null ? value.getMamh() : null);
         }
         final ArrayList<Object> mListMonHoc = data.getMonHoc(mListMaMonHoc);
-        AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0 , mListMonHoc);
+        AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
+        mAdapter.addAll(mListMonHoc);
         ListView mMonHoc = (ListView)view.findViewById(R.id.list_view_chonmonhoc_2);
         mMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

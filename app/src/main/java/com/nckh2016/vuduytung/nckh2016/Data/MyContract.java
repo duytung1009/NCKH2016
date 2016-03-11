@@ -83,6 +83,7 @@ public class MyContract {
         public static final String COLUMN_NAM_HOC = "namhoc";
         public static final String COLUMN_EMAIL = "email";
         public static final String COLUMN_HOC_KY = "hocky";
+        public static final String COLUMN_MA_CHUYEN_SAU = "machuyensau";
     }
 
     public static final class UserDataEntry implements BaseColumns {
@@ -93,5 +94,6 @@ public class MyContract {
         public static final String COLUMN_HOC_KY = "hocky";
         public static final String COLUMN_NAM_THU = "namthu";
         public static final String COLUMN_DIEM_SO = "diemso";
+        public static final String COLUMN_BANG_DIEM = "bangdiem";
     }
 }

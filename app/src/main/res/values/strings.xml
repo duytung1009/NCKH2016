@@ -41,11 +41,18 @@
 
     <string name="khong">Chưa có dữ liệu</string>
 
+    <string name="txtMaSinhVien">Mã sinh viên</string>
+    <string name="txtHoTen">Họ tên</string>
     <string name="txtKhoa">Khoa</string>
-    <string name="txtNganh">Chuyên ngành</string>
+    <string name="txtChuyenNganh">Chuyên ngành</string>
+    <string name="txtNganh">Ngành</string>
     <string name="txtBoMon">Bộ môn</string>
+    <string name="txtChuyenSau">Chuyên sâu</string>
+    <string name="txtNam">Năm thứ</string>
+    <string name="txtEmail">Email</string>
     <string name="txtDanhSachMonHoc">Danh sách môn học</string>
     <string name="txtKeHoachHocTap">Kế hoạch học tập</string>
+    <string name="txtTimKiem">Tìm kiếm</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

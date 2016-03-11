@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
+import com.nckh2016.vuduytung.nckh2016.Data.ObjectChuyenSau;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectKhoa;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectNganh;
@@ -32,8 +33,8 @@ import java.util.List;
  */
 public class TaoTaiKhoan1Fragment extends Fragment {
     public static final String PREFS_NAME = "current_user";
-    ArrayList<Object> mListKhoa, mListNganh;
-    Spinner mSpinnerKhoa, mSpinnerNganh, mSpinnerNamHoc;
+    ArrayList<Object> mListKhoa, mListNganh, mListChuyenSau;
+    Spinner mSpinnerKhoa, mSpinnerNganh, mSpinnerChuyenSau, mSpinnerNamHoc;
 
     public TaoTaiKhoan1Fragment() {
     }
@@ -44,12 +45,13 @@ public class TaoTaiKhoan1Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tao_tai_khoan_1, container, false);
         mSpinnerKhoa = (Spinner)view.findViewById(R.id.spinnerKhoa);
         mSpinnerNganh = (Spinner)view.findViewById(R.id.spinnerNganh);
+        mSpinnerChuyenSau = (Spinner)view.findViewById(R.id.spinnerChuyenSau);
         mSpinnerNamHoc = (Spinner)view.findViewById(R.id.spinnerNamHoc);
 
         ArrayAdapter<String> mNamHocAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, new String[] {"1","2","3","4","5"});
         mSpinnerNamHoc.setAdapter(mNamHocAdapter);
 
-        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+        final SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
             data.isCreatedDatabase();
         }
@@ -67,12 +69,6 @@ public class TaoTaiKhoan1Fragment extends Fragment {
         mSpinnerKhoa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-                try {
-                    data.isCreatedDatabase();
-                } catch (IOException e) {
-                    Log.e("tag", e.getMessage());
-                }
                 mListNganh = data.getNganhTheoKhoa(((ObjectKhoa) mListKhoa.get(position)).getMakhoa());
                 List<String> mListTenNganh = new ArrayList<String>();
                 for (Object object : mListNganh) {
@@ -81,6 +77,25 @@ public class TaoTaiKhoan1Fragment extends Fragment {
                 }
                 ArrayAdapter<String> mNganhAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, mListTenNganh);
                 mNganhAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mSpinnerNganh.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        mListChuyenSau = data.getChuyenSauTheoNganh(((ObjectNganh)mListNganh.get(position)).getManganh());
+                        List<String> mListTenChuyenSau = new ArrayList<String>();
+                        for (Object object : mListChuyenSau) {
+                            ObjectChuyenSau value = (ObjectChuyenSau) object;
+                            mListTenChuyenSau.add(value != null ? value.getTenchuyensau() : null);
+                        }
+                        ArrayAdapter<String> mChuyenSauAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, mListTenChuyenSau);
+                        mChuyenSauAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        mSpinnerChuyenSau.setAdapter(mChuyenSauAdapter);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
                 mSpinnerNganh.setAdapter(mNganhAdapter);
             }
 
@@ -97,18 +112,21 @@ public class TaoTaiKhoan1Fragment extends Fragment {
                 String masv = ((EditText)getActivity().findViewById(R.id.editMaSinhVien)).getText().toString();
                 String hoten = ((EditText)getActivity().findViewById(R.id.editHoTen)).getText().toString();
                 String email = ((EditText)getActivity().findViewById(R.id.editEmail)).getText().toString();
-                String makhoa = null, manganh = null, namthu = null, hocky = null;
+                String makhoa = null, manganh = null, namthu = null, chuyensau = null;
                 if(mSpinnerKhoa.getSelectedItem() != null){
                     makhoa = ((ObjectKhoa)mListKhoa.get(mSpinnerKhoa.getSelectedItemPosition())).getMakhoa();
                 }
                 if(mSpinnerNganh.getSelectedItem() != null){
                     manganh = ((ObjectNganh)mListNganh.get(mSpinnerNganh.getSelectedItemPosition())).getManganh();
                 }
+                if(mSpinnerChuyenSau.getSelectedItem() != null){
+                    chuyensau = ((ObjectChuyenSau)mListChuyenSau.get(mSpinnerChuyenSau.getSelectedItemPosition())).getMachuyensau();
+                }
                 if(mSpinnerNamHoc.getSelectedItem() != null){
                     namthu = mSpinnerNamHoc.getSelectedItem().toString();
                 }
 
-                if(masv.isEmpty() || hoten.isEmpty() || makhoa == null || manganh == null || namthu == null){
+                if(masv.isEmpty() || hoten.isEmpty() || makhoa == null || manganh == null || namthu == null || chuyensau==null){
                     Toast.makeText(getContext(), "bổ sung thêm thông tin", Toast.LENGTH_SHORT).show();
                 } else {
                     ObjectUserHocKy newUserHocKy = new ObjectUserHocKy();
@@ -124,6 +142,7 @@ public class TaoTaiKhoan1Fragment extends Fragment {
                     newUser.put(UserEntry.COLUMN_MA_NGANH, manganh);
                     newUser.put(UserEntry.COLUMN_NAM_HOC, namthu);
                     newUser.put(UserEntry.COLUMN_HOC_KY, new Gson().toJson(newUserHocKy));
+                    newUser.put(UserEntry.COLUMN_MA_CHUYEN_SAU, chuyensau);
 
                     SQLiteDataController data = SQLiteDataController.getInstance(getContext());
                     try{

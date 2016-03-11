@@ -46,7 +46,8 @@ public class BoMon2Fragment extends Fragment {
             Log.e("tag", e.getMessage());
         }
         final ArrayList<Object> mListMonHoc = data.getMonHocTheoBoMon(maBoMon);
-        AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0, mListMonHoc);
+        AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
+        mAdapter.addAll(mListMonHoc);
         ListView mMonHoc = (ListView)view.findViewById(R.id.list_view_chonmonhoc);
         mMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -62,5 +63,4 @@ public class BoMon2Fragment extends Fragment {
         txtTieuDe.setText(tenBoMon + " - " + mListMonHoc.size() + " môn học");
         return view;
     }
-
 }

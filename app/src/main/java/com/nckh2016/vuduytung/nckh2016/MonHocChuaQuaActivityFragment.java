@@ -45,7 +45,8 @@ public class MonHocChuaQuaActivityFragment extends Fragment {
         }
         double diem = 5.5;
         final ArrayList<Object> userMonHocChuaQua = data.getMonHocChuaQua(current_user, diem);
-        AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0, userMonHocChuaQua);
+        AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
+        mAdapter.addAll(userMonHocChuaQua);
         TextView txtTitle = (TextView)view.findViewById(R.id.txtTitle);
         txtTitle.setText("Môn học chưa qua: " + userMonHocChuaQua.size() + " môn");
         ListView lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);

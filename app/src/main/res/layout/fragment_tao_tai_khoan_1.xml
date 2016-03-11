@@ -11,7 +11,9 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnDangKy"
+            android:layout_alignParentTop="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,57 +48,129 @@
                     android:imeOptions="actionDone"
                     android:singleLine="true" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
                     android:layout_margin="10dp"
-                    android:text="Khoa" />
-
-                <Spinner
-                    android:id="@+id/spinnerKhoa"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"></Spinner>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="Ngành" />
-
-                <Spinner
-                    android:id="@+id/spinnerNganh"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"></Spinner>
+                    android:background="#c0c0c0" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
                     android:orientation="horizontal">
 
-                    <LinearLayout
+                    <TextView
+                        style="@style/normalText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:singleLine="true"
+                        android:text="@string/txtKhoa" />
+
+                    <Spinner
+                        android:id="@+id/spinnerKhoa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="horizontal"
-                        android:padding="10dp">
+                        android:layout_marginRight="20dp" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="Năm thứ" />
+                </LinearLayout>
 
-                        <Spinner
-                            android:id="@+id/spinnerNamHoc"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"></Spinner>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:background="#c0c0c0" />
 
-                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        style="@style/normalText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:singleLine="true"
+                        android:text="@string/txtNganh" />
+
+                    <Spinner
+                        android:id="@+id/spinnerNganh"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginRight="20dp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:background="#c0c0c0" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/normalText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:singleLine="true"
+                        android:text="@string/txtChuyenSau" />
+
+                    <Spinner
+                        android:id="@+id/spinnerChuyenSau"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginRight="20dp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:background="#c0c0c0" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/normalText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:singleLine="true"
+                        android:text="@string/txtNam" />
+
+                    <Spinner
+                        android:id="@+id/spinnerNamHoc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginRight="20dp" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

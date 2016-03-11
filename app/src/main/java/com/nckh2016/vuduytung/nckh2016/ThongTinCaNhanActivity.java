@@ -24,12 +24,13 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        TextView tvMaSinhVien = (TextView)findViewById(R.id.tvMaSinhVien);
-        TextView tvTenSinhVien = (TextView)findViewById(R.id.tvTenSinhVien);
-        TextView tvEmail = (TextView)findViewById(R.id.tvEmail);
-        TextView tvKhoa = (TextView)findViewById(R.id.tvKhoa);
-        TextView tvNganh = (TextView)findViewById(R.id.tvNganh);
-        TextView tvNamThu = (TextView)findViewById(R.id.tvNamThu);
+        TextView txtMaSinhVien = (TextView)findViewById(R.id.txtMaSinhVien);
+        TextView txtTenSinhVien = (TextView)findViewById(R.id.txtTenSinhVien);
+        TextView txtEmail = (TextView)findViewById(R.id.txtEmail);
+        TextView txtKhoa = (TextView)findViewById(R.id.txtKhoa);
+        TextView txtNganh = (TextView)findViewById(R.id.txtNganh);
+        TextView txtChuyenSau = (TextView)findViewById(R.id.txtChuyenSau);
+        TextView txtNamThu = (TextView)findViewById(R.id.txtNamThu);
         SQLiteDataController data = SQLiteDataController.getInstance(this);
         try{
             data.isCreatedDatabase();
@@ -45,24 +46,13 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
         }
         ArrayList<Object> mListUser = data.getUser(current_user);
         ObjectUser currentUser = (ObjectUser)mListUser.get(0);
-        tvMaSinhVien.setText(currentUser.getMasv());
-        tvTenSinhVien.setText(currentUser.getHoten());
-        tvEmail.setText(currentUser.getEmail());
-        tvKhoa.setText(data.getTenKhoa(currentUser.getMakhoa()));
-        tvNganh.setText(data.getTenNganh(currentUser.getManganh()));
-        tvNamThu.setText(currentUser.getNamhoc());
-
-        /*Cursor cUser = data.getAllUserData();
-        while(cUser.moveToNext()){
-            if(cUser.getString(cUser.getColumnIndexOrThrow("masv")).equals(current_user)){
-                tvMaSinhVien.setText(cUser.getString(cUser.getColumnIndexOrThrow("masv")));
-                tvTenSinhVien.setText(cUser.getString(cUser.getColumnIndexOrThrow("hoten")));
-                tvEmail.setText(cUser.getString(cUser.getColumnIndexOrThrow("email")));
-                tvKhoa.setText(data.getTenKhoa(cUser.getString(cUser.getColumnIndexOrThrow("makhoa"))));
-                tvNganh.setText(data.getTenNganh(cUser.getString(cUser.getColumnIndexOrThrow("manganh"))));
-            }
-        }
-        cUser.close();*/
+        txtMaSinhVien.setText(currentUser.getMasv());
+        txtTenSinhVien.setText(currentUser.getHoten());
+        txtEmail.setText(currentUser.getEmail());
+        txtKhoa.setText(data.getTenKhoa(currentUser.getMakhoa()));
+        txtNganh.setText(data.getTenNganh(currentUser.getManganh()));
+        txtChuyenSau.setText(data.getTenChuyenSau(currentUser.getManganh(), Integer.parseInt(currentUser.getMachuyensau())));
+        txtNamThu.setText(currentUser.getNamhoc());
     }
 
 }

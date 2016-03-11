@@ -130,7 +130,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                         dialog.dismiss();
                     }
                 })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setIcon(R.drawable.error)
                         .show();
             }
         });
@@ -138,7 +138,8 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
             lvMonHoc.setVisibility(View.GONE);
         } else {
             txtThongBao.setVisibility(View.GONE);
-            mAdapter = new AdapterMonHoc(getContext(), 0, userMonHoc);
+            mAdapter = new AdapterMonHoc(getContext(), 0);
+            mAdapter.addAll(userMonHoc);
             lvMonHoc.setAdapter(mAdapter);
         }
         return view;
@@ -155,7 +156,8 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
             Log.e("tag", e.getMessage());
         }
         userMonHoc = data.getUserData(current_user, selectedHocKy.getNamHoc(), selectedHocKy.getHocKy());
-        mAdapter = new AdapterMonHoc(getContext(), 0, userMonHoc);
+        mAdapter = new AdapterMonHoc(getContext(), 0);
+        mAdapter.addAll(userMonHoc);
         lvMonHoc.setAdapter(mAdapter);
     }
 }

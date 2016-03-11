@@ -65,6 +65,7 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
                 }
             }
         }
+        hocTapAdapter.sort();
         listViewHocTap.setAdapter(hocTapAdapter);
         return view;
     }

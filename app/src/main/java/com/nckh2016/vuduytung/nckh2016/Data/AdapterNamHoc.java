@@ -17,6 +17,7 @@ import com.nckh2016.vuduytung.nckh2016.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Tung on 8/3/2016.
@@ -34,6 +35,23 @@ public class AdapterNamHoc extends BaseAdapter {
     public AdapterNamHoc(Context mContext) {
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mContext = mContext;
+    }
+
+    // sắp xếp lại thứ tự các học kỳ
+    public void sort(){
+        for(int i = 0; i<mData.size()-1; i++){
+            for(int j = i+1; j<mData.size(); j++){
+                if(mData.get(i).getNamHoc() == mData.get(j).getNamHoc()){
+                    if(mData.get(i).getHocKy() > mData.get(j).getHocKy()){
+                        doiCho(i,j);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+    public void doiCho(int obj1, int obj2){
+        Collections.swap(mData, obj1, obj2);
     }
 
     public void addItem(ObjectHocKy item) {

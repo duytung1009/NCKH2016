@@ -59,10 +59,17 @@ public class KeHoachHocTap1Fragment extends Fragment {
             //add hoc ky 2
             hocKyAdapter.addItem(new ObjectHocKy(i+1, 2, cUser.getManganh()));
         }
+        hocKyAdapter.addItem((new ObjectHocKy(0, 0, cUser.getManganh())));
+        //tự chọn A - mã chuyên ngành
+        hocKyAdapter.addItem((new ObjectHocKy(0, -3, cUser.getManganh())));
+        //tự chọn B - mã khoa thêm số 0 đằng sau
+        hocKyAdapter.addItem((new ObjectHocKy(0, -2, cUser.getMakhoa() + "0")));
+        //tự chọn C - mã 1 (toàn trường)
+        hocKyAdapter.addItem((new ObjectHocKy(0, -1, "1")));
         listViewHocTap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(hocKyAdapter.getItem(position).getHocKy() != 0){
+                if (hocKyAdapter.getItem(position).getHocKy() != 0) {
                     ((KeHoachHocTapActivity) getActivity()).loadFragment2(hocKyAdapter.getItem(position));
                 }
             }

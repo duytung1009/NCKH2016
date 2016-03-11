@@ -81,10 +81,27 @@ public class AdapterHocKy extends BaseAdapter {
         }
         switch (type) {
             case LIST_ITEM_TYPE_1:
-                holder.textView.setText("Năm " + mData.get(position).getNamHoc());
+                if(mData.get(position).getNamHoc() == 0){
+                    holder.textView.setText("Các Môn tự chọn");
+                } else {
+                    holder.textView.setText("Năm " + mData.get(position).getNamHoc());
+                }
                 break;
             case LIST_ITEM_TYPE_2:
-                holder.textView.setText("Học kỳ " + mData.get(position).getHocKy());
+                switch (mData.get(position).getHocKy()){
+                    case -3:
+                        holder.textView.setText("Tự chọn A");
+                        break;
+                    case -2:
+                        holder.textView.setText("Tự chọn B");
+                        break;
+                    case -1:
+                        holder.textView.setText("Tự chọn C");
+                        break;
+                    default:
+                        holder.textView.setText("Học kỳ " + mData.get(position).getHocKy());
+                        break;
+                }
                 break;
         }
         return convertView;

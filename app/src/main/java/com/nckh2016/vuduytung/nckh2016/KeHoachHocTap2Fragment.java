@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc2;
@@ -50,6 +51,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
+        TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         mListHocKy = (ListView)view.findViewById(R.id.list_view_chonmonhoc);
         btnThemMonHoc = (Button)view.findViewById(R.id.btnThemMonHoc);
         selectAllCheckBox = (CheckBox)view.findViewById(R.id.selectAllCheckBox);
@@ -61,6 +63,9 @@ public class KeHoachHocTap2Fragment extends Fragment {
         }
         int maHocKy = 0, chuyenSau = 0;
         switch(selectedHocKy.getNamHoc()){
+            case 0:
+                maHocKy = selectedHocKy.getHocKy();
+                break;
             case 1:
                 switch (selectedHocKy.getHocKy()){
                     case 1:
@@ -147,6 +152,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
                 }
             }
         });
+        txtTieuDe.setText(monHocAdapter.getCount() + " môn học");
         mListHocKy.setAdapter(monHocAdapter);
         btnThemMonHoc.setOnClickListener(new View.OnClickListener() {
             @Override

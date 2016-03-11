@@ -1044,6 +1044,48 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     /**
+     * lấy danh sách môn học chưa qua (điểm số tùy biến)
+     * @param masv mã sinh viên (String)
+     * @param diem điểm số làm mốc (Double)
+     * @return
+     */
+    public ArrayList<Object> getMonHocChuaQua(String masv, double diem){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT " + MonHocEntry.TABLE_NAME + ".*,"
+                    + UserDataEntry.COLUMN_DIEM_SO
+                    + " FROM " + UserDataEntry.TABLE_NAME
+                    + " LEFT JOIN " + MonHocEntry.TABLE_NAME
+                    + " ON " + UserDataEntry.TABLE_NAME + "." + UserDataEntry.COLUMN_MA_MON_HOC + " = " + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_MA_MON_HOC
+                    + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = '" + masv + "'"
+                    + " AND " + UserDataEntry.COLUMN_DIEM_SO + " < " + diem, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectMonHoc(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TEN_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU)),
+                            null,
+                            mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mCursor.close();
+            close();
+        }
+        return result;
+    }
+
+    /**
      * lấy tên khoa
      * @param maKhoa mã khoa (String)
      * @return

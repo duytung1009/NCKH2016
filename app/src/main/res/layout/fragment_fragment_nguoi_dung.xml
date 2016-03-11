@@ -36,7 +36,7 @@
                     android:layout_weight="2"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="@string/btn_thongtincanhan"/>
+                    android:text="@string/btn_1_fragment_nguoidung"/>
             </LinearLayout>
 
             <LinearLayout
@@ -60,7 +60,7 @@
                     android:layout_weight="2"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="@string/btn_kehoachhoctap"/>
+                    android:text="@string/btn_2_fragment_nguoidung"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -84,7 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/account_box_outline"
+                    android:src="@drawable/high_priority"
                     />
                 <TextView
                     android:layout_width="match_parent"
@@ -92,7 +92,7 @@
                     android:layout_weight="2"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="@string/test"/>
+                    android:text="@string/btn_3_fragment_nguoidung"/>
             </LinearLayout>
 
             <LinearLayout

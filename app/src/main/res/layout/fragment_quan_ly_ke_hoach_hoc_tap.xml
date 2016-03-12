@@ -9,28 +9,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/layoutTieuDe"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentTop="true">
+        <include layout="@layout/item_title"/>
 
-            <TextView
-                android:id="@+id/txtTieuDe"
-                style="@style/bigText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:paddingLeft="10dp"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="@string/txtKeHoachHocTap"/>
-
-        </RelativeLayout>
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="#c0c0c0"/>
+            android:background="#c0c0c0" />
         <ListView
             android:id="@+id/listview_user_data"
             android:layout_width="match_parent"

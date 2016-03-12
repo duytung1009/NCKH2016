@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -93,8 +94,10 @@ public class FragmentMonHocChuaQua2 extends Fragment {
         final ArrayList<Object> userMonHocChuaQua = data.getMonHocChuaQua(current_user, diemMin, diemMax);
         AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
         mAdapter.addAll(userMonHocChuaQua);
-        TextView txtTitle = (TextView)view.findViewById(R.id.txtTitle);
-        txtTitle.setText("Môn học cải thiện: " + userMonHocChuaQua.size() + " môn");
+        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
+        TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
+        imageView.setImageResource(R.drawable.high_priority);
+        txtTieuDe.setText("Môn học cải thiện: " + userMonHocChuaQua.size() + " môn");
         ListView lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
         lvMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

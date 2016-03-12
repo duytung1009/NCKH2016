@@ -10,24 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/layoutTieuDe"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentTop="true">
-
-            <TextView
-                android:id="@+id/txtTieuDe"
-                style="@style/bigText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:singleLine="true"
-                android:text="@string/txtDanhSachMonHoc" />
-
-        </RelativeLayout>
+        <include layout="@layout/item_title"/>
 
         <View
             android:layout_width="fill_parent"

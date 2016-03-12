@@ -10,51 +10,74 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:id="@+id/layoutTitle"
+            android:id="@+id/layoutTieuDe"
             android:layout_width="match_parent"
             android:layout_height="50dp">
+
+            <View
+                android:id="@+id/leftMark"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="@color/colorAccent"
+                android:minHeight="50dp" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_toEndOf="@+id/leftMark"
+                android:layout_toRightOf="@+id/leftMark"
+                android:padding="10dp" />
+
             <TextView
-                android:id="@+id/txtTenHocKy"
+                android:id="@+id/txtTieuDe"
                 style="@style/bigText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
+                android:layout_toEndOf="@+id/imageView"
+                android:layout_toRightOf="@+id/imageView"
+                android:layout_toStartOf="@+id/btnXoaHocKy"
                 android:layout_toLeftOf="@+id/btnXoaHocKy"
-                android:paddingLeft="10dp"
-                android:singleLine="true"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:singleLine="true" />
+
             <Button
                 android:id="@+id/btnXoaHocKy"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_margin="10dp"
                 android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
                 android:background="@drawable/delete"
-                android:backgroundTint="@android:color/tab_indicator_text"/>
+                android:backgroundTint="@android:color/tab_indicator_text" />
         </RelativeLayout>
+
         <View
             android:id="@+id/line"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/layoutTitle"
-            android:background="#c0c0c0"/>
+            android:layout_below="@+id/layoutTieuDe"
+            android:background="#c0c0c0" />
+
         <TextView
             android:id="@+id/txtThongBao"
             style="@style/bigText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/line"
             android:layout_above="@+id/btnThemMonHoc"
+            android:layout_below="@+id/line"
             android:gravity="center"
-            android:textColor="@color/colorPrimary"
-            android:text="@string/khong"/>
+            android:text="@string/khong"
+            android:textColor="@color/colorPrimary" />
+
         <ListView
             android:id="@+id/lvMonHoc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/line"
-            android:layout_above="@+id/btnThemMonHoc">
-        </ListView>
+            android:layout_above="@+id/btnThemMonHoc"
+            android:layout_below="@+id/line"></ListView>
+
         <Button
             android:id="@+id/btnThemMonHoc"
             android:layout_width="match_parent"

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -58,6 +59,8 @@ public class SearchResultActivity extends AppCompatActivity {
         });
         lvResult.setAdapter(mAdapterResult);
         progressBar = (CircularProgressView) findViewById(R.id.progressBar);
+        ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        imageView.setImageResource(R.drawable.search);
         txtTieuDe = (TextView)findViewById(R.id.txtTieuDe);
     }
 
@@ -72,7 +75,7 @@ public class SearchResultActivity extends AppCompatActivity {
         searchBar.setLayoutTransition(new LayoutTransition());
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setQueryHint("Tìm kiếm");
+        searchView.setQueryHint(getResources().getString(R.string.txtTimKiem));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

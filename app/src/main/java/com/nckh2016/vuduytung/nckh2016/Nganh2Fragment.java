@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -85,12 +86,14 @@ public class Nganh2Fragment extends Fragment {
         mMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((NganhActivity) getActivity()).loadFragment3((ObjectCTDT)finalCTDT.get(position));
+                ((NganhActivity) getActivity()).loadFragment3((ObjectCTDT) finalCTDT.get(position));
             }
         });
         mMonHoc.setAdapter(mAdapter);
+        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
-        txtTieuDe.setText("Ngành " + tenNganh);
+        imageView.setImageResource(R.drawable.books);
+        txtTieuDe.setText("Chuyên ngành " + tenNganh);
         return view;
     }
 

@@ -8,27 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/layoutTitle"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-            <TextView
-                android:id="@+id/txtTitle"
-                style="@style/bigText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/btnXoaHocKy"
-                android:paddingLeft="10dp"
-                android:singleLine="true"
-                android:gravity="center_vertical" />
+        <include layout="@layout/item_title"/>
 
-        </RelativeLayout>
         <View
             android:id="@+id/line"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/layoutTitle"
+            android:layout_below="@+id/layoutTieuDe"
             android:background="#c0c0c0"/>
         <ListView
             android:id="@+id/lvMonHoc"

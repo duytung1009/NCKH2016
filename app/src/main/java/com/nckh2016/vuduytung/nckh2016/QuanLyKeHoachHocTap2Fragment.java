@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,8 +81,10 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                 startActivity(intent);
             }
         });
-        TextView txtTenHocKy = (TextView)view.findViewById(R.id.txtTenHocKy);
-        txtTenHocKy.setText("Học kỳ " + selectedHocKy.getHocKy() + " năm thứ " + selectedHocKy.getNamHoc());
+        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
+        TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
+        imageView.setImageResource(R.drawable.report_card);
+        txtTieuDe.setText("Học kỳ " + selectedHocKy.getHocKy() + " năm thứ " + selectedHocKy.getNamHoc());
         Button btnThemMonHoc = (Button)view.findViewById(R.id.btnThemMonHoc);
         btnThemMonHoc.setOnClickListener(new View.OnClickListener() {
             @Override

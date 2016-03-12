@@ -9,25 +9,55 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
+
+        <RelativeLayout
+            android:id="@+id/layoutTieuDe"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:orientation="horizontal">
+            android:layout_alignParentTop="true">
+
+            <View
+                android:id="@+id/leftMark"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="@color/colorAccent"
+                android:minHeight="50dp" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_toEndOf="@+id/leftMark"
+                android:layout_toRightOf="@+id/leftMark"
+                android:padding="10dp" />
+
             <TextView
+                android:id="@+id/txtTieuDe"
                 style="@style/bigText"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingLeft="10dp"
+                android:minHeight="50dp"
+                android:layout_toRightOf="@+id/imageView"
+                android:layout_toEndOf="@+id/imageView"
                 android:gravity="center_vertical"
-                android:text="Ngành "/>
+                android:singleLine="true" />
+
             <TextView
-                android:id="@+id/txtTenNganh"
+                android:id="@+id/txtTieuDe2"
                 style="@style/bigText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:minHeight="50dp"
+                android:layout_toRightOf="@+id/txtTieuDe"
+                android:layout_toEndOf="@+id/txtTieuDe"
                 android:gravity="center_vertical"
+                android:singleLine="true"
                 android:textColor="@color/colorPrimaryDark"/>
-        </LinearLayout>
+
+        </RelativeLayout>
+
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"

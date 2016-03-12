@@ -28,16 +28,21 @@
     <string name="btn_3_fragment_niengiam">hướng dẫn sử dụng</string>
     <string name="btn_4_fragment_niengiam">về chương trình</string>
 
-    <string name="test">test</string>
+    <string name="main_activity_tab1_name">chức năng</string>
+    <string name="main_activity_tab2_name">điểm số</string>
+    <string name="main_activity_tab3_name">niên giám</string>
+
+    <string name="mon_hoc_chua_qua_activity_tab1_name">môn học chưa qua</string>
+    <string name="mon_hoc_chua_qua_activity_tab2_name">môn học cải thiện</string>
 
     <string name="title_activity_search_result">Kết quả tìm kiếm</string>
-    <string name="title_activity_dang_ky">Đăng ký</string>
-    <string name="title_activity_tao_tai_khoan">TaoTaiKhoanActivity</string>
+    <string name="title_activity_tao_tai_khoan">Hồ sơ mới</string>
     <string name="title_activity_ke_hoach_hoc_tap">Kế hoạch học tập</string>
-    <string name="title_activity_chi_tiet_mon_hoc">ChiTietMonHocActivity</string>
-    <string name="title_activity_bo_mon">BoMonActivity</string>
-    <string name="title_activity_nganh">NganhActivity</string>
+    <string name="title_activity_chi_tiet_mon_hoc">Chi tiết môn học</string>
+    <string name="title_activity_bo_mon">Bộ môn</string>
+    <string name="title_activity_nganh">Chuyên ngành</string>
     <string name="title_activity_quan_ly_ke_hoach_hoc_tap">Quản lý kế hoạch học tập</string>
+    <string name="title_activity_mon_hoc_chua_qua">MonHocChuaQuaActivity</string>
 
     <string name="khong">Chưa có dữ liệu</string>
 
@@ -52,10 +57,12 @@
     <string name="txtEmail">Email</string>
     <string name="txtDanhSachMonHoc">Danh sách môn học</string>
     <string name="txtKeHoachHocTap">Kế hoạch học tập</string>
-    <string name="txtTimKiem">Tìm kiếm</string>
+    <string name="txtTimKiem">Tìm kiếm môn học</string>
+    <string name="txtNhapDiem">Nhập điểm</string>
+    <string name="txtCTDT">Chương trình đào tạo</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_mon_hoc_chua_qua">MonHocChuaQuaActivity</string>
+    <string name="test">test</string>
 
 </resources>

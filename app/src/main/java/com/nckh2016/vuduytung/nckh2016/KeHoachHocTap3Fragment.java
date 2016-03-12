@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHocNhapDiem;
@@ -47,6 +49,8 @@ public class KeHoachHocTap3Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ke_hoach_hoc_tap_3, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
+        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
+        TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         btnLuuMonHoc = (Button)view.findViewById(R.id.btnLuuMonHoc);
         final SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try {
@@ -80,12 +84,14 @@ public class KeHoachHocTap3Fragment extends Fragment {
                 boolean flag = data.insertUserData(values);
                 if (flag) {
                     getActivity().setResult(1);
-                    ((KeHoachHocTapActivity)getActivity()).finish();
+                    ((KeHoachHocTapActivity) getActivity()).finish();
                 } else {
                     Toast.makeText(getContext(), "Lỗi", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+        imageView.setImageResource(R.drawable.edit);
+        txtTieuDe.setText(R.string.txtNhapDiem);
         return view;
     }
 

@@ -78,12 +78,12 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         if((currentUserData.getString("user_mssv", null) == null) || (currentUserData.getString("user_mssv", null).isEmpty())){
             //form dang ky
-            tabLayout.addTab(tabLayout.newTab().setText("niên giám"), 0);
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab3_name), 0);
         } else{
             current_user = currentUserData.getString("user_mssv", null);
-            tabLayout.addTab(tabLayout.newTab().setText("chức năng"), 0);
-            tabLayout.addTab(tabLayout.newTab().setText("hồ sơ"), 1);
-            tabLayout.addTab(tabLayout.newTab().setText("niên giám"), 2);
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab1_name), 0);
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab2_name), 1);
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab3_name), 2);
         }
 
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity
         searchBar.setLayoutTransition(new LayoutTransition());
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setQueryHint("Tìm kiếm");
+        searchView.setQueryHint(getResources().getString(R.string.txtTimKiem));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

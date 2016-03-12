@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -59,8 +60,10 @@ public class BoMon2Fragment extends Fragment {
             }
         });
         mMonHoc.setAdapter(mAdapter);
+        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
-        txtTieuDe.setText(tenBoMon + " - " + mListMonHoc.size() + " môn học");
+        imageView.setImageResource(R.drawable.books);
+        txtTieuDe.setText("Bộ môn " + tenBoMon + " - " + mListMonHoc.size() + " môn học");
         return view;
     }
 }

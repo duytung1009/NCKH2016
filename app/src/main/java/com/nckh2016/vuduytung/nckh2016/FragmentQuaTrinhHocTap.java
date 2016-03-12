@@ -109,8 +109,12 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         int[] yData = data.soTinChi(current_user);
         final String[] xData = {"F","D","C","B","A"};
         tongTinChi = 0;
-        for(int value : yData){
+        /*for(int value : yData){
             tongTinChi += value;
+        }*/
+        //không tính tín chỉ bị F
+        for(int i=1; i<yData.length; i++){
+            tongTinChi += yData[i];
         }
         ArrayList<Entry> yVals = new ArrayList<Entry>();
         for(int i=0; i<yData.length; i++){
@@ -146,9 +150,9 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         mainChart.setDescriptionTextSize(20);
         mainChart.setDescriptionColor(Color.DKGRAY);
         if(Double.isNaN(tongDiem)){
-            mainChart.setCenterText("Chưa có dữ liệu");
+            mainChart.setCenterText(getResources().getString(R.string.khong));
         } else{
-            mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem) + "\n" + tongTinChi + " tín chỉ");
+            mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem) + "\nTín chỉ tích lũy\n" + tongTinChi);
         }
         mainChart.setCenterTextTypeface(light);
         mainChart.setCenterTextSize(24);
@@ -162,9 +166,9 @@ public class FragmentQuaTrinhHocTap extends Fragment {
             @Override
             public void onNothingSelected() {
                 if(Double.isNaN(tongDiem)){
-                    mainChart.setCenterText("Chưa có dữ liệu");
+                    mainChart.setCenterText(getResources().getString(R.string.khong));
                 } else{
-                    mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem) + "\n" + tongTinChi + " tín chỉ");
+                    mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem) + "\nTín chỉ tích lũy\n" + tongTinChi);
                 }
             }
         });

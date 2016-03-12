@@ -42,7 +42,7 @@ public class BoMon1Fragment extends Fragment {
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        mListKhoa = data.getKhoa();
+        mListKhoa = data.getKhoaCoBoMon();
         List<String> mListTenKhoa = new ArrayList<String>();
         for (Object object : mListKhoa) {
             ObjectKhoa value = (ObjectKhoa) object;

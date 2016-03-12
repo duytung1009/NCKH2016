@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -80,15 +81,19 @@ public class Nganh3Fragment extends Fragment {
             }
         });
         mMonHoc.setAdapter(mAdapter);
+        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         switch (hocKy){
             case -3:
+                imageView.setImageResource(R.drawable.tuchon_a);
                 txtTieuDe.setText("Tự chọn A");
                 break;
             case -2:
+                imageView.setImageResource(R.drawable.tuchon_b);
                 txtTieuDe.setText("Tự chọn B");
                 break;
             case -1:
+                imageView.setImageResource(R.drawable.tuchon_c);
                 txtTieuDe.setText("Tự chọn C");
                 break;
         }

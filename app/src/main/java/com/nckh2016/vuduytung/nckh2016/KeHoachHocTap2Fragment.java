@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
+        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         mListHocKy = (ListView)view.findViewById(R.id.list_view_chonmonhoc);
         btnThemMonHoc = (Button)view.findViewById(R.id.btnThemMonHoc);
@@ -152,7 +154,24 @@ public class KeHoachHocTap2Fragment extends Fragment {
                 }
             }
         });
-        txtTieuDe.setText(monHocAdapter.getCount() + " môn học");
+        switch (selectedHocKy.getHocKy()){
+            case -3:
+                imageView.setImageResource(R.drawable.tuchon_a);
+                txtTieuDe.setText("Tự chọn A - " + monHocAdapter.getCount() + " môn học");
+                break;
+            case -2:
+                imageView.setImageResource(R.drawable.tuchon_b);
+                txtTieuDe.setText("Tự chọn B - " + monHocAdapter.getCount() + " môn học");
+                break;
+            case -1:
+                imageView.setImageResource(R.drawable.tuchon_c);
+                txtTieuDe.setText("Tự chọn C - " + monHocAdapter.getCount() + " môn học");
+                break;
+            default:
+                imageView.setImageResource(R.drawable.books);
+                txtTieuDe.setText("Học kỳ " + maHocKy + " - " + monHocAdapter.getCount() + " môn học");
+                break;
+        }
         mListHocKy.setAdapter(monHocAdapter);
         btnThemMonHoc.setOnClickListener(new View.OnClickListener() {
             @Override

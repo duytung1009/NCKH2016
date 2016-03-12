@@ -271,9 +271,14 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 while(mCursor.moveToNext()){
                     diemSo = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
                     tinChi = Integer.parseInt(((ObjectMonHoc) (getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))).get(0))).getTinchi());
-                    tongDiem += (diemSo * tinChi);
-                    tongTinChi += tinChi;
-
+                    //không tính những môn bị điểm F
+                    if(diemSo >= 4){
+                        tongDiem += (diemSo * tinChi);
+                        tongTinChi += tinChi;
+                    }
+                    //tính toàn bộ các môn
+                    /*tongDiem += (diemSo * tinChi);
+                    tongTinChi += tinChi;*/
                 }
             }
         } catch (Exception e) {
@@ -740,6 +745,37 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             openDataBase();
             mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + KhoaEntry.TABLE_NAME
                     + " WHERE " + KhoaEntry.COLUMN_MA_KHOA + " NOT IN (1,2,12,13,14)", null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectKhoa(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(KhoaEntry.COLUMN_MA_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(KhoaEntry.COLUMN_TEN_KHOA)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(KhoaEntry.COLUMN_TRUONG_KHOA))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(mCursor != null){
+                mCursor.close();
+            }
+            close();
+        }
+        return result;
+    }
+
+    /**
+     * lấy danh sách khoa có bộ môn
+     * @return
+     */
+    public ArrayList<Object> getKhoaCoBoMon(){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + KhoaEntry.TABLE_NAME
+                    + " WHERE " + KhoaEntry.COLUMN_MA_KHOA + " NOT IN (12,13,14)", null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
                     result.add(new ObjectKhoa(

@@ -1,13 +1,21 @@
 package com.nckh2016.vuduytung.nckh2016;
 
+import android.animation.LayoutTransition;
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectMonHoc;
@@ -45,8 +53,9 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        ImageView imageView = (ImageView)findViewById(R.id.imageView);
         txtMaMonHoc = (TextView) findViewById(R.id.txtMaMonHoc);
-        txtTenMonHoc = (TextView) findViewById(R.id.txtTenMonHoc);
+        txtTenMonHoc = (TextView) findViewById(R.id.txtTieuDe);
         txtTinChi = (TextView) findViewById(R.id.txtTinChi);
         txtDieuKien = (TextView) findViewById(R.id.txtDieuKien);
         txtNoiDung = (TextView) findViewById(R.id.txtNoiDung);
@@ -62,9 +71,10 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         if(maMonHoc!=null && maMonHoc.isEmpty() == false){
             ObjectMonHoc mMonHoc = (ObjectMonHoc)data.getMonHoc(maMonHoc).get(0);
             ActionBar ab = getSupportActionBar();
-            ab.setTitle("Chi tiết môn học");
-            //ab.setSubtitle(mMonHoc.getMamh());
+            ab.setSubtitle(mMonHoc.getMamh());
+            imageView.setImageResource(R.drawable.literature);
             txtMaMonHoc.setText(mMonHoc.getMamh());
+            txtTenMonHoc.setSingleLine(false);
             txtTenMonHoc.setText(mMonHoc.getTenmh());
             txtTinChi.setText(mMonHoc.getTinchi());
             txtDieuKien.setText(mMonHoc.getDieukien());
@@ -100,5 +110,35 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Transition
+        LinearLayout searchBar = (LinearLayout) searchView.findViewById(R.id.search_bar);
+        searchBar.setLayoutTransition(new LayoutTransition());
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint(getResources().getString(R.string.txtTimKiem));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent = new Intent(getBaseContext(), SearchResultActivity.class);
+                intent.putExtra("query", query);
+                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 }

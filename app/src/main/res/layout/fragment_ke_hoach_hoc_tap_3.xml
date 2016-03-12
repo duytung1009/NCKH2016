@@ -9,11 +9,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include layout="@layout/item_title" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/layoutTieuDe"
+            android:background="#c0c0c0" />
+
         <ListView
             android:id="@+id/list_view_monhoc_nhapdiem"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/btnLuuMonHoc"></ListView>
+            android:layout_above="@+id/btnLuuMonHoc"
+            android:layout_below="@+id/line" />
 
         <Button
             android:id="@+id/btnLuuMonHoc"

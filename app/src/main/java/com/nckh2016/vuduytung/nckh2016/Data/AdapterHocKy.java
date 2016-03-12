@@ -82,7 +82,7 @@ public class AdapterHocKy extends BaseAdapter {
         switch (type) {
             case LIST_ITEM_TYPE_1:
                 if(mData.get(position).getNamHoc() == 0){
-                    holder.textView.setText("Các Môn tự chọn");
+                    holder.textView.setText("Các môn tự chọn");
                 } else {
                     holder.textView.setText("Năm " + mData.get(position).getNamHoc());
                 }

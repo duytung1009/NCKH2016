@@ -30,8 +30,8 @@ public class MonHocChuaQuaActivity extends AppCompatActivity
         tabLayout = (TabLayout)findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.removeAllTabs();
-        tabLayout.addTab(tabLayout.newTab().setText("môn học chưa qua"), 0);
-        tabLayout.addTab(tabLayout.newTab().setText("môn học cải thiện"), 1);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab1_name), 0);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab2_name), 1);
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

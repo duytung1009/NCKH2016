@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,7 +44,11 @@ public class KeHoachHocTap1Fragment extends Fragment {
             Log.e("tag", e.getMessage());
         }
         final ObjectUser cUser = data.getUser(current_user);
-        TextView txtTenNganh = (TextView)view.findViewById(R.id.txtTenNganh);
+        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
+        TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
+        TextView txtTenNganh = (TextView)view.findViewById(R.id.txtTieuDe2);
+        imageView.setImageResource(R.drawable.books);
+        txtTieuDe.setText(getResources().getString(R.string.txtChuyenNganh) + " ");
         txtTenNganh.setText(data.getTenNganh(cUser.getManganh()));
         final ListView listViewHocTap = (ListView)view.findViewById(R.id.list_view_hoctap);
         final AdapterHocKy hocKyAdapter = new AdapterHocKy(getContext());

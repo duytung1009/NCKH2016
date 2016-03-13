@@ -8,160 +8,167 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.nckh2016.vuduytung.nckh2016.ChiTietMonHocActivity"
     tools:showIn="@layout/activity_chi_tiet_mon_hoc">
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <include layout="@layout/item_title" />
 
-            <include layout="@layout/item_title"/>
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/layoutTieuDe"
+        android:background="#c0c0c0" />
 
-            <View
-                android:id="@+id/line"
-                android:layout_below="@+id/layoutTieuDe"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#c0c0c0"/>
+                android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/topLayout2"
-                android:layout_below="@+id/line"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:id="@+id/txtMaMonHoc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="10dp"
-                    android:singleLine="true"
-                    android:text="..."
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:singleLine="true"
-                    android:text=" - Tín chỉ: "
-                    android:textSize="16sp"
-                    android:textColor="@android:color/tertiary_text_dark" />
-
-                <TextView
-                    android:id="@+id/txtTinChi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:singleLine="true"
-                    android:text="..."
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/leftLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/topLayout2"
-                android:layout_toLeftOf="@+id/rightLayout"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:orientation="vertical" >
-
-                <TextView
+                <LinearLayout
+                    android:id="@+id/topLayout2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="10dp"
-                    android:singleLine="true"
-                    android:text="ĐIỀU KIỆN TIÊN QUYẾT"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/txtDieuKien"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:singleLine="false"
-                    android:text="@string/khong"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/txtMaMonHoc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:singleLine="true"
+                        android:text="..."
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                <TextView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:singleLine="true"
+                        android:text=" - Tín chỉ: "
+                        android:textColor="@android:color/tertiary_text_dark"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txtTinChi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:singleLine="true"
+                        android:text="..."
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/leftLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="10dp"
-                    android:singleLine="true"
-                    android:text="NỘI DUNG"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/topLayout2"
+                    android:layout_toLeftOf="@+id/rightLayout"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/txtNoiDung"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="20dp"
+                        android:singleLine="true"
+                        android:text="ĐIỀU KIỆN TIÊN QUYẾT"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txtDieuKien"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:singleLine="false"
+                        android:text="@string/khong"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="20dp"
+                        android:singleLine="true"
+                        android:text="NỘI DUNG"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txtNoiDung"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:singleLine="false"
+                        android:text="@string/khong"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="20dp"
+                        android:singleLine="true"
+                        android:text="TÀI LIỆU THAM KHẢO"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txtTaiLieu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:singleLine="false"
+                        android:text="@string/khong"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rightLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:singleLine="false"
-                    android:text="@string/khong"
-                    android:textSize="14sp" />
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/topLayout2"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="10dp"
-                    android:singleLine="true"
-                    android:text="TÀI LIỆU THAM KHẢO"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    <TextView
+                        android:id="@+id/txtDiem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="112sp" />
 
-                <TextView
-                    android:id="@+id/txtTaiLieu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:singleLine="false"
-                    android:text="@string/khong"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/txtDiem2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="24sp" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/rightLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/topLayout2"
-                android:layout_alignParentRight="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txtDiem"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:textSize="112sp" />
-                <TextView
-                    android:id="@+id/txtDiem2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="24sp" />
-
-            </LinearLayout>
-        </RelativeLayout>
-
-    </ScrollView>
+                </LinearLayout>
+            </RelativeLayout>
+        </ScrollView>
+    </LinearLayout>
 </LinearLayout>

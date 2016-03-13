@@ -42,7 +42,7 @@
     <string name="title_activity_bo_mon">Bộ môn</string>
     <string name="title_activity_nganh">Chuyên ngành</string>
     <string name="title_activity_quan_ly_ke_hoach_hoc_tap">Quản lý kế hoạch học tập</string>
-    <string name="title_activity_mon_hoc_chua_qua">MonHocChuaQuaActivity</string>
+    <string name="title_activity_mon_hoc_chua_qua">Xem nhanh</string>
 
     <string name="khong">Chưa có dữ liệu</string>
 

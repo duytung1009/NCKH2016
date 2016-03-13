@@ -51,7 +51,7 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
             final CheckBox ckChon = (CheckBox) view.findViewById(R.id.checkBox);
             txMaMonHoc.setText(mMonHoc.getMamh());
             txTenMonHoc.setText(mMonHoc.getTenmh());
-            txSoTinChi.setText(mMonHoc.getTinchi());
+            txSoTinChi.setText(mMonHoc.getTinchi().toString());
             //need more logic...
             itemLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

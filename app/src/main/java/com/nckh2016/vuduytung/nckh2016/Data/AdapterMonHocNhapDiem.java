@@ -46,7 +46,7 @@ public class AdapterMonHocNhapDiem extends ArrayAdapter<Object> {
             final EditText edDiem = (EditText) view.findViewById(R.id.edNhapDiem);
             txMaMonHoc.setText(mMonHoc.getMamh());
             txTenMonHoc.setText(mMonHoc.getTenmh());
-            txSoTinChi.setText(mMonHoc.getTinchi());
+            txSoTinChi.setText(mMonHoc.getTinchi().toString());
             itemLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

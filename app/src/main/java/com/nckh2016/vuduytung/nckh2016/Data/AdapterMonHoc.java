@@ -53,7 +53,7 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
                 //TextView txtIcon = (TextView)view.findViewById(R.id.txtIcon);
                 txtMaMonHoc.setText(mMonHoc.getMamh());
                 txtTenMonHoc.setText(mMonHoc.getTenmh());
-                txtSoTinChi.setText(mMonHoc.getTinchi());
+                txtSoTinChi.setText(mMonHoc.getTinchi().toString());
                 if (mMonHoc.getTuchon() != null) {
                     switch (mMonHoc.getTuchon()) {
                         case "A":

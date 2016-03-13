@@ -76,7 +76,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
             txtMaMonHoc.setText(mMonHoc.getMamh());
             txtTenMonHoc.setSingleLine(false);
             txtTenMonHoc.setText(mMonHoc.getTenmh());
-            txtTinChi.setText(mMonHoc.getTinchi());
+            txtTinChi.setText(mMonHoc.getTinchi().toString());
             txtDieuKien.setText(mMonHoc.getDieukien());
             txtNoiDung.setText(mMonHoc.getNoidung());
             txtTaiLieu.setText(mMonHoc.getTailieu());

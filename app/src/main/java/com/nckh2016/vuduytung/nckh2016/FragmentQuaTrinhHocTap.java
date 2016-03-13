@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -21,6 +22,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
@@ -39,9 +41,15 @@ import java.util.ArrayList;
 public class FragmentQuaTrinhHocTap extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
+    PieDataSet dataSet;
+    PieData chartData;
     public PieChart mainChart;
+    CircularProgressView progressBar;
     Typeface light = Typeface.create("sans-serif-light", Typeface.NORMAL);
     int tongTinChi;
+    Double tongDiem;
+    int[] yData;
+    DecimalFormat df;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -92,21 +100,25 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fragment_qua_trinh_hoc_tap, container, false);
         //get chart
         mainChart = (PieChart)view.findViewById(R.id.mainChart);
+        progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
-        loadData();
+        df = new DecimalFormat("####0.00");
         return view;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mainChart.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        loadData();
+        new MainTask(getContext()).execute();
+    }
+
     public void loadData(){
-        final SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-        try {
-            data.isCreatedDatabase();
-        } catch (IOException e) {
-            Log.e("tag", e.getMessage());
-        }
-        final DecimalFormat df = new DecimalFormat("####0.00");
-        final Double tongDiem = data.tongDiem(current_user);
-        int[] yData = data.soTinChi(current_user);
+        tongDiem = Double.NaN;
+        yData = new int[5];
         final String[] xData = {"F","D","C","B","A"};
         tongTinChi = 0;
         /*for(int value : yData){
@@ -124,7 +136,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         for(int i=0; i<xData.length; i++){
             xVals.add(xData[i]);
         }
-        PieDataSet dataSet = new PieDataSet(yVals, "");
+        dataSet = new PieDataSet(yVals, "");
         dataSet.setDrawValues(false);   //hide value
         dataSet.setSliceSpace(3);
         dataSet.setSelectionShift(5);
@@ -134,9 +146,8 @@ public class FragmentQuaTrinhHocTap extends Fragment {
                 ContextCompat.getColor(getContext(), R.color.diemC),
                 ContextCompat.getColor(getContext(), R.color.diemB),
                 ContextCompat.getColor(getContext(), R.color.diemA)});
-        ArrayList<Integer> colors = new ArrayList<Integer>();
         //pie data object
-        PieData chartData = new PieData(xVals, dataSet);
+        chartData = new PieData(xVals, dataSet);
         chartData.setValueTextSize(12);
         chartData.setValueTextColor(Color.WHITE);
         mainChart.setNoDataTextDescription("no data");
@@ -180,7 +191,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         //set pie data and refresh
         mainChart.setData(chartData);
         mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
-        mainChart.invalidate();
+        //mainChart.invalidate();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -220,5 +231,78 @@ public class FragmentQuaTrinhHocTap extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public class MainTask extends AsyncTask<Void, Long, Void> {
+        private Context mContext;
+
+        public MainTask(Context mContext) {
+            this.mContext = mContext;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+            try {
+                data.isCreatedDatabase();
+            } catch (IOException e) {
+                Log.e("tag", e.getMessage());
+            }
+            tongDiem = data.tongDiem(current_user);
+            yData = data.soTinChi(current_user);
+            final String[] xData = {"F","D","C","B","A"};
+            tongTinChi = 0;
+            for(int i=1; i<yData.length; i++){
+                tongTinChi += yData[i];
+            }
+            ArrayList<Entry> yVals = new ArrayList<Entry>();
+            for(int i=0; i<yData.length; i++){
+                yVals.add(new Entry(yData[i], i));
+            }
+            ArrayList<String> xVals = new ArrayList<String>();
+            for(int i=0; i<xData.length; i++){
+                xVals.add(xData[i]);
+            }
+            dataSet = new PieDataSet(yVals, "");
+            dataSet.setDrawValues(false);   //hide value
+            dataSet.setSliceSpace(3);
+            dataSet.setSelectionShift(5);
+            dataSet.setColors(new int[] {
+                    ContextCompat.getColor(getContext(), R.color.diemF),
+                    ContextCompat.getColor(getContext(), R.color.diemD),
+                    ContextCompat.getColor(getContext(), R.color.diemC),
+                    ContextCompat.getColor(getContext(), R.color.diemB),
+                    ContextCompat.getColor(getContext(), R.color.diemA)});
+            //pie data object
+            chartData = new PieData(xVals, dataSet);
+            chartData.setValueTextSize(12);
+            chartData.setValueTextColor(Color.WHITE);
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Long... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mainChart.setData(chartData);
+            if(Double.isNaN(tongDiem)){
+                mainChart.setCenterText(getResources().getString(R.string.khong));
+            } else{
+                mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem) + "\nTín chỉ tích lũy\n" + tongTinChi);
+            }
+            mainChart.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
+            //mainChart.invalidate();
+        }
     }
 }

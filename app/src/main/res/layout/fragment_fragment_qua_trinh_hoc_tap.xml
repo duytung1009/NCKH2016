@@ -7,9 +7,22 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".FragmentQuaTrinhHocTap">
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/mainChart"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/mainChart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.github.rahatarmanahmed.cpv.CircularProgressView
+            android:id="@+id/progressBar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            app:cpv_animAutostart="true"
+            app:cpv_indeterminate="true" />
+
+    </RelativeLayout>
 </FrameLayout>

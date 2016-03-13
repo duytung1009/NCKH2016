@@ -7,7 +7,7 @@ public class ObjectMonHoc implements Items{
     String mamh;
     String mabm;
     String tenmh;
-    String tinchi;
+    Integer tinchi;
     String dieukien;
     String noidung;
     String tailieu;
@@ -20,7 +20,7 @@ public class ObjectMonHoc implements Items{
         return isHocKy;
     }
 
-    public ObjectMonHoc(String mamh, String mabm, String tenmh, String tinchi, String dieukien, String noidung, String tailieu, String tuchon){
+    public ObjectMonHoc(String mamh, String mabm, String tenmh, Integer tinchi, String dieukien, String noidung, String tailieu, String tuchon){
         this.mamh = mamh;
         this.mabm = mabm;
         this.tenmh = tenmh;
@@ -31,7 +31,7 @@ public class ObjectMonHoc implements Items{
         this.tuchon = tuchon;
     }
 
-    public ObjectMonHoc(String mamh, String mabm, String tenmh, String tinchi, String dieukien, String noidung, String tailieu, String tuchon, double diem){
+    public ObjectMonHoc(String mamh, String mabm, String tenmh, Integer tinchi, String dieukien, String noidung, String tailieu, String tuchon, double diem){
         this.mamh = mamh;
         this.mabm = mabm;
         this.tenmh = tenmh;
@@ -41,6 +41,12 @@ public class ObjectMonHoc implements Items{
         this.tailieu = tailieu;
         this.tuchon = tuchon;
         this.diem = diem;
+    }
+
+    public ObjectMonHoc(String mamh, double diem, Integer tinchi) {
+        this.mamh = mamh;
+        this.diem = diem;
+        this.tinchi = tinchi;
     }
 
     public String getMamh() {
@@ -67,11 +73,11 @@ public class ObjectMonHoc implements Items{
         this.tenmh = tenmh;
     }
 
-    public String getTinchi() {
+    public Integer getTinchi() {
         return tinchi;
     }
 
-    public void setTinchi(String tinchi) {
+    public void setTinchi(Integer tinchi) {
         this.tinchi = tinchi;
     }
 

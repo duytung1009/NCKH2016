@@ -60,6 +60,7 @@
     <string name="txtTimKiem">Tìm kiếm môn học</string>
     <string name="txtNhapDiem">Nhập điểm</string>
     <string name="txtCTDT">Chương trình đào tạo</string>
+    <string name="txtBangDiem">Bảng điểm</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -138,6 +138,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<Object> objects) {
+            super.onPostExecute(objects);
             if(objects != null) {
                 mListResult.clear();
                 mListResult.addAll(objects);
@@ -147,7 +148,6 @@ public class SearchResultActivity extends AppCompatActivity {
                 mainLayout.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
             }
-            super.onPostExecute(objects);
         }
     }
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -14,6 +15,8 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,7 +30,11 @@ import java.text.DecimalFormat;
 public class ChiTietMonHocActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
+    String maMonHoc;
     TextView txtMaMonHoc, txtTenMonHoc, txtTinChi, txtDieuKien, txtNoiDung, txtTaiLieu, txtDiem, txtDiem2;
+    Button btnBangDiem;
+    LinearLayout rightLayout;
+    ActionBar ab;
     Typeface light = Typeface.create("sans-serif-light", Typeface.NORMAL);
 
     @Override
@@ -52,63 +59,26 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        imageView.setImageResource(R.drawable.literature);
+        rightLayout = (LinearLayout)findViewById(R.id.rightLayout);
         txtMaMonHoc = (TextView) findViewById(R.id.txtMaMonHoc);
         txtTenMonHoc = (TextView) findViewById(R.id.txtTieuDe);
         txtTinChi = (TextView) findViewById(R.id.txtTinChi);
         txtDieuKien = (TextView) findViewById(R.id.txtDieuKien);
         txtNoiDung = (TextView) findViewById(R.id.txtNoiDung);
         txtTaiLieu = (TextView) findViewById(R.id.txtTaiLieu);
-        String maMonHoc = getIntent().getStringExtra("MaMonHoc");
-        SQLiteDataController data = SQLiteDataController.getInstance(this);
-        try{
-            data.isCreatedDatabase();
-        }
-        catch (IOException e){
-            Log.e("tag", e.getMessage());
-        }
+        ab = getSupportActionBar();
+        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        current_user = currentUserData.getString("user_mssv", null);
+        maMonHoc = getIntent().getStringExtra("MaMonHoc");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         if(maMonHoc!=null && maMonHoc.isEmpty() == false){
-            ObjectMonHoc mMonHoc = (ObjectMonHoc)data.getMonHoc(maMonHoc).get(0);
-            ActionBar ab = getSupportActionBar();
-            ab.setSubtitle(mMonHoc.getMamh());
-            imageView.setImageResource(R.drawable.literature);
-            txtMaMonHoc.setText(mMonHoc.getMamh());
-            txtTenMonHoc.setSingleLine(false);
-            txtTenMonHoc.setText(mMonHoc.getTenmh());
-            txtTinChi.setText(mMonHoc.getTinchi().toString());
-            txtDieuKien.setText(mMonHoc.getDieukien());
-            txtNoiDung.setText(mMonHoc.getNoidung());
-            txtTaiLieu.setText(mMonHoc.getTailieu());
-            SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            current_user = currentUserData.getString("user_mssv", null);
-            if(current_user != null){
-                float diemSo = data.getDiem(current_user, mMonHoc.getMamh());
-                if(diemSo != -1){
-                    txtDiem = (TextView) findViewById(R.id.txtDiem);
-                    txtDiem.setPadding(40,0,60,0);
-                    txtDiem.setTypeface(light);
-                    txtDiem2 = (TextView) findViewById(R.id.txtDiem2);
-                    txtDiem2.setPadding(40,0,60,0);
-                    txtDiem2.setText(new DecimalFormat("####0.00").format(diemSo));
-                    if(diemSo < 4){
-                        txtDiem.setText("F");
-                        txtDiem.setTextColor(ContextCompat.getColor(this, R.color.diemF));
-                    } else if(diemSo < 5.5){
-                        txtDiem.setText("D");
-                        txtDiem.setTextColor(ContextCompat.getColor(this, R.color.diemD));
-                    } else if(diemSo < 7){
-                        txtDiem.setText("C");
-                        txtDiem.setTextColor(ContextCompat.getColor(this, R.color.diemC));
-                    } else if(diemSo < 8.5){
-                        txtDiem.setText("B");
-                        txtDiem.setTextColor(ContextCompat.getColor(this, R.color.diemB));
-                    } else {
-                        txtDiem.setText("A");
-                        txtDiem.setTextColor(ContextCompat.getColor(this, R.color.diemA));
-                    }
-                }
-            }
+            new MainTask(this).execute(maMonHoc);
         }
     }
 
@@ -140,5 +110,91 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private class MainTask extends AsyncTask<String, Long, ObjectMonHoc>{
+        private Context mContext;
+
+        public MainTask(Context mContext) {
+            this.mContext = mContext;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected ObjectMonHoc doInBackground(String... params) {
+            // Joining:
+            StringBuilder buffer = new StringBuilder();
+            for (String each : params)
+                buffer.append(",").append(each);
+            String joined = buffer.deleteCharAt(0).toString();
+            SQLiteDataController data = SQLiteDataController.getInstance(mContext);
+            try{
+                data.isCreatedDatabase();
+            }
+            catch (IOException e){
+                Log.e("tag", e.getMessage());
+            }
+            ObjectMonHoc mMonHoc = (ObjectMonHoc)data.getMonHoc(joined).get(0);
+            if(current_user != null){
+                mMonHoc.setDiem(data.getDiem(current_user, mMonHoc.getMamh()));
+            }
+            return mMonHoc;
+        }
+
+        @Override
+        protected void onProgressUpdate(Long... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(ObjectMonHoc objectMonHoc) {
+            super.onPostExecute(objectMonHoc);
+            if(objectMonHoc != null){
+                ab.setSubtitle(objectMonHoc.getMamh());
+                txtMaMonHoc.setText(objectMonHoc.getMamh());
+                txtTenMonHoc.setSingleLine(false);
+                txtTenMonHoc.setText(objectMonHoc.getTenmh());
+                txtTinChi.setText(objectMonHoc.getTinchi().toString());
+                txtDieuKien.setText(objectMonHoc.getDieukien());
+                txtNoiDung.setText(objectMonHoc.getNoidung());
+                txtTaiLieu.setText(objectMonHoc.getTailieu());
+                if(objectMonHoc.getDiem() != -1){
+                    btnBangDiem = (Button)findViewById(R.id.btnBangDiem);
+                    btnBangDiem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                    txtDiem = (TextView) findViewById(R.id.txtDiem);
+                    txtDiem.setTypeface(light);
+                    txtDiem2 = (TextView) findViewById(R.id.txtDiem2);
+                    txtDiem2.setText(new DecimalFormat("####0.00").format(objectMonHoc.getDiem()));
+                    if(objectMonHoc.getDiem() < 4){
+                        txtDiem.setText("F");
+                        txtDiem.setTextColor(ContextCompat.getColor(mContext, R.color.diemF));
+                    } else if(objectMonHoc.getDiem() < 5.5){
+                        txtDiem.setText("D");
+                        txtDiem.setTextColor(ContextCompat.getColor(mContext, R.color.diemD));
+                    } else if(objectMonHoc.getDiem() < 7){
+                        txtDiem.setText("C");
+                        txtDiem.setTextColor(ContextCompat.getColor(mContext, R.color.diemC));
+                    } else if(objectMonHoc.getDiem() < 8.5){
+                        txtDiem.setText("B");
+                        txtDiem.setTextColor(ContextCompat.getColor(mContext, R.color.diemB));
+                    } else {
+                        txtDiem.setText("A");
+                        txtDiem.setTextColor(ContextCompat.getColor(mContext, R.color.diemA));
+                    }
+                    rightLayout.setVisibility(View.VISIBLE);
+                } else {
+                    rightLayout.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 }

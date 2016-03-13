@@ -189,8 +189,8 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         legend.setDirection(Legend.LegendDirection.RIGHT_TO_LEFT);
         legend.setPosition(Legend.LegendPosition.BELOW_CHART_RIGHT);
         //set pie data and refresh
-        mainChart.setData(chartData);
-        mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
+        //mainChart.setData(chartData);
+        //mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
         //mainChart.invalidate();
     }
 

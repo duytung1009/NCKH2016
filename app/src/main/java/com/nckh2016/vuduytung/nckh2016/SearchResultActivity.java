@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchResultActivity extends AppCompatActivity {
+    MainTask mainTask;
     ArrayList<Object> mListResult = new ArrayList<Object>();
     AdapterMonHoc mAdapterResult;
     CircularProgressView progressBar;
@@ -81,7 +82,8 @@ public class SearchResultActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 progressBar.setVisibility(View.VISIBLE);
                 mainLayout.setVisibility(View.GONE);
-                new SearchResultTask(getParent()).execute(query);
+                mainTask = new MainTask(getParent());
+                mainTask.execute(query);
                 return false;
             }
 
@@ -97,13 +99,30 @@ public class SearchResultActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new SearchResultTask(this).execute(query);
+        mainTask = new MainTask(this);
+        mainTask.execute(query);
     }
 
-    public class SearchResultTask extends AsyncTask<String, Long, ArrayList<Object>>{
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+            mainTask.cancel(true);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+            mainTask.cancel(true);
+        }
+    }
+
+    public class MainTask extends AsyncTask<String, Long, ArrayList<Object>>{
         private Context mContext;
 
-        public SearchResultTask(Context mContext) {
+        public MainTask(Context mContext) {
             this.mContext = mContext;
         }
 

@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nckh2016.vuduytung.nckh2016">
 
-    <uses-feature android:name="android.hardware.camera"
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -104,6 +108,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
         </activity>
+        <activity
+            android:name=".BangDiemActivity"
+            android:label="@string/title_activity_bang_diem2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

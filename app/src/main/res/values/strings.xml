@@ -28,6 +28,10 @@
     <string name="btn_3_fragment_niengiam">hướng dẫn sử dụng</string>
     <string name="btn_4_fragment_niengiam">về chương trình</string>
 
+    <string name="btn_them_anh">thêm</string>
+    <string name="btn_sua_anh">sửa</string>
+    <string name="btn_xoa_anh">xóa</string>
+
     <string name="main_activity_tab1_name">chức năng</string>
     <string name="main_activity_tab2_name">điểm số</string>
     <string name="main_activity_tab3_name">niên giám</string>
@@ -43,6 +47,8 @@
     <string name="title_activity_nganh">Chuyên ngành</string>
     <string name="title_activity_quan_ly_ke_hoach_hoc_tap">Quản lý kế hoạch học tập</string>
     <string name="title_activity_mon_hoc_chua_qua">Xem nhanh</string>
+    <string name="title_activity_bang_diem2">Bảng điểm</string>
+    <string name="title_activity_bang_diem">Bảng điểm</string>
 
     <string name="khong">Chưa có dữ liệu</string>
 
@@ -61,6 +67,8 @@
     <string name="txtNhapDiem">Nhập điểm</string>
     <string name="txtCTDT">Chương trình đào tạo</string>
     <string name="txtBangDiem">Bảng điểm</string>
+
+    <string name="bang_diem_content">CHƯA CÓ\n DỮ LIỆU</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

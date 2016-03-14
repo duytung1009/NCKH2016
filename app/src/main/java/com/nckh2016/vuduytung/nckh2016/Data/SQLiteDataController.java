@@ -30,12 +30,12 @@ import java.util.Collections;
  * Created by Tung on 20/2/2016.
  */
 public class SQLiteDataController extends SQLiteOpenHelper {
-    private static SQLiteDataController mInstance = null;
+    public static SQLiteDataController mInstance = null;
     // database
     public static String DB_PATH = "/data/data/com.nckh2016.vuduytung.nckh2016/databases/";
     private static String DB_NAME = "nckh2016db.sqlite";
     private static final int DATABASE_VERSION = 1;
-    private SQLiteDatabase database;
+    public SQLiteDatabase database;
     private final Context mContext;
 
     private SQLiteDataController(Context cont) {
@@ -198,6 +198,28 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             openDataBase();
             String[] args = new String[]{masv};
             flag = database.update(UserEntry.TABLE_NAME, values, UserEntry.COLUMN_MA_SV + "=?", args);
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            close();
+            return flag;
+        }
+    }
+
+    /**
+     * cập nhật thông tin môn học của người dùng
+     * @param masv mã sinh viên (String)
+     * @param mamh mã môn học (String)
+     * @param values
+     * @return
+     */
+    public long updateUserData(String masv, String mamh, ContentValues values){
+        long flag = -1;
+        try{
+            openDataBase();
+            String[] args = new String[]{masv};
+            flag = database.update(UserDataEntry.TABLE_NAME, values,
+                    UserDataEntry.COLUMN_MA_SV + "=? AND " + UserDataEntry.COLUMN_MA_MON_HOC + " =?", new String[]{masv, mamh});
         } catch (Exception e){
             e.printStackTrace();
         } finally {
@@ -533,10 +555,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor mCursor = null;
         try {
             openDataBase();
-            String q = "SELECT * FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME
-                    + " WHERE " + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + mabm
-                    + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " = " + hocKy
-                    + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC + " = " + mamh;
             mCursor = database.rawQuery("SELECT * FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME
                     + " WHERE " + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + mabm
                     + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " = " + hocKy
@@ -1323,8 +1341,46 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_HOC_KY)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_NAM_THU)),
-                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO))
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)),
+                            mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM))
                     ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(mCursor != null){
+                mCursor.close();
+            }
+            close();
+        }
+        return result;
+    }
+
+    /**
+     * lấy thông tin điểm số một môn học của 1 người dùng
+     * @param masv mã sinh viên (String)
+     * @param mamh mã môn học (String)
+     * @return
+     */
+    public ObjectUserData getUserData(String masv, String mamh){
+        ObjectUserData result = new ObjectUserData();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
+                    + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = '" + masv + "'"
+                    + " AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = '" + mamh + "'", null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result = new ObjectUserData(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_SV)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_HOC_KY)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_NAM_THU)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)),
+                            mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM))
+                    );
                 }
             }
         } catch (Exception e) {

@@ -1,7 +1,5 @@
 package com.nckh2016.vuduytung.nckh2016.Data;
 
-import android.graphics.Bitmap;
-
 /**
  * Created by vuduy_000 on 29/02/2016.
  */
@@ -11,7 +9,16 @@ public class ObjectUserData {
     String hocky;
     String namthu;
     String diemso;
-    Bitmap bangdiem;
+    byte[] bangdiem;
+
+    public ObjectUserData() {
+        this.masv = null;
+        this.mamonhoc = null;
+        this.hocky = null;
+        this.namthu = null;
+        this.diemso = null;
+        this.bangdiem = null;
+    }
 
     public ObjectUserData(String masv, String mamonhoc, String hocky, String namthu, String diemso) {
         this.masv = masv;
@@ -19,9 +26,10 @@ public class ObjectUserData {
         this.hocky = hocky;
         this.namthu = namthu;
         this.diemso = diemso;
+        this.bangdiem = null;
     }
 
-    public ObjectUserData(String masv, String mamonhoc, String hocky, String namthu, String diemso, Bitmap bangdiem) {
+    public ObjectUserData(String masv, String mamonhoc, String hocky, String namthu, String diemso, byte[] bangdiem) {
         this.masv = masv;
         this.mamonhoc = mamonhoc;
         this.hocky = hocky;
@@ -70,11 +78,11 @@ public class ObjectUserData {
         this.diemso = diemso;
     }
 
-    public Bitmap getBangdiem() {
+    public byte[] getBangdiem() {
         return bangdiem;
     }
 
-    public void setBangdiem(Bitmap bangdiem) {
+    public void setBangdiem(byte[] bangdiem) {
         this.bangdiem = bangdiem;
     }
 }

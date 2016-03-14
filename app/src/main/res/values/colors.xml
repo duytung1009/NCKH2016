@@ -6,13 +6,21 @@
 
     <color name="splashScreenBackground">#ECEFF1</color>
 
-    <color name="diemA">#81C784</color><!-- 4CAF50 -->
-    <color name="diemB">#4DD0E1</color><!-- 00BCD4 -->
-    <color name="diemC">#7986CB</color><!-- 3F51B5 -->
-    <color name="diemD">#FFD54F</color><!-- FFC107 -->
-    <color name="diemF">#90A4AE</color><!-- 607D8B -->
+    <color name="diemA">#81C784</color>
+    <!-- 4CAF50 -->
+    <color name="diemB">#4DD0E1</color>
+    <!-- 00BCD4 -->
+    <color name="diemC">#7986CB</color>
+    <!-- 3F51B5 -->
+    <color name="diemD">#FFD54F</color>
+    <!-- FFC107 -->
+    <color name="diemF">#90A4AE</color>
+    <!-- 607D8B -->
 
     <color name="tuchonA">#16a085</color>
     <color name="tuchonB">#2980b9</color>
-    <color name="tuchonC">#607D8B</color> <!-- 3B6272 -->
+    <color name="tuchonC">#607D8B</color>
+
+    <color name="black_overlay">#66000000</color>
+    <!-- 3B6272 -->
 </resources>

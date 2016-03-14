@@ -41,6 +41,7 @@ import java.util.ArrayList;
 public class FragmentQuaTrinhHocTap extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
+    MainTask mainTask;
     PieDataSet dataSet;
     PieData chartData;
     public PieChart mainChart;
@@ -110,13 +111,30 @@ public class FragmentQuaTrinhHocTap extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        setUpChart();
         mainChart.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        loadData();
-        new MainTask(getContext()).execute();
+        mainTask = new MainTask(getContext());
+        mainTask.execute();
     }
 
-    public void loadData(){
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+            mainTask.cancel(true);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+            mainTask.cancel(true);
+        }
+    }
+
+    public void setUpChart(){
         tongDiem = Double.NaN;
         yData = new int[5];
         final String[] xData = {"F","D","C","B","A"};

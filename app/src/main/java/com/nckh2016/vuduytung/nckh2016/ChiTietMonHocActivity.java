@@ -30,27 +30,13 @@ import java.text.DecimalFormat;
 public class ChiTietMonHocActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
+    MainTask mainTask;
     String maMonHoc;
     TextView txtMaMonHoc, txtTenMonHoc, txtTinChi, txtDieuKien, txtNoiDung, txtTaiLieu, txtDiem, txtDiem2;
     Button btnBangDiem;
     LinearLayout rightLayout;
     ActionBar ab;
     Typeface light = Typeface.create("sans-serif-light", Typeface.NORMAL);
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        /*String value = getIntent().getStringExtra("caller");
-        switch (value){
-            case "BoMonActivity":
-                startActivity(new Intent(this, BoMonActivity.class));
-                finish();
-                break;
-            default:
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-        }*/
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +64,24 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(maMonHoc!=null && maMonHoc.isEmpty() == false){
-            new MainTask(this).execute(maMonHoc);
+            mainTask = new MainTask(this);
+            mainTask.execute(maMonHoc);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+            mainTask.cancel(true);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+            mainTask.cancel(true);
         }
     }
 
@@ -167,7 +170,9 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                     btnBangDiem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            Intent intent = new Intent(getBaseContext(), BangDiemActivity.class);
+                            intent.putExtra("MaMonHoc", maMonHoc);
+                            startActivity(intent);
                         }
                     });
                     txtDiem = (TextView) findViewById(R.id.txtDiem);

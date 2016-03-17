@@ -67,6 +67,8 @@
     <string name="txtNhapDiem">Nhập điểm</string>
     <string name="txtCTDT">Chương trình đào tạo</string>
     <string name="txtBangDiem">Bảng điểm</string>
+    <string name="txtChonAnh">Lấy ảnh từ</string>
+    <string name="txtXoaAnh">Xóa bảng điểm</string>
 
     <string name="bang_diem_content">CHƯA CÓ\n DỮ LIỆU</string>
 

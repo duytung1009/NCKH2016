@@ -70,9 +70,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
     @Override
     public synchronized void close() {
+        super.close();
         if(database != null)
             database.close();
-        super.close();
     }
 
     private void copyDataBase() throws IOException {
@@ -131,7 +131,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         if (!checkExistDataBase()) {
             this.getReadableDatabase();
             try {
-                copyDataBase();
+                //copyDataBase();
                 CopyAssets();
                 result = false;
             } catch (Exception e) {

@@ -265,7 +265,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+            SQLiteDataController data = SQLiteDataController.getInstance(getActivity().getApplicationContext());
             try {
                 data.isCreatedDatabase();
             } catch (IOException e) {

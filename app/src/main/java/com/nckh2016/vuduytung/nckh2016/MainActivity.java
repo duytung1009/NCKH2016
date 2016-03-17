@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
-        SQLiteDataController data = SQLiteDataController.getInstance(this);
+        SQLiteDataController data = SQLiteDataController.getInstance(getApplicationContext());
         try{
             data.isCreatedDatabase();
         }

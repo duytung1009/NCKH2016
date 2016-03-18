@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_1"
+            android:icon="@drawable/student"
+            android:title="@string/btn_1_fragment_nguoidung" />
+        <item
+            android:id="@+id/nav_2"
+            android:icon="@drawable/report_card"
+            android:title="@string/btn_2_fragment_nguoidung" />
+        <item
+            android:id="@+id/nav_3"
+            android:icon="@drawable/high_priority"
+            android:title="@string/btn_3_fragment_nguoidung" />
+        <item
+            android:id="@+id/nav_4"
+            android:icon="@drawable/account_box_outline"
+            android:title="@string/btn_4_fragment_nguoidung" />
+        <item
+            android:id="@+id/nav_5"
+            android:icon="@drawable/account_box_outline"
+            android:title="@string/btn_5_fragment_nguoidung" />
+        <item
+            android:id="@+id/nav_6"
+            android:icon="@drawable/account_box_outline"
+            android:title="@string/btn_6_fragment_nguoidung" />
+    </group>
+
+    <item android:title="@string/txtCTDT">
+        <menu>
+            <item
+                android:id="@+id/nav_niengiam_1"
+                android:icon="@drawable/books"
+                android:title="@string/btn_1_fragment_niengiam" />
+            <item
+                android:id="@+id/nav_niengiam_2"
+                android:icon="@drawable/books"
+                android:title="@string/btn_2_fragment_niengiam" />
+            <item
+                android:id="@+id/nav_niengiam_3"
+                android:icon="@drawable/help"
+                android:title="@string/btn_3_fragment_niengiam" />
+            <item
+                android:id="@+id/nav_niengiam_4"
+                android:icon="@drawable/infomation"
+                android:title="@string/btn_4_fragment_niengiam" />
+        </menu>
+    </item>
+
+</menu>

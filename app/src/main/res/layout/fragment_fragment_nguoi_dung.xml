@@ -116,7 +116,7 @@
                     android:layout_weight="2"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="@string/test"/>
+                    android:text="@string/btn_4_fragment_nguoidung"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -148,7 +148,7 @@
                     android:layout_weight="2"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="@string/test"/>
+                    android:text="@string/btn_5_fragment_nguoidung"/>
             </LinearLayout>
 
             <LinearLayout
@@ -172,7 +172,7 @@
                     android:layout_weight="2"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="@string/test"/>
+                    android:text="@string/btn_6_fragment_nguoidung"/>
             </LinearLayout>
 
         </LinearLayout>

@@ -43,8 +43,6 @@ public class SearchResultActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Intent intent = getIntent();
-        query = intent.getStringExtra("query");
         mainLayout = (LinearLayout)findViewById(R.id.mainLayout);
         mainLayout.setVisibility(View.GONE);
         mAdapterResult = new AdapterMonHoc(this, 0);
@@ -67,7 +65,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.base, menu);
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
@@ -99,6 +97,7 @@ public class SearchResultActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        query = getIntent().getStringExtra("query");
         mainTask = new MainTask(this);
         mainTask.execute(query);
     }

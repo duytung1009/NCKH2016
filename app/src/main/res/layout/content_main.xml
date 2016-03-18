@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.nckh2016.vuduytung.nckh2016.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:context="com.nckh2016.vuduytung.nckh2016.MainActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tab_layout"/>
+        android:layout_below="@+id/tab_layout"/>
 
 </FrameLayout>

@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.widget.LinearLayout;
 
 public class BoMonActivity extends AppCompatActivity {
+    private static final String FRAG1 = "fragment_bo_mon_1";
+    private static final String FRAG2 = "fragment_bo_mon_2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class BoMonActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.base, menu);
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
@@ -55,7 +57,6 @@ public class BoMonActivity extends AppCompatActivity {
     }
 
     public void loadFragment2(String maBoMon, String tenBoMon){
-        String tag = "fragment_bo_mon_2";
         Bundle bundle = new Bundle();
         bundle.putString("MaBoMon", maBoMon);
         bundle.putString("TenBoMon", tenBoMon);
@@ -63,8 +64,8 @@ public class BoMonActivity extends AppCompatActivity {
         //ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         Fragment frag2 = new BoMon2Fragment();
         frag2.setArguments(bundle);
-        ft.addToBackStack(tag);
-        ft.replace(R.id.fragment_bo_mon, frag2, tag);
+        ft.addToBackStack(FRAG2);
+        ft.replace(R.id.fragment_bo_mon, frag2, FRAG2);
         ft.commit();
     }
 }

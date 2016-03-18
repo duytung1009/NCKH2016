@@ -23,4 +23,8 @@
 
     <color name="black_overlay">#66000000</color>
     <!-- 3B6272 -->
+
+    <color name="white">#FFFFFF</color>
+    <!-- Transparent: 70% -->
+    <color name="whiteTransparent">#B3FFFFFF</color>
 </resources>

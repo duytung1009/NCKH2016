@@ -20,6 +20,9 @@
     <string name="btn_1_fragment_nguoidung">thông tin cá nhân</string>
     <string name="btn_2_fragment_nguoidung">kế hoạch học tập</string>
     <string name="btn_3_fragment_nguoidung">môn học chưa qua</string>
+    <string name="btn_4_fragment_nguoidung">test</string>
+    <string name="btn_5_fragment_nguoidung">test</string>
+    <string name="btn_6_fragment_nguoidung">test</string>
     <string name="btn_themmonhoc">thêm môn học</string>
     <string name="btn_luumonhoc">lưu môn học</string>
 
@@ -74,6 +77,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="test">test</string>
+    <string name="title_activity_base">BaseActivity</string>
 
 </resources>

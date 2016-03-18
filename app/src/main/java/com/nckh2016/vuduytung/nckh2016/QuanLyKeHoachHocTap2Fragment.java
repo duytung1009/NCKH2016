@@ -104,28 +104,28 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                 new AlertDialog.Builder(getContext())
                 .setTitle("Xóa học kỳ")
                 .setMessage("Xóa toàn bộ thông tin của học kỳ này?")
+                .setIcon(R.drawable.error)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //xóa
                         boolean flag = userData.removeHocKy(selectedHocKy);
-                        if(flag){
+                        if (flag) {
                             SharedPreferences.Editor editor = currentUserData.edit();
                             editor.putString("user_data", gson.toJson(userData));
                             editor.commit();
                             SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-                            try{
+                            try {
                                 data.isCreatedDatabase();
-                            }
-                            catch (IOException e){
+                            } catch (IOException e) {
                                 Log.e("tag", e.getMessage());
                             }
                             ContentValues updateValues = new ContentValues();
                             updateValues.put(MyContract.UserEntry.COLUMN_HOC_KY, gson.toJson(userData));
                             data.updateNguoiDung(current_user, updateValues);
                             data.deleteUserData(current_user, selectedHocKy.getHocKy(), selectedHocKy.getNamHoc());
-                            ((QuanLyKeHoachHocTapActivity)getContext()).loadPreviousFragment();
-                        } else{
+                            ((QuanLyKeHoachHocTapActivity) getContext()).loadPreviousFragment();
+                        } else {
                             Toast.makeText(getContext(), "Lỗi! xóa thất bại", Toast.LENGTH_SHORT).show();
                         }
                         dialog.dismiss();
@@ -136,9 +136,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
-                })
-                        .setIcon(R.drawable.error)
-                        .show();
+                }).show();
             }
         });
         if(userMonHoc.size() == 0){

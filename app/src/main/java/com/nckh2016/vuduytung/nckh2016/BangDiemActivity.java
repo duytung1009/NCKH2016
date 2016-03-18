@@ -1,9 +1,6 @@
 package com.nckh2016.vuduytung.nckh2016;
 
-import android.animation.LayoutTransition;
-import android.app.SearchManager;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,15 +16,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserData;
@@ -42,7 +34,7 @@ import java.util.Date;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class BangDiemActivity extends AppCompatActivity {
+public class BangDiemActivity extends BaseActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_FROM_GALLERY = 2;
     public static final String PREFS_NAME = "current_user";
@@ -58,15 +50,20 @@ public class BangDiemActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bang_diem);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        setContentView(R.layout.content_bang_diem);
         view1 = findViewById(R.id.fullscreen_content);
         view2 = findViewById(R.id.fullscreen_image_content);
         btn_1 = (Button) findViewById(R.id.dummy_button_1);
         btn_2 = (Button) findViewById(R.id.dummy_button_2);
         btn_3 = (Button) findViewById(R.id.dummy_button_3);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        for(int i=0; i < navigationView.getMenu().size(); i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
+        }
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         maMonHoc = getIntent().getStringExtra("MaMonHoc");
@@ -212,6 +209,7 @@ public class BangDiemActivity extends AppCompatActivity {
             }
         });
     }
+
     //http://developer.android.com/intl/vi/training/camera/photobasics.html#TaskPhotoView
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -243,37 +241,6 @@ public class BangDiemActivity extends AppCompatActivity {
         paint.setColorFilter(f);
         c.drawBitmap(bmpOriginal, 0, 0, paint);
         return bmpGrayscale;
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        // Get the SearchView and set the searchable configuration
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        // Transition
-        LinearLayout searchBar = (LinearLayout) searchView.findViewById(R.id.search_bar);
-        searchBar.setLayoutTransition(new LayoutTransition());
-        // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setQueryHint(getResources().getString(R.string.txtTimKiem));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Intent intent = new Intent(getBaseContext(), SearchResultActivity.class);
-                intent.putExtra("query", query);
-                startActivity(intent);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                return false;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

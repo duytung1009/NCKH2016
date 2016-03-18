@@ -1,18 +1,17 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
 
-public class QuanLyKeHoachHocTapActivity extends AppCompatActivity {
+public class QuanLyKeHoachHocTapActivity extends BaseActivity {
+    public final static int NAV_INDEX = 1;
+    private static final String FRAG1 = "frag1";
+    private static final String FRAG2 = "frag2";
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
     public String current_user_name = null;
@@ -20,16 +19,13 @@ public class QuanLyKeHoachHocTapActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quan_ly_ke_hoach_hoc_tap);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
-        current_user_name = currentUserData.getString("user_name", null);
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle(current_user_name);
-        ab.setSubtitle(current_user);
+        setContentView(R.layout.content_quan_ly_ke_hoach_hoc_tap);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigationView.getMenu().getItem(NAV_INDEX).setChecked(true);
     }
 
     public void loadPreviousFragment(){
@@ -40,7 +36,6 @@ public class QuanLyKeHoachHocTapActivity extends AppCompatActivity {
     }
 
     public void loadFragment2(ObjectHocKy hocKy){
-        String tag = "frag2";
         Bundle bundle = new Bundle();
         bundle.putString("nganh", hocKy.getNganh());
         bundle.putInt("namhoc", hocKy.getNamHoc());
@@ -48,8 +43,8 @@ public class QuanLyKeHoachHocTapActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment frag2 = new QuanLyKeHoachHocTap2Fragment();
         frag2.setArguments(bundle);
-        ft.addToBackStack(tag);
-        ft.replace(R.id.fragment, frag2, tag);
+        ft.addToBackStack(FRAG2);
+        ft.replace(R.id.fragment, frag2, FRAG2);
         ft.commit();
     }
 

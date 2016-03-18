@@ -4,23 +4,29 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
 
 import java.util.ArrayList;
 
-public class KeHoachHocTapActivity extends AppCompatActivity {
+public class KeHoachHocTapActivity extends BaseActivity {
+    private static final String FRAG1 = "frag1";
+    private static final String FRAG2 = "frag2";
+    private static final String FRAG3 = "frag3";
     ObjectHocKy selectedHocKy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ke_hoach_hoc_tap);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.content_ke_hoach_hoc_tap);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        for(int i=0; i < navigationView.getMenu().size(); i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
+        }
         String tenNganh = getIntent().getStringExtra("Nganh");
         String tenChuyenSau = getIntent().getStringExtra("ChuyenSau");
         ActionBar ab = getSupportActionBar();
@@ -29,7 +35,6 @@ public class KeHoachHocTapActivity extends AppCompatActivity {
     }
 
     public void loadFragment2(ObjectHocKy hocKy){
-        String tag = "frag2";
         selectedHocKy = hocKy;
         Bundle bundle = new Bundle();
         bundle.putString("nganh", selectedHocKy.getNganh());
@@ -38,13 +43,12 @@ public class KeHoachHocTapActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment frag2 = new KeHoachHocTap2Fragment();
         frag2.setArguments(bundle);
-        ft.addToBackStack(tag);
-        ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag2, tag);
+        ft.addToBackStack(FRAG2);
+        ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag2, FRAG2);
         ft.commit();
     }
 
     public void loadFragment3(ObjectHocKy hocKy, ArrayList<String> selectedMonHoc){
-        String tag = "frag3";
         Bundle bundle = new Bundle();
         bundle.putStringArrayList("mamonhoc", selectedMonHoc);
         bundle.putString("nganh", hocKy.getNganh());
@@ -55,8 +59,8 @@ public class KeHoachHocTapActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment frag3 = new KeHoachHocTap3Fragment();
         frag3.setArguments(bundle);
-        ft.addToBackStack(tag);
-        ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag3, tag);
+        ft.addToBackStack(FRAG3);
+        ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag3, FRAG3);
         ft.commit();
     }
 }

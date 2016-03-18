@@ -2,8 +2,6 @@ package com.nckh2016.vuduytung.nckh2016;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -12,17 +10,21 @@ import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
 
-public class ThongTinCaNhanActivity extends AppCompatActivity {
+public class ThongTinCaNhanActivity extends BaseActivity {
+    public final static int NAV_INDEX = 0;
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_thong_tin_ca_nhan);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.content_thong_tin_ca_nhan);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigationView.getMenu().getItem(NAV_INDEX).setChecked(true);
         TextView txtMaSinhVien = (TextView)findViewById(R.id.txtMaSinhVien);
         TextView txtTenSinhVien = (TextView)findViewById(R.id.txtTenSinhVien);
         TextView txtEmail = (TextView)findViewById(R.id.txtEmail);
@@ -53,4 +55,8 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
         txtNamThu.setText(currentUser.getNamhoc());
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

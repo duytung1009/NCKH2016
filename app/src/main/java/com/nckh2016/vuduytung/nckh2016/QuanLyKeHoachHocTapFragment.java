@@ -74,6 +74,8 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
         return view;
     }
 
+
+
     public void refreshView(){
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         user_data = new Gson().fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);

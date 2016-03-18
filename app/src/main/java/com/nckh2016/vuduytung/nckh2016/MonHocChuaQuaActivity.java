@@ -6,12 +6,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.view.View;
 
-public class MonHocChuaQuaActivity extends AppCompatActivity
+public class MonHocChuaQuaActivity extends BaseActivity
         implements FragmentMonHocChuaQua1.OnFragmentInteractionListener, FragmentMonHocChuaQua2.OnFragmentInteractionListener{
+    public final static int NAV_INDEX = 2;
     TabLayout tabLayout;
     TabsPagerAdapter mAdapter;
     ViewPager viewPager;
@@ -19,16 +20,21 @@ public class MonHocChuaQuaActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mon_hoc_chua_qua);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.content_mon_hoc_chua_qua);
+        appBarLayout.addView(View.inflate(this, R.layout.tabhost_layout, null));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigationView.getMenu().getItem(NAV_INDEX).setChecked(true);
         loadTabs();
     }
 
     public void loadTabs(){
         tabLayout = (TabLayout)findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.whiteTransparent), ContextCompat.getColor(this, R.color.white));
         tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab1_name), 0);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab2_name), 1);

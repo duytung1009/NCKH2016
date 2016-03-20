@@ -58,6 +58,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         maMonHoc = getIntent().getStringExtra("MaMonHoc");
+        rightLayout.setVisibility(View.GONE);
     }
 
     @Override

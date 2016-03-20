@@ -210,6 +210,14 @@ public class BangDiemActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mAttacher!=null){
+            mAttacher.cleanup();
+        }
+    }
+
     //http://developer.android.com/intl/vi/training/camera/photobasics.html#TaskPhotoView
     private File createImageFile() throws IOException {
         // Create an image file name

@@ -69,6 +69,10 @@ public class MainActivity extends BaseActivity
         if(!(mAdapter == null)){
             mAdapter.notifyDataSetChanged();
         }
+        viewPager.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        mainTask = new MainTask(this);
+        mainTask.execute();
     }
 
     @Override
@@ -286,8 +290,8 @@ public class MainActivity extends BaseActivity
             super.onPostExecute(objects);
             loadTabs(objects);
             loadUser(objects);
-            viewPager.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
+            viewPager.setVisibility(View.VISIBLE);
         }
     }
 }

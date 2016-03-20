@@ -21,6 +21,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerInParent="true"
+            app:cpv_color="@color/colorPrimary"
             app:cpv_animAutostart="true"
             app:cpv_indeterminate="true" />
 

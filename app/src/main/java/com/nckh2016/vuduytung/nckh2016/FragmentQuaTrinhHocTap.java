@@ -105,6 +105,20 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         df = new DecimalFormat("####0.00");
+        mainChart.setNoDataTextDescription("no data");
+        mainChart.setDrawSliceText(false);  //hide title
+        mainChart.setDescription("Điểm số");
+        mainChart.setDescriptionTypeface(light);
+        mainChart.setDescriptionTextSize(20);
+        mainChart.setDescriptionColor(Color.DKGRAY);
+        mainChart.setCenterTextTypeface(light);
+        mainChart.setCenterTextSize(24);
+        mainChart.setCenterTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        mainChart.setDrawHoleEnabled(true);
+        mainChart.setHoleColor(Color.TRANSPARENT);
+        mainChart.setHoleRadius(60);
+        mainChart.setTransparentCircleRadius(65);
+        mainChart.setDrawCenterText(true);
         return view;
     }
 
@@ -168,24 +182,13 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         chartData = new PieData(xVals, dataSet);
         chartData.setValueTextSize(12);
         chartData.setValueTextColor(Color.WHITE);
-        mainChart.setNoDataTextDescription("no data");
-        mainChart.setDrawSliceText(false);  //hide title
-        mainChart.setHoleColor(Color.TRANSPARENT);
-        mainChart.setHoleRadius(60);
-        mainChart.setTransparentCircleRadius(65);
-        //mainChart.setCenterTextRadiusPercent(60);
-        mainChart.setDescription("Điểm số");
-        mainChart.setDescriptionTypeface(light);
-        mainChart.setDescriptionTextSize(20);
-        mainChart.setDescriptionColor(Color.DKGRAY);
+
         if(Double.isNaN(tongDiem)){
             mainChart.setCenterText(getResources().getString(R.string.khong));
         } else{
             mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem) + "\nTín chỉ tích lũy\n" + tongTinChi);
         }
-        mainChart.setCenterTextTypeface(light);
-        mainChart.setCenterTextSize(24);
-        mainChart.setCenterTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+
         mainChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {

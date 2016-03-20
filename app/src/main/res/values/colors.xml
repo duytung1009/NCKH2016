@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#00E5FF</color>
 
-    <color name="splashScreenBackground">#ECEFF1</color>
+    <color name="splashScreenBackground">#009688</color>
 
     <color name="diemA">#81C784</color>
     <!-- 4CAF50 -->
@@ -25,6 +25,6 @@
     <!-- 3B6272 -->
 
     <color name="white">#FFFFFF</color>
-    <!-- Transparent: 70% -->
+    <!-- Transparent: 70% #ECEFF1-->
     <color name="whiteTransparent">#B3FFFFFF</color>
 </resources>

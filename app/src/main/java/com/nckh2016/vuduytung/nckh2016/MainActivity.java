@@ -55,6 +55,7 @@ public class MainActivity extends BaseActivity
     protected void onStart() {
         super.onStart();
         viewPager.setVisibility(View.GONE);
+        tabLayout.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
         mainTask = new MainTask(this);
         mainTask.execute();
@@ -69,10 +70,18 @@ public class MainActivity extends BaseActivity
         if(!(mAdapter == null)){
             mAdapter.notifyDataSetChanged();
         }
-        viewPager.setVisibility(View.GONE);
+        /*viewPager.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         mainTask = new MainTask(this);
-        mainTask.execute();
+        mainTask.execute();*/
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+            mainTask.cancel(true);
+        }
     }
 
     @Override
@@ -234,6 +243,7 @@ public class MainActivity extends BaseActivity
         if(resultCode == 1){
             //recreate();
             //super.onResume();
+            tabLayout.setEnabled(false);
             viewPager.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
             mainTask = new MainTask(this);
@@ -291,6 +301,7 @@ public class MainActivity extends BaseActivity
             loadTabs(objects);
             loadUser(objects);
             progressBar.setVisibility(View.GONE);
+            tabLayout.setEnabled(true);
             viewPager.setVisibility(View.VISIBLE);
         }
     }

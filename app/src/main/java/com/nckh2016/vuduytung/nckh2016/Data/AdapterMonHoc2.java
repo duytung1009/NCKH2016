@@ -39,39 +39,39 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-
-        final Object mObject = objects.get(position);
-        if(mObject != null){
-            final ObjectMonHoc mMonHoc = (ObjectMonHoc) mObject;
-            view = LayoutInflater.from(context).inflate(R.layout.item_monhoc_2, parent, false);
-            RelativeLayout itemLayout = (RelativeLayout) view.findViewById(R.id.itemLayout);
-            TextView txMaMonHoc = (TextView) view.findViewById(R.id.txMaMonHoc);
-            TextView txTenMonHoc = (TextView) view.findViewById(R.id.txTenMonHoc);
-            TextView txSoTinChi = (TextView) view.findViewById(R.id.txSoTinChi);
-            final CheckBox ckChon = (CheckBox) view.findViewById(R.id.checkBox);
-            txMaMonHoc.setText(mMonHoc.getMamh());
-            txTenMonHoc.setText(mMonHoc.getTenmh());
-            txSoTinChi.setText(mMonHoc.getTinchi().toString());
-            //need more logic...
-            itemLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ckChon.performClick();
-                }
-            });
-            ckChon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        selectedMonHoc.add(mMonHoc.getMamh());
-                    } else {
-                        selectedMonHoc.remove(selectedMonHoc.indexOf(mMonHoc.getMamh()));
+        if(objects.size()!=0) {
+            Object mObject = objects.get(position);
+            if (mObject != null) {
+                final ObjectMonHoc mMonHoc = (ObjectMonHoc) mObject;
+                view = LayoutInflater.from(context).inflate(R.layout.item_monhoc_2, parent, false);
+                RelativeLayout itemLayout = (RelativeLayout) view.findViewById(R.id.itemLayout);
+                TextView txMaMonHoc = (TextView) view.findViewById(R.id.txMaMonHoc);
+                TextView txTenMonHoc = (TextView) view.findViewById(R.id.txTenMonHoc);
+                TextView txSoTinChi = (TextView) view.findViewById(R.id.txSoTinChi);
+                final CheckBox ckChon = (CheckBox) view.findViewById(R.id.checkBox);
+                txMaMonHoc.setText(mMonHoc.getMamh());
+                txTenMonHoc.setText(mMonHoc.getTenmh());
+                txSoTinChi.setText(mMonHoc.getTinchi().toString());
+                //need more logic...
+                itemLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ckChon.performClick();
                     }
-                }
-            });
-            ckChon.setChecked(mainFragment.checkAll);
+                });
+                ckChon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            selectedMonHoc.add(mMonHoc.getMamh());
+                        } else {
+                            selectedMonHoc.remove(selectedMonHoc.indexOf(mMonHoc.getMamh()));
+                        }
+                    }
+                });
+                ckChon.setChecked(mainFragment.checkAll);
+            }
         }
-
         return view;
     }
 

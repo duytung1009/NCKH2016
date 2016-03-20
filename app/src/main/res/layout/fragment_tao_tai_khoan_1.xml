@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:colorBackground"
-    tools:context=".TaoTaiKhoan1Fragment">
+    tools:context=".TaoTaiKhoanFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/btnDangKy"
+            android:layout_above="@+id/fullscreen_content_controls"
             android:layout_alignParentTop="true">
 
             <LinearLayout
@@ -175,15 +175,24 @@
             </LinearLayout>
         </ScrollView>
 
-        <Button
-            android:id="@+id/btnDangKy"
+        <LinearLayout
+            android:id="@+id/fullscreen_content_controls"
+            style="?metaButtonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:padding="20dp"
-            android:text="@string/btndangky"
-            android:textColor="@android:color/white" />
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/black_overlay"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
 
+            <Button
+                style="@style/btn_tran"
+                android:id="@+id/btnDangKy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_dang_ky" />
+        </LinearLayout>
     </RelativeLayout>
 
 </FrameLayout>

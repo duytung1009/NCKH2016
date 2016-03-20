@@ -9,20 +9,24 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/btnThemHocKy"
+        android:layout_toStartOf="@+id/btnThemHocKy"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:text="Năm thứ ..."
         android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:text="Năm thứ ..."/>
+        android:textSize="20sp" />
 
     <Button
+        style="@style/btn_tran"
         android:id="@+id/btnThemHocKy"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_margin="10dp"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:backgroundTint="@android:color/white"
+        android:layout_margin="10dp"
         android:background="@drawable/plus"/>
 
 </RelativeLayout>

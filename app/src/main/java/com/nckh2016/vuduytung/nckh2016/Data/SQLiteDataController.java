@@ -1604,6 +1604,30 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     /**
+     * xóa toàn bộ dữ liệu người dùng
+     * @param masv mã sinh viên (String)
+     * @return
+     */
+    public int deleteUser(String masv){
+        int result = -1;
+        try{
+            // Mở kết nối
+            openDataBase();
+            database.delete(UserDataEntry.TABLE_NAME,
+                    UserDataEntry.COLUMN_MA_SV + " = ?",
+                    new String[]{masv});
+            result = database.delete(UserEntry.TABLE_NAME,
+                    UserEntry.COLUMN_MA_SV + " = ?",
+                    new String[]{masv});
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return result;
+    }
+
+    /**
      * xóa dữ liệu người dùng ứng với học kỳ cụ thể
      * @param masv mã sinh viên (String)
      * @param hocky học kỳ (int)

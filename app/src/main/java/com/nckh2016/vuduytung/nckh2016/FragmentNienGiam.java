@@ -2,6 +2,7 @@ package com.nckh2016.vuduytung.nckh2016;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,9 @@ import android.widget.LinearLayout;
  * create an instance of this fragment.
  */
 public class FragmentNienGiam extends Fragment {
+    public static final String PREFS_NAME = "current_user";
+    public String current_user = null;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,7 +72,22 @@ public class FragmentNienGiam extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_nien_giam, container, false);
+        Button btnHoSo = (Button)view.findViewById(R.id.btnHoSo);
         Button btnDangKy = (Button)view.findViewById(R.id.btnDangKy);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        current_user = currentUserData.getString("user_mssv", null);
+        if(current_user == null){
+            btnHoSo.setVisibility(View.GONE);
+        } else {
+            btnHoSo.setVisibility(View.VISIBLE);
+        }
+        btnHoSo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), QuanLyTaiKhoanActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
         btnDangKy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

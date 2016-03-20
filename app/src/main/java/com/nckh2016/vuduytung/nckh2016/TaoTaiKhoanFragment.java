@@ -1,7 +1,9 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -31,12 +33,13 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class TaoTaiKhoan1Fragment extends Fragment {
+public class TaoTaiKhoanFragment extends Fragment {
     public static final String PREFS_NAME = "current_user";
     ArrayList<Object> mListKhoa, mListNganh, mListChuyenSau;
     Spinner mSpinnerKhoa, mSpinnerNganh, mSpinnerChuyenSau, mSpinnerNamHoc;
+    MainTask mainTask;
 
-    public TaoTaiKhoan1Fragment() {
+    public TaoTaiKhoanFragment() {
     }
 
     @Override
@@ -144,34 +147,90 @@ public class TaoTaiKhoan1Fragment extends Fragment {
                     newUser.put(UserEntry.COLUMN_HOC_KY, new Gson().toJson(newUserHocKy));
                     newUser.put(UserEntry.COLUMN_MA_CHUYEN_SAU, chuyensau);
 
-                    SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-                    try{
-                        data.isCreatedDatabase();
-                    }
-                    catch (IOException e){
-                        Log.e("tag", e.getMessage());
-                    }
-                    if(data.checkUser(masv)){
-                        Toast.makeText(getContext(), "mã sinh viên đã có", Toast.LENGTH_SHORT).show();
-                    } else{
-                        long flag = data.insertNguoiDung(newUser);
-                        if(flag == -1){
-                            Toast.makeText(getContext(), "insert failed", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //((TaoTaiKhoanActivity)getActivity()).loadFragment2();
-                            SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, getContext().MODE_PRIVATE);
-                            SharedPreferences.Editor editor = settings.edit();
-                            editor.putString("user_mssv", masv);
-                            editor.putString("user_name", hoten);
-                            editor.putString("user_data", new Gson().toJson(newUserHocKy));
-                            editor.commit();
-                            getActivity().setResult(1);
-                            ((TaoTaiKhoanActivity)getActivity()).finish();
-                        }
-                    }
+                    mainTask = new MainTask(getContext());
+                    mainTask.execute(newUser);
                 }
             }
         });
         return view;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
+        }
+    }
+
+    public class MainTask extends AsyncTask<ContentValues, Long, Long> {
+        private Context mContext;
+        private ContentValues user;
+
+        public MainTask(Context mContext) {
+            this.mContext = mContext;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Long doInBackground(ContentValues... params) {
+            long flag = -1;
+            user = params[0];
+            SQLiteDataController data = SQLiteDataController.getInstance(mContext);
+            try{
+                data.isCreatedDatabase();
+            }
+            catch (IOException e){
+                Log.e("tag", e.getMessage());
+            }
+            if(data.checkUser(user.getAsString(UserEntry.COLUMN_MA_SV))){
+                flag = -2;
+            } else{
+                flag = data.insertNguoiDung(user);
+            }
+            return flag;
+        }
+
+        @Override
+        protected void onProgressUpdate(Long... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Long flag) {
+            super.onPostExecute(flag);
+            if(flag == -2){
+                Toast.makeText(getContext(), "mã sinh viên đã có", Toast.LENGTH_SHORT).show();
+            }
+            if(flag == -1){
+                Toast.makeText(getContext(), "thêm hồ sơ thất bại", Toast.LENGTH_SHORT).show();
+            } else {
+                //((TaoTaiKhoanActivity)getActivity()).loadFragment2();
+                SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, getContext().MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("user_mssv", user.getAsString(UserEntry.COLUMN_MA_SV));
+                editor.putString("user_name", user.getAsString(UserEntry.COLUMN_HO_TEN));
+                editor.putString("user_data", user.getAsString(UserEntry.COLUMN_HOC_KY));
+                editor.commit();
+                getActivity().setResult(1);
+                ((TaoTaiKhoanActivity)getActivity()).finish();
+            }
+        }
     }
 }

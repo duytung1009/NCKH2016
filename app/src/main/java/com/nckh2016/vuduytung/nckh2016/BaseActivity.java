@@ -63,8 +63,8 @@ public class BaseActivity extends AppCompatActivity
         //disable item icon tint color
         navigationView.setItemIconTintList(null);
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if(currentUserData == null){
-            //form dang ky
+        if(currentUserData.getString("user_mssv", null) == null){
+            //chua co du lieu
         } else{
             current_user_hoten = currentUserData.getString("user_name", null);
             current_user_masv = currentUserData.getString("user_mssv", null);
@@ -75,6 +75,21 @@ public class BaseActivity extends AppCompatActivity
             txtNavMaSinhVien.setText(current_user_masv);
         }
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void updateNavigationView(){
+        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        if(currentUserData.getString("user_mssv", null) == null){
+            //chua co du lieu
+        } else{
+            current_user_hoten = currentUserData.getString("user_name", null);
+            current_user_masv = currentUserData.getString("user_mssv", null);
+            View headerView = navigationView.getHeaderView(0);
+            TextView txtNavTenSinhVien = (TextView) headerView.findViewById(R.id.txtNavTenSinhVien);
+            TextView txtNavMaSinhVien = (TextView) headerView.findViewById(R.id.txtNavMaSinhVien);
+            txtNavTenSinhVien.setText(current_user_hoten);
+            txtNavMaSinhVien.setText(current_user_masv);
+        }
     }
 
     @Override
@@ -167,6 +182,26 @@ public class BaseActivity extends AppCompatActivity
         } else if (id == R.id.nav_5) {
 
         } else if (id == R.id.nav_6) {
+
+        } else if (id == R.id.nav_niengiam_1){
+            toggle.runWhenIdle(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(BaseActivity.this, NganhActivity.class);
+                    startActivity(intent);
+                }
+            });
+        } else if (id == R.id.nav_niengiam_2){
+            toggle.runWhenIdle(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(BaseActivity.this, BoMonActivity.class);
+                    startActivity(intent);
+                }
+            });
+        } else if (id == R.id.nav_niengiam_3){
+
+        } else if (id == R.id.nav_niengiam_4){
 
         }
 

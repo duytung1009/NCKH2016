@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:padding="20dp"
             android:layout_alignParentBottom="true"
-            android:text="@string/btnxem"
+            android:text="@string/btn_xem"
             android:textColor="@android:color/white" />
 
     </RelativeLayout>

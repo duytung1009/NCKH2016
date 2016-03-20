@@ -9,8 +9,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
 
-    <string name="btndangky">thêm hồ sơ</string>
-    <string name="btnxem">xem</string>
+    <string name="btn_dang_ky">thêm hồ sơ</string>
+    <string name="btn_tai_khoan">quản lý hồ sơ</string>
+    <string name="btn_xem">xem</string>
     <string name="editmasv">mã sinh viên</string>
     <string name="edithoten">họ và tên</string>
     <string name="editemail">email</string>
@@ -52,6 +53,7 @@
     <string name="title_activity_mon_hoc_chua_qua">Xem nhanh</string>
     <string name="title_activity_bang_diem2">Bảng điểm</string>
     <string name="title_activity_bang_diem">Bảng điểm</string>
+    <string name="title_activity_quan_ly_tai_khoan">Danh sách hồ sơ</string>
 
     <string name="khong">Chưa có dữ liệu</string>
 

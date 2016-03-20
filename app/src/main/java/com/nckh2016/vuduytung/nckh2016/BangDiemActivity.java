@@ -99,7 +99,7 @@ public class BangDiemActivity extends BaseActivity {
             public void onClick(View v) {
                 new AlertDialog.Builder(BangDiemActivity.this)
                         .setTitle(R.string.txtChonAnh)
-                        .setIcon(R.drawable.image_add)
+                        .setIcon(R.drawable.image_edit)
                         .setItems(new String[]{"Máy ảnh", "Thư viện"}, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

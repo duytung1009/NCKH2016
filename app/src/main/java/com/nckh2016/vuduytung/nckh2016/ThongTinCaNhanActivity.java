@@ -27,7 +27,7 @@ public class ThongTinCaNhanActivity extends BaseActivity {
         navigationView.getMenu().getItem(NAV_INDEX).setChecked(true);
         TextView txtMaSinhVien = (TextView)findViewById(R.id.txtMaSinhVien);
         TextView txtTenSinhVien = (TextView)findViewById(R.id.txtTenSinhVien);
-        TextView txtEmail = (TextView)findViewById(R.id.txtEmail);
+        //TextView txtEmail = (TextView)findViewById(R.id.txtEmail);
         TextView txtKhoa = (TextView)findViewById(R.id.txtKhoa);
         TextView txtNganh = (TextView)findViewById(R.id.txtNganh);
         TextView txtChuyenSau = (TextView)findViewById(R.id.txtChuyenSau);
@@ -48,7 +48,7 @@ public class ThongTinCaNhanActivity extends BaseActivity {
         ObjectUser currentUser = data.getUser(current_user);
         txtMaSinhVien.setText(currentUser.getMasv());
         txtTenSinhVien.setText(currentUser.getHoten());
-        txtEmail.setText(currentUser.getEmail());
+        //txtEmail.setText(currentUser.getEmail());
         txtKhoa.setText(data.getTenKhoa(currentUser.getMakhoa()));
         txtNganh.setText(data.getTenNganh(currentUser.getManganh()));
         txtChuyenSau.setText(data.getTenChuyenSau(currentUser.getManganh(), Integer.parseInt(currentUser.getMachuyensau())));

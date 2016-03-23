@@ -14,6 +14,7 @@ public class ObjectMonHoc implements Items{
     String tuchon;
     boolean isHocKy = false;
     double diem = -1;
+    boolean bangdiem = false;
 
     @Override
     public boolean isHocKy() {
@@ -31,7 +32,7 @@ public class ObjectMonHoc implements Items{
         this.tuchon = tuchon;
     }
 
-    public ObjectMonHoc(String mamh, String mabm, String tenmh, Integer tinchi, String dieukien, String noidung, String tailieu, String tuchon, double diem){
+    public ObjectMonHoc(String mamh, String mabm, String tenmh, Integer tinchi, String dieukien, String noidung, String tailieu, String tuchon, double diem, boolean bangdiem){
         this.mamh = mamh;
         this.mabm = mabm;
         this.tenmh = tenmh;
@@ -41,6 +42,7 @@ public class ObjectMonHoc implements Items{
         this.tailieu = tailieu;
         this.tuchon = tuchon;
         this.diem = diem;
+        this.bangdiem = bangdiem;
     }
 
     public ObjectMonHoc(String mamh, double diem, Integer tinchi) {
@@ -123,5 +125,13 @@ public class ObjectMonHoc implements Items{
 
     public void setDiem(double diem) {
         this.diem = diem;
+    }
+
+    public boolean isBangdiem() {
+        return bangdiem;
+    }
+
+    public void setBangdiem(boolean bangdiem) {
+        this.bangdiem = bangdiem;
     }
 }

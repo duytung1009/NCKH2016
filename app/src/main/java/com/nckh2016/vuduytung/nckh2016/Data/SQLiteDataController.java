@@ -1407,7 +1407,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try{
             openDataBase();
             mCursor = database.rawQuery("SELECT " + MonHocEntry.TABLE_NAME + ".*,"
-                    + UserDataEntry.COLUMN_DIEM_SO
+                    + UserDataEntry.COLUMN_DIEM_SO + "," + UserDataEntry.COLUMN_BANG_DIEM
                     + " FROM " + UserDataEntry.TABLE_NAME
                     + " LEFT JOIN " + MonHocEntry.TABLE_NAME
                     + " ON " + UserDataEntry.TABLE_NAME + "." + UserDataEntry.COLUMN_MA_MON_HOC + " = " + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_MA_MON_HOC
@@ -1425,7 +1425,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU)),
                             null,
-                            mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO))
+                            mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)),
+                            (mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM)) != null)
                     ));
                 }
             }
@@ -1453,7 +1454,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try{
             openDataBase();
             mCursor = database.rawQuery("SELECT " + MonHocEntry.TABLE_NAME + ".*,"
-                    + UserDataEntry.COLUMN_DIEM_SO
+                    + UserDataEntry.COLUMN_DIEM_SO + "," + UserDataEntry.COLUMN_BANG_DIEM
                     + " FROM " + UserDataEntry.TABLE_NAME
                     + " LEFT JOIN " + MonHocEntry.TABLE_NAME
                     + " ON " + UserDataEntry.TABLE_NAME + "." + UserDataEntry.COLUMN_MA_MON_HOC + " = " + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_MA_MON_HOC
@@ -1471,7 +1472,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU)),
                             null,
-                            mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO))
+                            mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)),
+                            (mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM)) != null)
                     ));
                 }
             }

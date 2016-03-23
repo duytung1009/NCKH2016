@@ -57,6 +57,7 @@
 
     <string name="khong">Chưa có dữ liệu</string>
 
+    <string name="txt">TextView</string>
     <string name="txtMaSinhVien">Mã sinh viên</string>
     <string name="txtHoTen">Họ tên</string>
     <string name="txtKhoa">Khoa</string>

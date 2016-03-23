@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,6 +32,7 @@ public class BaseActivity extends AppCompatActivity
     public NavigationView navigationView;
     public DrawerLayout fullLayout;
     public FrameLayout frameLayout;
+    public CoordinatorLayout coordinatorLayout;
 
     public static final String PREFS_NAME = "current_user";
     public String current_user_masv = null;
@@ -50,7 +52,7 @@ public class BaseActivity extends AppCompatActivity
         super.setContentView(fullLayout);
         //http://stackoverflow.com/questions/30289203/android-toolbar-occupies-full-screen
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
-
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

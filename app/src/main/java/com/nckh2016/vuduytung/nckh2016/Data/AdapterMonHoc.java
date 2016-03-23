@@ -50,10 +50,16 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
                 TextView txtSoTinChi = (TextView) view.findViewById(R.id.txtSoTinChi);
                 TextView txtTinChi = (TextView) view.findViewById(R.id.txtTinChi);
                 ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
+                ImageView imageViewBangDiem = (ImageView)view.findViewById(R.id.imageViewBangDiem);
                 //TextView txtIcon = (TextView)view.findViewById(R.id.txtIcon);
                 txtMaMonHoc.setText(mMonHoc.getMamh());
                 txtTenMonHoc.setText(mMonHoc.getTenmh());
                 txtSoTinChi.setText(mMonHoc.getTinchi().toString());
+                if(mMonHoc.isBangdiem()){
+                    imageViewBangDiem.setVisibility(View.VISIBLE);
+                } else {
+                    imageViewBangDiem.setVisibility(View.GONE);
+                }
                 if (mMonHoc.getTuchon() != null) {
                     switch (mMonHoc.getTuchon()) {
                         case "A":

@@ -79,9 +79,9 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+        /*if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
             mainTask.cancel(true);
-        }
+        }*/
     }
 
     @Override

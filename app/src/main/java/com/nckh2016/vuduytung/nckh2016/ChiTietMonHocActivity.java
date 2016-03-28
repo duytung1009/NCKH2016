@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
@@ -163,7 +164,35 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                 txtTenMonHoc.setSingleLine(false);
                 txtTenMonHoc.setText(objectMonHoc.getTenmh());
                 txtTinChi.setText(objectMonHoc.getTinchi().toString());
-                txtDieuKien.setText(objectMonHoc.getDieukien());
+
+                SQLiteDataController data = SQLiteDataController.getInstance(mContext);
+                try{
+                    data.isCreatedDatabase();
+                }
+                catch (IOException e){
+                    Log.e("tag", e.getMessage());
+                }
+                String dieukien = "Đã hoặc đang học: ";
+                String madieukien = objectMonHoc.getDieukien();
+                Toast.makeText(getApplicationContext(),madieukien, Toast.LENGTH_SHORT).show();
+                if(madieukien.length() < 7)
+                {
+                    dieukien = "Không";
+                }
+                else if(madieukien.length() > 7 )
+                {
+                    String[] items =madieukien.split(",");
+                    for (String item : items)
+                    {
+                        dieukien += data.getTenMonHoc(item);
+                        dieukien += ", ";
+                    }
+                }
+                else{
+                    dieukien += data.getTenMonHoc(madieukien);
+                }
+                txtDieuKien.setText(dieukien);
+
                 txtNoiDung.setText(objectMonHoc.getNoidung());
                 txtTaiLieu.setText(objectMonHoc.getTailieu());
                 if(objectMonHoc.getDiem() != -1){

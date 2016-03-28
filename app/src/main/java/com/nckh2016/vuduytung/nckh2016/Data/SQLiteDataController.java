@@ -1572,6 +1572,33 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return tenChuyenSau;
     }
 
+    /**
+     * lấy tên môn học theo mã môn học
+     * @param mamh mã môn học (String)
+     * @return
+     */
+    public String getTenMonHoc(String mamh){
+        String tenMonHoc = null;
+        Cursor mCursor = null;
+        try {
+            // Mở kết nối
+            openDataBase();
+            mCursor = database.rawQuery("SELECT rowid as _id,* FROM " + MonHocEntry.TABLE_NAME
+                    + " WHERE " + MonHocEntry.COLUMN_MA_MON_HOC + " = " + mamh, null);
+            while (mCursor.moveToNext()) {
+                tenMonHoc = mCursor.getString(mCursor.getColumnIndex(MonHocEntry.COLUMN_TEN_MON_HOC));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(mCursor != null){
+                mCursor.close();
+            }
+            close();
+        }
+        return tenMonHoc;
+    }
+
     public ArrayList<Object> searchMonHoc(String query){
         ArrayList<Object> result = new ArrayList<Object>();
         Cursor mCursor = null;

@@ -175,7 +175,7 @@
             </LinearLayout>
         </ScrollView>
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/fullscreen_content_controls"
             style="?metaButtonBarStyle"
             android:layout_width="match_parent"
@@ -191,6 +191,23 @@
                 android:id="@+id/btnDangKy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/btn_dang_ky" />
+        </LinearLayout>-->
+        <LinearLayout
+            android:id="@+id/fullscreen_content_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|center_horizontal"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+            <Button
+                android:id="@+id/btnDangKy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:textColor="@color/white"
                 android:text="@string/btn_dang_ky" />
         </LinearLayout>
     </RelativeLayout>

@@ -90,22 +90,23 @@
         <activity
             android:name=".BaseActivity"
             android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ThongTinCaNhanActivity"
             android:label="@string/title_activity_thong_tin_ca_nhan"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".QuanLyKeHoachHocTapActivity"
             android:label="@string/title_activity_quan_ly_ke_hoach_hoc_tap"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".MonHocChuaQuaActivity"
             android:label="@string/title_activity_mon_hoc_chua_qua"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".KeHoachHocTapActivity"
             android:label="@string/title_activity_ke_hoach_hoc_tap"

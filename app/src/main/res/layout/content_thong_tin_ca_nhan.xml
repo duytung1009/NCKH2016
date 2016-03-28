@@ -84,6 +84,13 @@
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/normalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignTop="@+id/txtNamThu"
+                    android:text="@string/txtNam" />
+                <TextView
                     android:id="@+id/txtNamThu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

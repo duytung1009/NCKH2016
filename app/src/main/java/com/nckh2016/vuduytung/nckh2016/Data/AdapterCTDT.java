@@ -105,7 +105,7 @@ public class AdapterCTDT extends BaseAdapter {
                                     imageView.setImageResource(R.drawable.tuchon_a);
                                     txtMaMonHoc.setVisibility(View.GONE);
                                     txtTinChi.setVisibility(View.GONE);
-                                    txtTenMonHoc.setText("Tự chọn A");
+                                    txtTenMonHoc.setText(mContext.getResources().getString(R.string.txtTuChonA));
                                     txtTenMonHoc.setPadding(0, 0, 0, 0);
                                     /*view.setOnClickListener(new View.OnClickListener() {
                                         @Override
@@ -118,7 +118,7 @@ public class AdapterCTDT extends BaseAdapter {
                                     imageView.setImageResource(R.drawable.tuchon_b);
                                     txtMaMonHoc.setVisibility(View.GONE);
                                     txtTinChi.setVisibility(View.GONE);
-                                    txtTenMonHoc.setText("Tự chọn B");
+                                    txtTenMonHoc.setText(mContext.getResources().getString(R.string.txtTuChonB));
                                     txtTenMonHoc.setPadding(0, 0, 0, 0);
                                     /*view.setOnClickListener(new View.OnClickListener() {
                                         @Override
@@ -131,7 +131,7 @@ public class AdapterCTDT extends BaseAdapter {
                                     imageView.setImageResource(R.drawable.tuchon_c);
                                     txtMaMonHoc.setVisibility(View.GONE);
                                     txtTinChi.setVisibility(View.GONE);
-                                    txtTenMonHoc.setText("Tự chọn C");
+                                    txtTenMonHoc.setText(mContext.getResources().getString(R.string.txtTuChonC));
                                     txtTenMonHoc.setPadding(0, 0, 0, 0);
                                     /*view.setOnClickListener(new View.OnClickListener() {
                                         @Override

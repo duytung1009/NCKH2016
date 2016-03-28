@@ -93,15 +93,13 @@
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/txtDieuKien"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/listViewMonHocDieuKien"
+                        android:orientation="vertical"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:singleLine="false"
-                        android:text="@string/khong"
-                        android:textSize="14sp" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
                     <TextView
                         android:layout_width="match_parent"

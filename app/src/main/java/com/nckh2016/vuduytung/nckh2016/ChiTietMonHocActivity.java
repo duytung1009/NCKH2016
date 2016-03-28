@@ -20,13 +20,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class ChiTietMonHocActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "current_user";
@@ -34,10 +34,12 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
     MainTask mainTask;
     String maMonHoc;
     TextView txtMaMonHoc, txtTenMonHoc, txtTinChi, txtDieuKien, txtNoiDung, txtTaiLieu, txtDiem, txtDiem2;
+    LinearLayout listViewMonHocDieuKien;
     Button btnBangDiem;
     LinearLayout rightLayout;
     ActionBar ab;
     Typeface light = Typeface.create("sans-serif-light", Typeface.NORMAL);
+    ArrayList<Boolean> monHocDaQua = new ArrayList<Boolean>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,8 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         txtMaMonHoc = (TextView) findViewById(R.id.txtMaMonHoc);
         txtTenMonHoc = (TextView) findViewById(R.id.txtTieuDe);
         txtTinChi = (TextView) findViewById(R.id.txtTinChi);
-        txtDieuKien = (TextView) findViewById(R.id.txtDieuKien);
+        listViewMonHocDieuKien = (LinearLayout)findViewById(R.id.listViewMonHocDieuKien);
+        //txtDieuKien = (TextView) findViewById(R.id.txtDieuKien);
         txtNoiDung = (TextView) findViewById(R.id.txtNoiDung);
         txtTaiLieu = (TextView) findViewById(R.id.txtTaiLieu);
         ab = getSupportActionBar();
@@ -148,21 +151,18 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                 mMonHoc.setDiem(data.getDiem(current_user, mMonHoc.getMamh()));
             }
             //lấy tên môn học điều kiện
-            String dieukien = "Đã học: ";
+            String dieukien = "";
             String madieukien = mMonHoc.getDieukien();
-            if(madieukien.length() < 7)
-            {
-                dieukien = "Không";
-            } else if(madieukien.length() > 7 ) {
+            if(madieukien.length() >= 7 ) {
                 String[] items = madieukien.split(",");
                 for (String item : items)
                 {
                     dieukien += data.getTenMonHoc(item);
-                    dieukien += ", ";
+                    dieukien += "\n";
+                    if(current_user != null){
+                        monHocDaQua.add(data.checkMonHocChuaQua(current_user, item));
+                    }
                 }
-            }
-            else{
-                dieukien += data.getTenMonHoc(madieukien);
             }
             mMonHoc.setDieukien(dieukien);
             return mMonHoc;
@@ -182,7 +182,35 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                 txtTenMonHoc.setSingleLine(false);
                 txtTenMonHoc.setText(objectMonHoc.getTenmh());
                 txtTinChi.setText(objectMonHoc.getTinchi().toString());
-                txtDieuKien.setText(objectMonHoc.getDieukien());
+                String madieukien = objectMonHoc.getDieukien();
+                View view;
+                ImageView imageViewMonHocDieuKien;
+                TextView textViewMonHocDieuKien;
+                if(madieukien.isEmpty()){
+                    view = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
+                    imageViewMonHocDieuKien = (ImageView)view.findViewById(R.id.imageViewMonHocDieuKien);
+                    textViewMonHocDieuKien = (TextView)view.findViewById(R.id.textViewMonHocDieuKien);
+                    imageViewMonHocDieuKien.setVisibility(View.GONE);
+                    textViewMonHocDieuKien.setText(getResources().getString(R.string.khong));
+                    listViewMonHocDieuKien.addView(view);
+                } else {
+                    int i = 0;
+                    String[] items = madieukien.split("\n");
+                    for (String item : items) {
+                        view = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
+                        imageViewMonHocDieuKien = (ImageView)view.findViewById(R.id.imageViewMonHocDieuKien);
+                        textViewMonHocDieuKien = (TextView)view.findViewById(R.id.textViewMonHocDieuKien);
+                        if(monHocDaQua.get(i) == true){
+                            imageViewMonHocDieuKien.setImageResource(R.drawable.circle);
+                        } else {
+                            imageViewMonHocDieuKien.setImageResource(R.drawable.check);
+                        }
+                        i++;
+                        textViewMonHocDieuKien.setText(item);
+                        listViewMonHocDieuKien.addView(view);
+                    }
+                }
+                //txtDieuKien.setText(objectMonHoc.getDieukien());
                 txtNoiDung.setText(objectMonHoc.getNoidung());
                 txtTaiLieu.setText(objectMonHoc.getTailieu());
                 if(objectMonHoc.getDiem() != -1){

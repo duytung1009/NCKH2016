@@ -94,6 +94,8 @@ public class AdapterCTDT extends BaseAdapter {
                         TextView txtSoTinChi = (TextView)view.findViewById(R.id.txtSoTinChi);
                         TextView txtTinChi = (TextView)view.findViewById(R.id.txtTinChi);
                         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
+                        ImageView imageViewBangDiem = (ImageView)view.findViewById(R.id.imageViewBangDiem);
+                        imageViewBangDiem.setVisibility(View.GONE);
                         txtMaMonHoc.setText(monHoc.getMamh());
                         txtTenMonHoc.setText(monHoc.getTenmh());
                         txtSoTinChi.setText(monHoc.getTinchi());

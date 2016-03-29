@@ -15,7 +15,6 @@
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/layoutTieuDe"
         android:background="#c0c0c0" />
 
     <LinearLayout
@@ -24,8 +23,8 @@
         android:orientation="vertical">
 
         <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1">
 
             <RelativeLayout
@@ -77,8 +76,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_below="@+id/topLayout2"
                     android:layout_toLeftOf="@+id/rightLayout"
+                    android:layout_toStartOf="@+id/rightLayout"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:orientation="vertical">
@@ -149,6 +150,7 @@
                     android:layout_height="wrap_content"
                     android:padding="20dp"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_below="@+id/topLayout2"
                     android:orientation="vertical">
 

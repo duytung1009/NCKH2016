@@ -140,7 +140,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
             mArrayList = data.getChuongTrinhDaoTao(selectedHocKy.getNganh(), selectedHocKy.getNamHoc(), maHocKy, chuyenSau);
         }
         ArrayList<Object> mMonHocChuaQua = data.getMonHocChuaQua(current_user, mArrayList);
-        monHocAdapter = new AdapterMonHoc2(this, 0, mMonHocChuaQua);
+        monHocAdapter = new AdapterMonHoc2(this, 0, mMonHocChuaQua, current_user);
         selectAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

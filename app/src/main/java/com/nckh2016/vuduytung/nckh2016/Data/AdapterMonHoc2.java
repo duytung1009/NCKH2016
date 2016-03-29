@@ -1,6 +1,9 @@
 package com.nckh2016.vuduytung.nckh2016.Data;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +13,18 @@ import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nckh2016.vuduytung.nckh2016.ChiTietMonHocActivity;
 import com.nckh2016.vuduytung.nckh2016.KeHoachHocTap2Fragment;
 import com.nckh2016.vuduytung.nckh2016.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * Created by Tung on 27/2/2016.
  */
 public class AdapterMonHoc2 extends ArrayAdapter<Object> {
+    public String current_user = null;
     private Context context;
     private KeHoachHocTap2Fragment mainFragment;
     private ArrayList<Object> objects;
@@ -29,11 +35,12 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
         super.notifyDataSetChanged();
     }
 
-    public AdapterMonHoc2(KeHoachHocTap2Fragment abc, int resource, ArrayList<Object> objects) {
+    public AdapterMonHoc2(KeHoachHocTap2Fragment abc, int resource, ArrayList<Object> objects, String current_user) {
         super(abc.getContext(), resource, objects);
         this.mainFragment = abc;
         this.context = abc.getContext();
         this.objects = objects;
+        this.current_user = current_user;
     }
 
     @Override
@@ -52,24 +59,61 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
                 txMaMonHoc.setText(mMonHoc.getMamh());
                 txTenMonHoc.setText(mMonHoc.getTenmh());
                 txSoTinChi.setText(mMonHoc.getTinchi().toString());
-                //need more logic...
-                itemLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ckChon.performClick();
+                //xet dieu kien
+                String madieukien = mMonHoc.getDieukien();
+                boolean chuaQua = false;
+                if(madieukien.length() >= 7 ) {
+                    SQLiteDataController data = SQLiteDataController.getInstance(context);
+                    try{
+                        data.isCreatedDatabase();
                     }
-                });
-                ckChon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked) {
-                            selectedMonHoc.add(mMonHoc.getMamh());
-                        } else {
-                            selectedMonHoc.remove(selectedMonHoc.indexOf(mMonHoc.getMamh()));
+                    catch (IOException e){
+                        Log.e("tag", e.getMessage());
+                    }
+                    String[] items = madieukien.split(",");
+                    for (String item : items)
+                    {
+                        if(data.checkMonHocChuaQua(current_user, item)){
+                            chuaQua = true;
+                            break;
                         }
                     }
-                });
-                ckChon.setChecked(mainFragment.checkAll);
+                }
+                if(chuaQua){
+                    itemLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, ChiTietMonHocActivity.class);
+                            intent.putExtra("MaMonHoc", mMonHoc.getMamh());
+                            context.startActivity(intent);
+                        }
+                    });
+                    if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        itemLayout.setBackgroundColor(context.getColor(R.color.black_overlay_2));
+                    } else {
+                        itemLayout.setBackgroundColor(context.getResources().getColor(R.color.black_overlay_2));
+                    }
+                    ckChon.setEnabled(false);
+                } else {
+                    //need more logic...
+                    itemLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ckChon.performClick();
+                        }
+                    });
+                    ckChon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (isChecked) {
+                                selectedMonHoc.add(mMonHoc.getMamh());
+                            } else {
+                                selectedMonHoc.remove(selectedMonHoc.indexOf(mMonHoc.getMamh()));
+                            }
+                        }
+                    });
+                    ckChon.setChecked(mainFragment.checkAll);
+                }
             }
         }
         return view;

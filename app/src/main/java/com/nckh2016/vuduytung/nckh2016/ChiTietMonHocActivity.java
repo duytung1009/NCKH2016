@@ -157,10 +157,12 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                 String[] items = madieukien.split(",");
                 for (String item : items)
                 {
-                    dieukien += data.getTenMonHoc(item);
-                    dieukien += "\n";
-                    if(current_user != null){
-                        monHocDaQua.add(data.checkMonHocChuaQua(current_user, item));
+                    if(data.getTenMonHoc(item) != null){
+                        dieukien += data.getTenMonHoc(item);
+                        dieukien += "\n";
+                        if(current_user != null){
+                            monHocDaQua.add(data.checkMonHocChuaQua(current_user, item));
+                        }
                     }
                 }
             }

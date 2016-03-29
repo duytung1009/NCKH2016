@@ -33,6 +33,7 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
     public ObjectUser cUser;
     AdapterNamHoc hocTapAdapter;
     ListView listViewHocTap;
+    //ArrayList<ObjectHocKy> listHocKy = new ArrayList<ObjectHocKy>();
 
     public QuanLyKeHoachHocTapFragment() {
     }
@@ -48,31 +49,9 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         imageView.setImageResource(R.drawable.report_card);
         txtTieuDe.setText(R.string.txtKeHoachHocTap);
-        /*SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-        try{
-            data.isCreatedDatabase();
-        }
-        catch (IOException e){
-            Log.e("tag", e.getMessage());
-        }
-        cUser = data.getUser(current_user);*/
+        hocTapAdapter = new AdapterNamHoc(getContext());
         listViewHocTap = (ListView)view.findViewById(R.id.listview_user_data);
-        /*hocTapAdapter = new AdapterNamHoc(getContext());
-        for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
-            //add nam hoc
-            hocTapAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
-            if(user_data != null){
-                for(ObjectHocKy value : user_data.getUserData()){
-                    if(value.getNamHoc() == i+1){
-                        if(value.getHocKy() != 0){
-                            hocTapAdapter.addItem(new ObjectHocKy(i+1, value.getHocKy(), cUser.getManganh()));
-                        }
-                    }
-                }
-            }
-        }
-        hocTapAdapter.sort();
-        listViewHocTap.setAdapter(hocTapAdapter);*/
+        listViewHocTap.setAdapter(hocTapAdapter);
         return view;
     }
 
@@ -102,23 +81,11 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
     public void refreshView(){
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         user_data = new Gson().fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);
-        if(cUser != null){
-            hocTapAdapter.removeAll();
-            for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
-                //add nam hoc
-                hocTapAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
-                if(user_data != null){
-                    for(ObjectHocKy value : user_data.getUserData()){
-                        if(value.getNamHoc() == i+1){
-                            if(value.getHocKy() != 0){
-                                hocTapAdapter.addItem(new ObjectHocKy(i+1, value.getHocKy(), cUser.getManganh()));
-                            }
-                        }
-                    }
-                }
-            }
-            hocTapAdapter.notifyDataSetChanged();
+        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+            mainTask.cancel(true);
         }
+        mainTask = new MainTask(getContext());
+        mainTask.execute();
     }
 
     public class MainTask extends AsyncTask<Void, Long, Void> {
@@ -143,6 +110,25 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
                 Log.e("tag", e.getMessage());
             }
             cUser = data.getUser(current_user);
+            if(cUser != null){
+                hocTapAdapter.removeAll();
+                //listHocKy.clear();
+                for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
+                    hocTapAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
+                    //listHocKy.add(new ObjectHocKy(i + 1, 0, cUser.getManganh()));
+                    if(user_data != null){
+                        for(ObjectHocKy value : user_data.getUserData()){
+                            if(value.getNamHoc() == i+1){
+                                if(value.getHocKy() != 0){
+                                    //listHocKy.add(new ObjectHocKy(i + 1, value.getHocKy(), cUser.getManganh(), data.getDiemHocKy(cUser.getMasv(), value.getHocKy(), value.getNamHoc())));
+                                    hocTapAdapter.addItem(new ObjectHocKy(i + 1, value.getHocKy(), cUser.getManganh(), data.getDiemHocKy(cUser.getMasv(), value.getHocKy(), value.getNamHoc())));
+                                }
+                            }
+                        }
+                    }
+                }
+                hocTapAdapter.sort();
+            }
             return null;
         }
 
@@ -154,24 +140,12 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            hocTapAdapter = new AdapterNamHoc(getContext());
-            if(cUser != null){
-                for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
-                    //add nam hoc
-                    hocTapAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
-                    if(user_data != null){
-                        for(ObjectHocKy value : user_data.getUserData()){
-                            if(value.getNamHoc() == i+1){
-                                if(value.getHocKy() != 0){
-                                    hocTapAdapter.addItem(new ObjectHocKy(i+1, value.getHocKy(), cUser.getManganh()));
-                                }
-                            }
-                        }
-                    }
-                }
+            /*if(cUser != null){
+                hocTapAdapter.removeAll();
+                hocTapAdapter.addAll(listHocKy);
                 hocTapAdapter.sort();
-                listViewHocTap.setAdapter(hocTapAdapter);
-            }
+            }*/
+            hocTapAdapter.notifyDataSetChanged();
         }
     }
 }

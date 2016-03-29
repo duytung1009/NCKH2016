@@ -7,6 +7,7 @@ public class ObjectHocKy implements Items {
     int namHoc;
     int hocKy;
     String nganh;
+    double diem = -1;
 
     @Override
     public boolean isHocKy() {
@@ -17,6 +18,13 @@ public class ObjectHocKy implements Items {
         this.namHoc = namHoc;
         this.hocKy = hocKy;
         this.nganh = nganh;
+    }
+
+    public ObjectHocKy(int namHoc, int hocKy, String nganh, double diem) {
+        this.namHoc = namHoc;
+        this.hocKy = hocKy;
+        this.nganh = nganh;
+        this.diem = diem;
     }
 
     public int getNamHoc() {
@@ -41,5 +49,13 @@ public class ObjectHocKy implements Items {
 
     public void setNganh(String nganh) {
         this.nganh = nganh;
+    }
+
+    public double getDiem() {
+        return diem;
+    }
+
+    public void setDiem(double diem) {
+        this.diem = diem;
     }
 }

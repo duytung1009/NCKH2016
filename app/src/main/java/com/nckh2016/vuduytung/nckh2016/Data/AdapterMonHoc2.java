@@ -75,7 +75,6 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
                     {
                         if(data.checkMonHocChuaQua(current_user, item)){
                             chuaQua = true;
-                            break;
                         }
                     }
                 }

@@ -21,6 +21,9 @@ public class ObjectMonHoc implements Items{
         return isHocKy;
     }
 
+    public ObjectMonHoc() {
+    }
+
     public ObjectMonHoc(String mamh, String mabm, String tenmh, Integer tinchi, String dieukien, String noidung, String tailieu, String tuchon){
         this.mamh = mamh;
         this.mabm = mabm;

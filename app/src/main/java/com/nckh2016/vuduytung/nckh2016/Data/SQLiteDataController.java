@@ -914,7 +914,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
      * @return
      */
     public boolean checkMonHocChuaQua(String maSinhVien, String maMonHoc){
-        boolean flag = true;
+        boolean flag = false;
         double diem = -1;
         Cursor mCursor = null;
         try{
@@ -926,8 +926,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 while(mCursor.moveToNext()){
                     diem = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)) > diem ? mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)) : diem;
                 }
-                if(diem >= 4){
-                    flag = false;
+                if(diem < 4){
+                    flag = true;
                 }
             }
         } catch (Exception e) {
@@ -1279,6 +1279,48 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_HOC_KY)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(UserEntry.COLUMN_MA_CHUYEN_SAU))
                     );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(mCursor != null){
+                mCursor.close();
+            }
+            close();
+        }
+        return result;
+    }
+
+    /**
+     * tính điểm tổng kết một học kỳ
+     * @param masv mã sinh viên (String)
+     * @param hocKy học kỳ (int)
+     * @param namHoc năm học (int)
+     * @return
+     */
+    public double getDiemHocKy(String masv, int hocKy, int namHoc){
+        double result = -1;
+        double tongDiem = 0;
+        int tongTinChi = 0;
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
+                    + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = '" + masv + "'"
+                    + " AND " + UserDataEntry.COLUMN_HOC_KY + " = '" + hocKy + "'"
+                    + " AND " + UserDataEntry.COLUMN_NAM_THU + " = '" + namHoc + "'", null);
+            if(mCursor != null) {
+                int tinchi = 0;
+                while(mCursor.moveToNext()){
+                    tinchi = ((ObjectMonHoc)getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))).get(0)).getTinchi();
+                    tongDiem += mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)) * tinchi;
+                    tongTinChi += tinchi;
+                }
+                if(tongTinChi != 0){
+                    result = (tongDiem/tongTinChi)/2.5;
+                    //http://www.wikihow.com/Convert-a-Percentage-into-a-4.0-Grade-Point-Average
+                    //https://vi.wikipedia.org/wiki/H%E1%BB%87_th%E1%BB%91ng_t%C3%ADn_ch%E1%BB%89_t%E1%BA%A1i_Vi%E1%BB%87t_Nam
                 }
             }
         } catch (Exception e) {

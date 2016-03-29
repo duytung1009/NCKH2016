@@ -16,6 +16,7 @@ import com.nckh2016.vuduytung.nckh2016.QuanLyKeHoachHocTapActivity;
 import com.nckh2016.vuduytung.nckh2016.R;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -48,7 +49,7 @@ public class AdapterNamHoc extends BaseAdapter {
                 }
             }
         }
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
     public void doiCho(int obj1, int obj2){
         Collections.swap(mData, obj1, obj2);
@@ -56,12 +57,17 @@ public class AdapterNamHoc extends BaseAdapter {
 
     public void addItem(ObjectHocKy item) {
         mData.add(item);
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+    }
+
+    public void addAll(ArrayList<ObjectHocKy> items){
+        mData.addAll(items);
+        //notifyDataSetChanged();
     }
 
     public void removeAll(){
         mData.clear();
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
 
     @Override
@@ -171,7 +177,11 @@ public class AdapterNamHoc extends BaseAdapter {
                 case LIST_ITEM_TYPE_2:
                     view = mInflater.inflate(R.layout.item_hocky, null);
                     TextView txtHocKy = (TextView)view.findViewById(R.id.txtHocKy);
+                    TextView txtDiemHocKy = (TextView)view.findViewById(R.id.txtDiemHocKy);
                     txtHocKy.setText("Học kỳ " + i.getHocKy());
+                    if(i.getDiem() != -1){
+                        txtDiemHocKy.setText(new DecimalFormat("####0.##").format(i.getDiem()));
+                    }
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

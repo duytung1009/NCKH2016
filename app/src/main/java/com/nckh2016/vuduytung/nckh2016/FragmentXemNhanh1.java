@@ -26,12 +26,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragmentMonHocChuaQua2.OnFragmentInteractionListener} interface
+ * {@link FragmentXemNhanh1.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragmentMonHocChuaQua2#newInstance} factory method to
+ * Use the {@link FragmentXemNhanh1#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentMonHocChuaQua2 extends Fragment {
+public class FragmentXemNhanh1 extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
     // TODO: Rename parameter arguments, choose names that match
@@ -45,7 +45,7 @@ public class FragmentMonHocChuaQua2 extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentMonHocChuaQua2() {
+    public FragmentXemNhanh1() {
         // Required empty public constructor
     }
 
@@ -55,11 +55,11 @@ public class FragmentMonHocChuaQua2 extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentMonHocChuaQua2.
+     * @return A new instance of fragment FragmentXemNhanh1.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentMonHocChuaQua2 newInstance(String param1, String param2) {
-        FragmentMonHocChuaQua2 fragment = new FragmentMonHocChuaQua2();
+    public static FragmentXemNhanh1 newInstance(String param1, String param2) {
+        FragmentXemNhanh1 fragment = new FragmentXemNhanh1();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -80,7 +80,7 @@ public class FragmentMonHocChuaQua2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_fragment_mon_hoc_chua_qua_2, container, false);
+        View view = inflater.inflate(R.layout.fragment_fragment_mon_hoc_chua_qua_1, container, false);
         final SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         SQLiteDataController data = SQLiteDataController.getInstance(getContext());
@@ -90,21 +90,21 @@ public class FragmentMonHocChuaQua2 extends Fragment {
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        double diemMin = 4, diemMax = 5.5;
+        double diemMin = 0, diemMax = 4;
         final ArrayList<Object> userMonHocChuaQua = data.getMonHocChuaQua(current_user, diemMin, diemMax);
         AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
         mAdapter.addAll(userMonHocChuaQua);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         imageView.setImageResource(R.drawable.high_priority);
-        txtTieuDe.setText("Môn học cải thiện: " + userMonHocChuaQua.size() + " môn");
+        txtTieuDe.setText("Môn học chưa qua: " + userMonHocChuaQua.size() + " môn");
         ListView lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
         lvMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
                 intent.putExtra("MaMonHoc", ((ObjectMonHoc) userMonHocChuaQua.get(position)).getMamh());
-                intent.putExtra("caller", "MonHocChuaQuaActivity");
+                intent.putExtra("caller", "XemNhanhActivity");
                 startActivity(intent);
             }
         });

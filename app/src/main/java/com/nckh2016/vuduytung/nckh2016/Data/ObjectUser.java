@@ -14,7 +14,7 @@ public class ObjectUser {
     String email;
     String hocky;   //dữ liệu học kỳ custom được lưu ở biến này (GSON: ArrayList<ObjectHocKy>)
     String machuyensau;
-    ArrayList<ObjectUserData> userdata;
+    ArrayList<ObjectUserData> userdata = new ArrayList<ObjectUserData>();
 
     public ObjectUser() {
         this.masv = null;
@@ -25,7 +25,6 @@ public class ObjectUser {
         this.email = null;
         this.hocky = null;
         this.machuyensau = null;
-        userdata = new ArrayList<ObjectUserData>();
     }
 
     public ObjectUser(String masv, String makhoa, String manganh, String hoten, String namhoc, String email, String hocky, String machuyensau) {
@@ -37,7 +36,7 @@ public class ObjectUser {
         this.email = email;
         this.hocky = hocky;
         this.machuyensau = machuyensau;
-        userdata = new ArrayList<ObjectUserData>();
+        //userdata = new ArrayList<ObjectUserData>();
     }
 
     public String getMasv() {

@@ -44,6 +44,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         // TODO Auto-generated constructor stub
     }
 
+    //singleton
     public static SQLiteDataController getInstance(Context cont){
         if (mInstance == null) {
             mInstance = new SQLiteDataController(cont.getApplicationContext());
@@ -71,8 +72,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     @Override
     public synchronized void close() {
         super.close();
-        if(database != null)
-            database.close();
+        if(database != null){
+            if(database.isOpen()){
+                database.close();
+            }
+        }
     }
 
     private void copyDataBase() throws IOException {
@@ -163,7 +167,13 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     public void openDataBase() throws SQLException {
-        database = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
+        if(database == null){
+            database = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
+        } else {
+            if(!database.isOpen()){
+                database = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
+            }
+        }
     }
 
     //phương thức truy vấn CSDL
@@ -181,8 +191,62 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e){
             e.printStackTrace();
         } finally {
-            close();
+            //close();
             return flag;
+        }
+    }
+
+    /**
+     * thêm người dùng + dữ liệu người dùng (điểm số...)
+     * @param user thông tin người dùng cần thêm (ObjectUser)
+     * @return
+     */
+    public boolean insertUser(ObjectUser user){
+        boolean result = true;
+        try{
+            openDataBase();
+            if(checkUser(user.getMasv())){
+                //update bảng user
+                ContentValues newUser = new ContentValues();
+                newUser.put(UserEntry.COLUMN_HO_TEN, user.getHoten());
+                newUser.put(UserEntry.COLUMN_EMAIL, user.getEmail());
+                newUser.put(UserEntry.COLUMN_MA_KHOA, user.getMakhoa());
+                newUser.put(UserEntry.COLUMN_MA_NGANH, user.getManganh());
+                newUser.put(UserEntry.COLUMN_NAM_HOC, user.getNamhoc());
+                newUser.put(UserEntry.COLUMN_HOC_KY, user.getHocky());
+                newUser.put(UserEntry.COLUMN_MA_CHUYEN_SAU, user.getMachuyensau());
+                long flag = database.update(UserEntry.TABLE_NAME, newUser, UserEntry.COLUMN_MA_SV + "=?" , new String[]{user.getMasv()});
+                //xóa dữ liệu cũ ở bảng userdata, thêm dữ liệu mới
+                deleteUserData(user.getMasv());
+                boolean flag2 = insertUserData(user.getUserdata());
+                //kiểm tra kết quả
+                if(flag == -1 || !flag2){
+                    result = false;
+                }
+            } else {
+                //insert bảng user
+                ContentValues newUser = new ContentValues();
+                newUser.put(UserEntry.COLUMN_MA_SV, user.getMasv());
+                newUser.put(UserEntry.COLUMN_HO_TEN, user.getHoten());
+                newUser.put(UserEntry.COLUMN_EMAIL, user.getEmail());
+                newUser.put(UserEntry.COLUMN_MA_KHOA, user.getMakhoa());
+                newUser.put(UserEntry.COLUMN_MA_NGANH, user.getManganh());
+                newUser.put(UserEntry.COLUMN_NAM_HOC, user.getNamhoc());
+                newUser.put(UserEntry.COLUMN_HOC_KY, user.getHocky());
+                newUser.put(UserEntry.COLUMN_MA_CHUYEN_SAU, user.getMachuyensau());
+                long flag = database.insert(UserEntry.TABLE_NAME, null, newUser);
+                //thêm dữ liệu mới ở bảng userdata
+                boolean flag2 = insertUserData(user.getUserdata());
+                //kiểm tra kết quả
+                if(flag == -1 || !flag2){
+                    result = false;
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            //close();
+            return result;
         }
     }
 
@@ -201,7 +265,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e){
             e.printStackTrace();
         } finally {
-            close();
+            //close();
             return flag;
         }
     }
@@ -223,7 +287,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e){
             e.printStackTrace();
         } finally {
-            close();
+            //close();
             return flag;
         }
     }
@@ -270,7 +334,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
             return flag;
         }
     }
@@ -393,7 +457,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return (tongDiem / tongTinChi)/10*4;
     }
@@ -515,7 +579,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return soTinChi;
     }
@@ -568,7 +632,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if (mCursor != null) {
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -604,7 +668,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -641,7 +705,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -687,7 +751,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -724,7 +788,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -753,7 +817,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -796,7 +860,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -841,7 +905,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -886,7 +950,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -936,7 +1000,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return flag;
     }
@@ -966,7 +1030,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return diem;
     }
@@ -997,7 +1061,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1028,7 +1092,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1058,7 +1122,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1088,7 +1152,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1119,7 +1183,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1151,7 +1215,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1183,7 +1247,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1215,7 +1279,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1250,7 +1314,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1287,7 +1351,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1329,7 +1393,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1359,7 +1423,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return flag;
     }
@@ -1369,8 +1433,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
      * @param masv mã sinh viên (String)
      * @return
      */
-    public ArrayList<Object> getUserData(String masv){
-        ArrayList<Object> result = new ArrayList<Object>();
+    public ArrayList<ObjectUserData> getUserData(String masv){
+        ArrayList<ObjectUserData> result = new ArrayList<ObjectUserData>();
         Cursor mCursor = null;
         try{
             openDataBase();
@@ -1394,7 +1458,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1431,7 +1495,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1478,7 +1542,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1525,7 +1589,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1552,7 +1616,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return tenKhoa;
     }
@@ -1580,7 +1644,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return tenNganh;
     }
@@ -1609,7 +1673,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return tenChuyenSau;
     }
@@ -1636,7 +1700,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return tenMonHoc;
     }
@@ -1669,7 +1733,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null){
                 mCursor.close();
             }
-            close();
+            //close();
         }
         return result;
     }
@@ -1693,7 +1757,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            close();
+            //close();
         }
         return result;
     }
@@ -1716,7 +1780,28 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            close();
+            //close();
+        }
+        return result;
+    }
+
+    /**
+     * xóa dữ liệu người dùng
+     * @param masv mã sinh viên (String)
+     * @return
+     */
+    public int deleteUserData(String masv){
+        int result = -1;
+        try{
+            // Mở kết nối
+            openDataBase();
+            result = database.delete(UserDataEntry.TABLE_NAME,
+                    UserDataEntry.COLUMN_MA_SV + " = ?",
+                    new String[]{masv});
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //close();
         }
         return result;
     }

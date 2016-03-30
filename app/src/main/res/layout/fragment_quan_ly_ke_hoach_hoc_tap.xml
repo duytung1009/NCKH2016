@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,16 +10,32 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/item_title"/>
+        <include layout="@layout/item_title" />
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:background="#c0c0c0" />
-        <ListView
-            android:id="@+id/listview_user_data"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/listview_user_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></ListView>
+
+            <com.github.rahatarmanahmed.cpv.CircularProgressView
+                android:id="@+id/progressBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                app:cpv_animAutostart="true"
+                app:cpv_color="@color/colorPrimary"
+                app:cpv_indeterminate="true" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 

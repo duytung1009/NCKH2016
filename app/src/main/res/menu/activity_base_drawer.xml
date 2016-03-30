@@ -12,7 +12,7 @@
             android:title="@string/btn_2_fragment_nguoidung" />
         <item
             android:id="@+id/nav_3"
-            android:icon="@drawable/high_priority"
+            android:icon="@drawable/quick_view"
             android:title="@string/btn_3_fragment_nguoidung" />
         <item
             android:id="@+id/nav_4"

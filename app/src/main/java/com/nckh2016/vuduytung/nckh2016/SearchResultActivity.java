@@ -78,9 +78,11 @@ public class SearchResultActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                /*progressBar.startAnimation(animFadeIn);
                 progressBar.setVisibility(View.VISIBLE);
-                mainLayout.setVisibility(View.GONE);
-                mainTask = new MainTask(getParent());
+                mainLayout.setVisibility(View.GONE);*/
+                Utils.showProcessBar(getApplicationContext(), progressBar, mainLayout);
+                mainTask = new MainTask(getApplicationContext());
                 mainTask.execute(query);
                 return false;
             }
@@ -98,6 +100,10 @@ public class SearchResultActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         query = getIntent().getStringExtra("query");
+        /*progressBar.startAnimation(animFadeIn);
+        progressBar.setVisibility(View.VISIBLE);
+        mainLayout.setVisibility(View.GONE);*/
+        Utils.showProcessBar(getApplicationContext(), progressBar, mainLayout);
         mainTask = new MainTask(this);
         mainTask.execute(query);
     }
@@ -163,8 +169,11 @@ public class SearchResultActivity extends AppCompatActivity {
                 txtTieuDe.setText(query + " - " + mListResult.size() + " kết quả");
                 mAdapterResult.clear();
                 mAdapterResult.addAll(mListResult);
+                /*progressBar.startAnimation(animFadeOut);
+                mainLayout.startAnimation(animFadeIn);
                 mainLayout.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);*/
+                Utils.hideProcessBar(mContext, progressBar, mainLayout);
             }
         }
     }

@@ -149,7 +149,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
                     monHocAdapter.notifyDataSetChanged();
                 } else {
                     checkAll = false;
-                    monHocAdapter.removeAll();
+                    monHocAdapter.clear();
                     monHocAdapter.notifyDataSetChanged();
                 }
             }

@@ -54,9 +54,11 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onStart() {
         super.onStart();
-        viewPager.setVisibility(View.GONE);
         tabLayout.setEnabled(false);
-        progressBar.setVisibility(View.VISIBLE);
+        /*progressBar.startAnimation(animFadeIn);
+        viewPager.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);*/
+        Utils.showProcessBar(this, progressBar, viewPager);
         mainTask = new MainTask(this);
         mainTask.execute();
     }
@@ -70,8 +72,8 @@ public class MainActivity extends BaseActivity
         if(!(mAdapter == null)){
             mAdapter.notifyDataSetChanged();
         }
-        /*viewPager.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+        /*
+        Utils.showProcessBar(this, progressBar, viewPager);
         mainTask = new MainTask(this);
         mainTask.execute();*/
     }
@@ -98,6 +100,7 @@ public class MainActivity extends BaseActivity
         if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
             mainTask.cancel(true);
         }
+        //SQLiteDataController.getInstance(getApplicationContext()).close();
     }
 
     public void loadTabs(ArrayList<Object> users){
@@ -217,6 +220,7 @@ public class MainActivity extends BaseActivity
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        SQLiteDataController.getInstance(getApplicationContext()).close();
                         finish();
                     }
                 })
@@ -244,8 +248,10 @@ public class MainActivity extends BaseActivity
             //recreate();
             //super.onResume();
             tabLayout.setEnabled(false);
+            /*progressBar.startAnimation(animFadeIn);
             viewPager.setVisibility(View.GONE);
-            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);*/
+            Utils.showProcessBar(this, progressBar, viewPager);
             mainTask = new MainTask(this);
             mainTask.execute();
 
@@ -300,9 +306,12 @@ public class MainActivity extends BaseActivity
             super.onPostExecute(objects);
             loadTabs(objects);
             loadUser(objects);
+            /*viewPager.startAnimation(animFadeIn);
+            progressBar.startAnimation(animFadeOut);
             progressBar.setVisibility(View.GONE);
+            viewPager.setVisibility(View.VISIBLE);*/
             tabLayout.setEnabled(true);
-            viewPager.setVisibility(View.VISIBLE);
+            Utils.hideProcessBar(mContext, progressBar, viewPager);
         }
     }
 }

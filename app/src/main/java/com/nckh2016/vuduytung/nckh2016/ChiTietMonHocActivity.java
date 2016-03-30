@@ -153,15 +153,17 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
             //lấy tên môn học điều kiện
             String dieukien = "";
             String madieukien = mMonHoc.getDieukien();
-            if(madieukien.length() >= 7 ) {
-                String[] items = madieukien.split(",");
-                for (String item : items)
-                {
-                    if(data.getTenMonHoc(item) != null){
-                        dieukien += data.getTenMonHoc(item);
-                        dieukien += "\n";
-                        if(current_user != null){
-                            monHocDaQua.add(data.checkMonHocChuaQua(current_user, item));
+            if(madieukien != null){
+                if(madieukien.length() >= 7 ) {
+                    String[] items = madieukien.split(",");
+                    for (String item : items)
+                    {
+                        if(data.getTenMonHoc(item) != null){
+                            dieukien += data.getTenMonHoc(item);
+                            dieukien += "\n";
+                            if(current_user != null){
+                                monHocDaQua.add(data.checkMonHocChuaQua(current_user, item));
+                            }
                         }
                     }
                 }

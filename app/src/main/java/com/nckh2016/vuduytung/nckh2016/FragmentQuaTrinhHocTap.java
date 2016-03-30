@@ -126,8 +126,10 @@ public class FragmentQuaTrinhHocTap extends Fragment {
     public void onStart() {
         super.onStart();
         setUpChart();
+        /*progressBar.startAnimation(animFadeIn);
         mainChart.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);*/
+        Utils.showProcessBar(getContext(), progressBar, mainChart);
         mainTask = new MainTask(getContext());
         mainTask.execute();
     }
@@ -320,8 +322,11 @@ public class FragmentQuaTrinhHocTap extends Fragment {
             } else{
                 mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem) + "\nTín chỉ tích lũy\n" + tongTinChi);
             }
+            /*mainChart.startAnimation(animFadeIn);
+            progressBar.startAnimation(animFadeOut);
             mainChart.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);*/
+            Utils.hideProcessBar(getContext(), progressBar, mainChart);
             mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
             //mainChart.invalidate();
         }

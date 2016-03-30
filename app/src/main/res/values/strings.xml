@@ -20,7 +20,7 @@
 
     <string name="btn_1_fragment_nguoidung">thông tin cá nhân</string>
     <string name="btn_2_fragment_nguoidung">kế hoạch học tập</string>
-    <string name="btn_3_fragment_nguoidung">môn học chưa qua</string>
+    <string name="btn_3_fragment_nguoidung">xem nhanh</string>
     <string name="btn_4_fragment_nguoidung">test</string>
     <string name="btn_5_fragment_nguoidung">test</string>
     <string name="btn_6_fragment_nguoidung">test</string>
@@ -50,10 +50,11 @@
     <string name="title_activity_bo_mon">Bộ môn</string>
     <string name="title_activity_nganh">Chuyên ngành</string>
     <string name="title_activity_quan_ly_ke_hoach_hoc_tap">Quản lý kế hoạch học tập</string>
-    <string name="title_activity_mon_hoc_chua_qua">Xem nhanh</string>
+    <string name="title_activity_xem_nhanh">Xem nhanh</string>
     <string name="title_activity_bang_diem2">Bảng điểm</string>
     <string name="title_activity_bang_diem">Bảng điểm</string>
     <string name="title_activity_quan_ly_tai_khoan">Danh sách hồ sơ</string>
+    <string name="title_activity_backup">Sao lưu - phục hồi</string>
 
     <string name="khong">Chưa có dữ liệu</string>
 
@@ -78,6 +79,7 @@
     <string name="txtTuChonA">Tự chọn A</string>
     <string name="txtTuChonB">Tự chọn B</string>
     <string name="txtTuChonC">Tự chọn C</string>
+    <string name="txtBackup">Danh sách file người dùng</string>
 
     <string name="bang_diem_content">CHƯA CÓ\n DỮ LIỆU</string>
 

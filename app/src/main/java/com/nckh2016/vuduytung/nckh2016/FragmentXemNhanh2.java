@@ -26,12 +26,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragmentMonHocChuaQua1.OnFragmentInteractionListener} interface
+ * {@link FragmentXemNhanh2.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragmentMonHocChuaQua1#newInstance} factory method to
+ * Use the {@link FragmentXemNhanh2#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentMonHocChuaQua1 extends Fragment {
+public class FragmentXemNhanh2 extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
     // TODO: Rename parameter arguments, choose names that match
@@ -45,7 +45,7 @@ public class FragmentMonHocChuaQua1 extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentMonHocChuaQua1() {
+    public FragmentXemNhanh2() {
         // Required empty public constructor
     }
 
@@ -55,11 +55,11 @@ public class FragmentMonHocChuaQua1 extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentMonHocChuaQua1.
+     * @return A new instance of fragment FragmentXemNhanh2.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentMonHocChuaQua1 newInstance(String param1, String param2) {
-        FragmentMonHocChuaQua1 fragment = new FragmentMonHocChuaQua1();
+    public static FragmentXemNhanh2 newInstance(String param1, String param2) {
+        FragmentXemNhanh2 fragment = new FragmentXemNhanh2();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -80,7 +80,7 @@ public class FragmentMonHocChuaQua1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_fragment_mon_hoc_chua_qua_1, container, false);
+        View view = inflater.inflate(R.layout.fragment_fragment_mon_hoc_chua_qua_2, container, false);
         final SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         SQLiteDataController data = SQLiteDataController.getInstance(getContext());
@@ -90,21 +90,21 @@ public class FragmentMonHocChuaQua1 extends Fragment {
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        double diemMin = 0, diemMax = 4;
+        double diemMin = 4, diemMax = 5.5;
         final ArrayList<Object> userMonHocChuaQua = data.getMonHocChuaQua(current_user, diemMin, diemMax);
         AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
         mAdapter.addAll(userMonHocChuaQua);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
-        imageView.setImageResource(R.drawable.high_priority);
-        txtTieuDe.setText("Môn học chưa qua: " + userMonHocChuaQua.size() + " môn");
+        imageView.setImageResource(R.drawable.error);
+        txtTieuDe.setText("Môn học cải thiện: " + userMonHocChuaQua.size() + " môn");
         ListView lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
         lvMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
                 intent.putExtra("MaMonHoc", ((ObjectMonHoc) userMonHocChuaQua.get(position)).getMamh());
-                intent.putExtra("caller", "MonHocChuaQuaActivity");
+                intent.putExtra("caller", "XemNhanhActivity");
                 startActivity(intent);
             }
         });

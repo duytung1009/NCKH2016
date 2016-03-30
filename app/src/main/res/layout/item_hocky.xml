@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/txtDiemHocKy"
-        style="@style/bigText"
+        style="@style/normalText"
         android:layout_width="50dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"

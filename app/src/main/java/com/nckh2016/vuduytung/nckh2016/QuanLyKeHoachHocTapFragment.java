@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterNamHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
@@ -28,12 +29,12 @@ import java.io.IOException;
 public class QuanLyKeHoachHocTapFragment extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
+    CircularProgressView progressBar;
     MainTask mainTask;
     public ObjectUserHocKy user_data;
     public ObjectUser cUser;
     AdapterNamHoc hocTapAdapter;
     ListView listViewHocTap;
-    //ArrayList<ObjectHocKy> listHocKy = new ArrayList<ObjectHocKy>();
 
     public QuanLyKeHoachHocTapFragment() {
     }
@@ -45,12 +46,13 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         user_data = new Gson().fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);
+        progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
+        listViewHocTap = (ListView)view.findViewById(R.id.listview_user_data);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         imageView.setImageResource(R.drawable.report_card);
         txtTieuDe.setText(R.string.txtKeHoachHocTap);
         hocTapAdapter = new AdapterNamHoc(getContext());
-        listViewHocTap = (ListView)view.findViewById(R.id.listview_user_data);
         listViewHocTap.setAdapter(hocTapAdapter);
         return view;
     }
@@ -58,6 +60,10 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        /*progressBar.startAnimation(animFadeIn);
+        listViewHocTap.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);*/
+        Utils.showProcessBar(getContext(), progressBar, listViewHocTap);
         mainTask = new MainTask(getContext());
         mainTask.execute();
     }
@@ -84,6 +90,10 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
         if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
             mainTask.cancel(true);
         }
+        /*progressBar.startAnimation(animFadeIn);
+        listViewHocTap.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);*/
+        Utils.showProcessBar(getContext(), progressBar, listViewHocTap);
         mainTask = new MainTask(getContext());
         mainTask.execute();
     }
@@ -112,15 +122,12 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
             cUser = data.getUser(current_user);
             if(cUser != null){
                 hocTapAdapter.removeAll();
-                //listHocKy.clear();
                 for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
                     hocTapAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
-                    //listHocKy.add(new ObjectHocKy(i + 1, 0, cUser.getManganh()));
                     if(user_data != null){
                         for(ObjectHocKy value : user_data.getUserData()){
                             if(value.getNamHoc() == i+1){
                                 if(value.getHocKy() != 0){
-                                    //listHocKy.add(new ObjectHocKy(i + 1, value.getHocKy(), cUser.getManganh(), data.getDiemHocKy(cUser.getMasv(), value.getHocKy(), value.getNamHoc())));
                                     hocTapAdapter.addItem(new ObjectHocKy(i + 1, value.getHocKy(), cUser.getManganh(), data.getDiemHocKy(cUser.getMasv(), value.getHocKy(), value.getNamHoc())));
                                 }
                             }
@@ -140,12 +147,12 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            /*if(cUser != null){
-                hocTapAdapter.removeAll();
-                hocTapAdapter.addAll(listHocKy);
-                hocTapAdapter.sort();
-            }*/
             hocTapAdapter.notifyDataSetChanged();
+            /*progressBar.startAnimation(animFadeOut);
+            listViewHocTap.startAnimation(animFadeIn);
+            progressBar.setVisibility(View.GONE);
+            listViewHocTap.setVisibility(View.VISIBLE);*/
+            Utils.hideProcessBar(getContext(), progressBar, listViewHocTap);
         }
     }
 }

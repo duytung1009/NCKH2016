@@ -44,6 +44,12 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
     }
 
     @Override
+    public void clear() {
+        super.clear();
+        this.selectedMonHoc.clear();
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if(objects.size()!=0) {
@@ -62,19 +68,21 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
                 //xet dieu kien
                 String madieukien = mMonHoc.getDieukien();
                 boolean chuaQua = false;
-                if(madieukien.length() >= 7 ) {
-                    SQLiteDataController data = SQLiteDataController.getInstance(context);
-                    try{
-                        data.isCreatedDatabase();
-                    }
-                    catch (IOException e){
-                        Log.e("tag", e.getMessage());
-                    }
-                    String[] items = madieukien.split(",");
-                    for (String item : items)
-                    {
-                        if(data.checkMonHocChuaQua(current_user, item)){
-                            chuaQua = true;
+                if(madieukien != null){
+                    if(madieukien.length() >= 7 ) {
+                        SQLiteDataController data = SQLiteDataController.getInstance(context);
+                        try{
+                            data.isCreatedDatabase();
+                        }
+                        catch (IOException e){
+                            Log.e("tag", e.getMessage());
+                        }
+                        String[] items = madieukien.split(",");
+                        for (String item : items)
+                        {
+                            if(data.checkMonHocChuaQua(current_user, item)){
+                                chuaQua = true;
+                            }
                         }
                     }
                 }
@@ -116,10 +124,6 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
             }
         }
         return view;
-    }
-
-    public void removeAll(){
-        selectedMonHoc.clear();
     }
 
     public ArrayList<String> getSelectedMonHoc(){

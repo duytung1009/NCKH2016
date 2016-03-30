@@ -175,7 +175,7 @@ public class BaseActivity extends AppCompatActivity
             toggle.runWhenIdle(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(BaseActivity.this, MonHocChuaQuaActivity.class);
+                    Intent intent = new Intent(BaseActivity.this, XemNhanhActivity.class);
                     startActivity(intent);
                 }
             });

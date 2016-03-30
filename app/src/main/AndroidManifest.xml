@@ -7,6 +7,7 @@
         android:required="true" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,13 +15,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!-- Splash screen-->
+
+        <!-- Splash screen -->
         <activity
             android:name=".SplashScreen"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,9 +33,9 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <!-- Old Main activity
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <!--
+        Old Main activity
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -45,7 +47,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>-->
+        </activity>
+        -->
 
         <activity
             android:name=".SearchResultActivity"
@@ -77,7 +80,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
         </activity>
-
         <activity
             android:name=".ChiTietMonHocActivity"
             android:label="@string/title_activity_chi_tiet_mon_hoc"
@@ -91,22 +93,22 @@
             android:name=".BaseActivity"
             android:label="@string/title_activity_base"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ThongTinCaNhanActivity"
             android:label="@string/title_activity_thong_tin_ca_nhan"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".QuanLyKeHoachHocTapActivity"
             android:label="@string/title_activity_quan_ly_ke_hoach_hoc_tap"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MonHocChuaQuaActivity"
-            android:label="@string/title_activity_mon_hoc_chua_qua"
+            android:name=".XemNhanhActivity"
+            android:label="@string/title_activity_xem_nhanh"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".KeHoachHocTapActivity"
             android:label="@string/title_activity_ke_hoach_hoc_tap"
@@ -143,7 +145,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
         </activity>
-
+        <activity
+            android:name=".BackupActivity"
+            android:label="@string/title_activity_backup"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

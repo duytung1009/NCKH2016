@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserData;
@@ -38,11 +40,12 @@ public class BangDiemActivity extends BaseActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_FROM_GALLERY = 2;
     public static final String PREFS_NAME = "current_user";
+    //các biến được khôi phục lại nếu app resume
     public String current_user = null;
+    String userMaMonHoc;
+    Uri mCurrentPhoto;
 
-    String maMonHoc;
     ObjectUserData userData;
-    String mCurrentPhotoPath;
     View view1, view2;
     Button btn_1, btn_2, btn_3;
     PhotoViewAttacher mAttacher;
@@ -66,8 +69,8 @@ public class BangDiemActivity extends BaseActivity {
         }
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
-        maMonHoc = getIntent().getStringExtra("MaMonHoc");
         userData = new ObjectUserData();
+        userMaMonHoc = getIntent().getStringExtra("MaMonHoc");
         if (current_user != null) {
             SQLiteDataController data = SQLiteDataController.getInstance(getApplicationContext());
             try {
@@ -75,7 +78,7 @@ public class BangDiemActivity extends BaseActivity {
             } catch (IOException e) {
                 Log.e("tag", e.getMessage());
             }
-            userData = data.getUserData(current_user, maMonHoc);
+            userData = data.getUserData(current_user, userMaMonHoc);
         }
         byte[] image = userData.getBangdiem();
         if (image == null) {
@@ -105,30 +108,38 @@ public class BangDiemActivity extends BaseActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
                                     case 0:
-                                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        // Ensure that there's a camera activity to handle the intent
-                                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                                            // Create the File where the photo should go
-                                            File photoFile = null;
-                                            try {
-                                                photoFile = createImageFile();
-                                            } catch (IOException ex) {
-                                                // Error occurred while creating the File
-                                                ex.printStackTrace();
+                                    {
+                                        if(getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+                                            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                            // Ensure that there's a camera activity to handle the intent
+                                            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                                                // Create the File where the photo should go
+                                                File photoFile = null;
+                                                try {
+                                                    photoFile = createImageFile();
+                                                } catch (IOException ex) {
+                                                    // Error occurred while creating the File
+                                                    ex.printStackTrace();
+                                                }
+                                                if (photoFile != null) {
+                                                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                                                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                                                }
                                             }
-                                            if (photoFile != null) {
-                                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                                        Uri.fromFile(photoFile));
-                                                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                                            }
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Máy của bạn không hỗ trợ tính năng này", Toast.LENGTH_SHORT).show();
                                         }
                                         break;
+                                    }
+
                                     case 1:
+                                    {
                                         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                                         intent.setType("image/*");
                                         intent.setAction(Intent.ACTION_GET_CONTENT);
                                         startActivityForResult(intent, REQUEST_FROM_GALLERY);
                                         break;
+                                    }
                                     default:
                                         break;
                                 }
@@ -147,30 +158,37 @@ public class BangDiemActivity extends BaseActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
                                     case 0:
-                                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        // Ensure that there's a camera activity to handle the intent
-                                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                                            // Create the File where the photo should go
-                                            File photoFile = null;
-                                            try {
-                                                photoFile = createImageFile();
-                                            } catch (IOException ex) {
-                                                // Error occurred while creating the File
-                                                ex.printStackTrace();
+                                    {
+                                        if(getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+                                            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                            // Ensure that there's a camera activity to handle the intent
+                                            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                                                // Create the File where the photo should go
+                                                File photoFile = null;
+                                                try {
+                                                    photoFile = createImageFile();
+                                                } catch (IOException ex) {
+                                                    // Error occurred while creating the File
+                                                    ex.printStackTrace();
+                                                }
+                                                if (photoFile != null) {
+                                                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                                                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                                                }
                                             }
-                                            if (photoFile != null) {
-                                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                                        Uri.fromFile(photoFile));
-                                                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                                            }
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Máy của bạn không hỗ trợ tính năng này", Toast.LENGTH_SHORT).show();
                                         }
                                         break;
+                                    }
                                     case 1:
+                                    {
                                         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                                         intent.setType("image/*");
                                         intent.setAction(Intent.ACTION_GET_CONTENT);
                                         startActivityForResult(intent, REQUEST_FROM_GALLERY);
                                         break;
+                                    }
                                     default:
                                         break;
                                 }
@@ -218,13 +236,28 @@ public class BangDiemActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("picUri", mCurrentPhoto);
+        outState.putString("maSinhVien", current_user);
+        outState.putString("maMonHoc", userMaMonHoc);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mCurrentPhoto = savedInstanceState.getParcelable("picUri");
+        current_user = savedInstanceState.getString("maSinhVien");
+        userMaMonHoc = savedInstanceState.getString("maMonHoc");
+    }
+
     //http://developer.android.com/intl/vi/training/camera/photobasics.html#TaskPhotoView
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -232,7 +265,8 @@ public class BangDiemActivity extends BaseActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhoto = Uri.fromFile(image);
+        //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         return image;
     }
     public Bitmap toGrayscale(Bitmap bmpOriginal)
@@ -256,11 +290,13 @@ public class BangDiemActivity extends BaseActivity {
         if (resultCode == RESULT_OK){
             switch (requestCode){
                 case REQUEST_IMAGE_CAPTURE:
+                {
                     //Bundle extras = data.getExtras();
                     //Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    Uri uri = Uri.parse(mCurrentPhotoPath);
+                    //Uri uri = Uri.parse(mCurrentPhotoPath);
                     try{
-                        Bitmap imageBitmap = toGrayscale(MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri));
+                        Bitmap imageBitmap = toGrayscale(MediaStore.Images.Media.getBitmap(this.getContentResolver(), mCurrentPhoto));
+                        //Bitmap imageBitmap = toGrayscale(BitmapFactory.decodeFile(mCurrentPhotoPath));
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                         ImageView mImageView = (ImageView) view2;
@@ -273,7 +309,7 @@ public class BangDiemActivity extends BaseActivity {
                         }
                         ContentValues value = new ContentValues();
                         value.put(MyContract.UserDataEntry.COLUMN_BANG_DIEM, stream.toByteArray());
-                        database.updateUserData(userData.getMasv(), userData.getMamonhoc(), value);
+                        database.updateUserData(current_user, userMaMonHoc, value);
                         recreate();
                     }catch (FileNotFoundException e){
                         e.printStackTrace();
@@ -281,10 +317,10 @@ public class BangDiemActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     break;
+                }
                 case REQUEST_FROM_GALLERY:
+                {
                     Uri selectedImage = data.getData();
-                    // h=1;
-                    //imgui = selectedImage;
                     String[] filePath = { MediaStore.Images.Media.DATA };
                     Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
                     c.moveToFirst();
@@ -304,9 +340,10 @@ public class BangDiemActivity extends BaseActivity {
                     }
                     ContentValues value = new ContentValues();
                     value.put(MyContract.UserDataEntry.COLUMN_BANG_DIEM, stream.toByteArray());
-                    database.updateUserData(userData.getMasv(), userData.getMamonhoc(), value);
+                    database.updateUserData(current_user, userMaMonHoc, value);
                     recreate();
                     break;
+                }
                 default:
                     break;
             }

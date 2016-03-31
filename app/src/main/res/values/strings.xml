@@ -30,7 +30,7 @@
     <string name="btn_1_fragment_niengiam">chương trình đào tạo</string>
     <string name="btn_2_fragment_niengiam">bộ môn chủ quản</string>
     <string name="btn_3_fragment_niengiam">hướng dẫn sử dụng</string>
-    <string name="btn_4_fragment_niengiam">về chương trình</string>
+    <string name="btn_4_fragment_niengiam">sao lưu - phục hồi</string>
 
     <string name="btn_them_anh">thêm</string>
     <string name="btn_sua_anh">sửa</string>
@@ -79,12 +79,14 @@
     <string name="txtTuChonA">Tự chọn A</string>
     <string name="txtTuChonB">Tự chọn B</string>
     <string name="txtTuChonC">Tự chọn C</string>
-    <string name="txtBackup">Danh sách file người dùng</string>
+    <string name="txtMemory">Bộ nhớ trong</string>
+    <string name="txtGoogleDrive">Google Drive</string>
 
     <string name="bang_diem_content">CHƯA CÓ\n DỮ LIỆU</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_base">BaseActivity</string>
+    <string name="title_activity_google_drive">GoogleDriveActivity</string>
 
 </resources>

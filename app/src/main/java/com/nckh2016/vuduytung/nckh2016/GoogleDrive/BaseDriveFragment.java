@@ -3,6 +3,7 @@ package com.nckh2016.vuduytung.nckh2016.GoogleDrive;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -10,12 +11,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
-import com.nckh2016.vuduytung.nckh2016.BaseActivity;
 
 /**
- * Created by Tung on 21/3/2016.
+ * Created by Tung on 31/3/2016.
  */
-public abstract class BaseDriveActivity extends BaseActivity implements
+public class BaseDriveFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
@@ -43,10 +43,10 @@ public abstract class BaseDriveActivity extends BaseActivity implements
      * activities itself.
      */
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
+            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                     .addApi(Drive.API)
                     .addScope(Drive.SCOPE_FILE)
                     .addScope(Drive.SCOPE_APPFOLDER) // required for App Folder sample
@@ -62,7 +62,7 @@ public abstract class BaseDriveActivity extends BaseActivity implements
      * be disconnected as soon as an activity is invisible.
      */
     @Override
-    protected void onPause() {
+    public void onPause() {
         if (mGoogleApiClient != null) {
             mGoogleApiClient.disconnect();
         }
@@ -73,9 +73,9 @@ public abstract class BaseDriveActivity extends BaseActivity implements
      * Handles resolution callbacks.
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_RESOLUTION && resultCode == RESULT_OK) {
+        if(requestCode == REQUEST_CODE_RESOLUTION && resultCode == getActivity().RESULT_OK) {
             mGoogleApiClient.connect();
         }
     }
@@ -106,11 +106,11 @@ public abstract class BaseDriveActivity extends BaseActivity implements
         Log.i(TAG, "GoogleApiClient connection failed: " + result.toString());
         if (!result.hasResolution()) {
             // show the localized error dialog.
-            GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
+            GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), result.getErrorCode(), 0).show();
             return;
         }
         try {
-            result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
+            result.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLUTION);
         } catch (IntentSender.SendIntentException e) {
             Log.e(TAG, "Exception while starting resolution activity", e);
         }
@@ -120,7 +120,7 @@ public abstract class BaseDriveActivity extends BaseActivity implements
      * Shows a toast message.
      */
     public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
     /**

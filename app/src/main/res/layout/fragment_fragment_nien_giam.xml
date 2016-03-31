@@ -109,7 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/infomation"
+                    android:src="@drawable/backup_restore"
                     android:tint="#03A9F4"
                     />
                 <TextView

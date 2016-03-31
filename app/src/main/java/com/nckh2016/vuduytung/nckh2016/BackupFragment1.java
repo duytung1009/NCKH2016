@@ -1,9 +1,11 @@
 package com.nckh2016.vuduytung.nckh2016;
 
+
 import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,10 +34,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 /**
- * A placeholder fragment containing a simple view.
+ * A simple {@link Fragment} subclass.
+ * Use the {@link BackupFragment1#newInstance} factory method to
+ * create an instance of this fragment.
  */
-public class BackupActivityFragment extends Fragment {
+public class BackupFragment1 extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
@@ -50,13 +64,44 @@ public class BackupActivityFragment extends Fragment {
     ArrayList<File> listFile = new ArrayList<File>();
     AdapterListFile adapterListFile;
 
-    public BackupActivityFragment() {
+    private OnFragmentInteractionListener mListener;
+
+    public BackupFragment1() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment BackupFragment1.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static BackupFragment1 newInstance(String param1, String param2) {
+        BackupFragment1 fragment = new BackupFragment1();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_backup, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_backup_fragment_1, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
@@ -68,48 +113,6 @@ public class BackupActivityFragment extends Fragment {
             Log.e("tag", e.getMessage());
         }
         listViewFile = (ListView)view.findViewById(R.id.listViewFile);
-        /*listViewFile.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final File file = (File) adapterListFile.getItem(position);
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Khôi phục dữ liệu")
-                        .setMessage("Việc khôi phục dữ liệu sẽ ghi đè lên hồ sơ có mã sinh viên là " + file.getName().replace(PATTERN, "") + ", tiếp tục?")
-                        .setIcon(R.drawable.backup_restore)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    FileInputStream fis = new FileInputStream(file);
-                                    InputStreamReader isr = new InputStreamReader(fis);
-                                    BufferedReader bufferedReader = new BufferedReader(isr);
-                                    StringBuilder sb = new StringBuilder();
-                                    String line;
-                                    while ((line = bufferedReader.readLine()) != null) {
-                                        sb.append(line);
-                                    }
-                                    String json = sb.toString();
-                                    Gson gson = new Gson();
-                                    ObjectUser user = gson.fromJson(json, ObjectUser.class);
-                                    if (data.insertUser(user)) {
-                                        Toast.makeText(getContext(), "Đã khôi phục", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(getContext(), "Khôi phục thất bại", Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
-            }
-        });*/
         adapterListFile = new AdapterListFile(getContext(), 0);
         listViewFile.setAdapter(adapterListFile);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
@@ -131,6 +134,11 @@ public class BackupActivityFragment extends Fragment {
             }
         });
         Button btnBackup = (Button)view.findViewById(R.id.btnBackup);
+        if(current_user == null){
+            btnBackup.setVisibility(View.GONE);
+        } else {
+            btnBackup.setVisibility(View.VISIBLE);
+        }
         btnBackup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,14 +185,20 @@ public class BackupActivityFragment extends Fragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                        mainTask.cancel(true);
+                    }
+                    Utils.showProcessBar(getContext(), progressBar, listViewFile);
+                    mainTask = new MainTask(getContext());
+                    mainTask.execute();
                     Toast.makeText(getContext(), "File backup đã lưu tại " + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
-        imageView.setImageResource(R.drawable.backup_restore);
-        txtTieuDe.setText(R.string.txtBackup);
+        imageView.setImageResource(R.drawable.folder);
+        txtTieuDe.setText(R.string.txtMemory);
         return view;
     }
 
@@ -221,6 +235,45 @@ public class BackupActivityFragment extends Fragment {
         }
     }
 
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
     public class MainTask extends AsyncTask<Void, Long, Void> {
         private Context mContext;
 
@@ -250,7 +303,7 @@ public class BackupActivityFragment extends Fragment {
             super.onPostExecute(aVoid);
             adapterListFile.clear();
             adapterListFile.addAll(listFile);
-            Utils.hideProcessBar(getContext(), progressBar, listViewFile);
+            Utils.hideProcessBar(mContext, progressBar, listViewFile);
             swipeContainer.setRefreshing(false);
         }
 

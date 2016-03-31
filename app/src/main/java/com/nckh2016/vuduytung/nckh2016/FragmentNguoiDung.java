@@ -91,14 +91,6 @@ public class FragmentNguoiDung extends Fragment {
                 startActivity(intent);
             }
         });
-        LinearLayout layout_4 = (LinearLayout)view.findViewById(R.id.layout_4);
-        layout_4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), BackupActivity.class);
-                startActivity(intent);
-            }
-        });
         return view;
     }
 

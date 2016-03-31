@@ -309,6 +309,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 userData.put(UserDataEntry.COLUMN_HOC_KY, value.getHocky());
                 userData.put(UserDataEntry.COLUMN_NAM_THU, value.getNamthu());
                 userData.put(UserDataEntry.COLUMN_DIEM_SO, value.getDiemso());
+                userData.put(UserDataEntry.COLUMN_BANG_DIEM, value.getBangdiem());
                 long num = -1;
                 mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
                         + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + value.getMasv()

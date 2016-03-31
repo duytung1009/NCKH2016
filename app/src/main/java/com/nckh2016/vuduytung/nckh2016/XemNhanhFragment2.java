@@ -26,12 +26,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragmentXemNhanh2.OnFragmentInteractionListener} interface
+ * {@link XemNhanhFragment2.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragmentXemNhanh2#newInstance} factory method to
+ * Use the {@link XemNhanhFragment2#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentXemNhanh2 extends Fragment {
+public class XemNhanhFragment2 extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public String current_user = null;
     // TODO: Rename parameter arguments, choose names that match
@@ -45,7 +45,7 @@ public class FragmentXemNhanh2 extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentXemNhanh2() {
+    public XemNhanhFragment2() {
         // Required empty public constructor
     }
 
@@ -55,11 +55,11 @@ public class FragmentXemNhanh2 extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentXemNhanh2.
+     * @return A new instance of fragment XemNhanhFragment2.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentXemNhanh2 newInstance(String param1, String param2) {
-        FragmentXemNhanh2 fragment = new FragmentXemNhanh2();
+    public static XemNhanhFragment2 newInstance(String param1, String param2) {
+        XemNhanhFragment2 fragment = new XemNhanhFragment2();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

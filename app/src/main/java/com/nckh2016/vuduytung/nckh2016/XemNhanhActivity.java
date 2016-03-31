@@ -11,7 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 public class XemNhanhActivity extends BaseActivity
-        implements FragmentXemNhanh1.OnFragmentInteractionListener, FragmentXemNhanh2.OnFragmentInteractionListener{
+        implements XemNhanhFragment1.OnFragmentInteractionListener, XemNhanhFragment2.OnFragmentInteractionListener{
     public final static int NAV_INDEX = 2;
     TabLayout tabLayout;
     TabsPagerAdapter mAdapter;
@@ -65,7 +65,6 @@ public class XemNhanhActivity extends BaseActivity
 
     }
 
-
     public class TabsPagerAdapter extends FragmentStatePagerAdapter {
         int mNumOfTabs;
 
@@ -78,9 +77,9 @@ public class XemNhanhActivity extends BaseActivity
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return FragmentXemNhanh1.newInstance(null, null);
+                    return XemNhanhFragment1.newInstance(null, null);
                 case 1:
-                    return FragmentXemNhanh2.newInstance(null, null);
+                    return XemNhanhFragment2.newInstance(null, null);
                 default:
                     return null;
             }

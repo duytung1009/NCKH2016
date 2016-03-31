@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -65,7 +66,18 @@ public class AdapterListFile extends ArrayAdapter<Object> {
                 TextView txtTenFile = (TextView)view.findViewById(R.id.txtTenFile);
                 TextView txtDuongDan = (TextView)view.findViewById(R.id.txtDuongDan);
                 txtTenFile.setText(file.getName());
-                txtDuongDan.setText(file.getAbsolutePath());
+                //txtDuongDan.setText(file.getAbsolutePath());
+                String size = "";
+                long fileSize = file.length();
+                if(fileSize < 1024){
+                    size = String.valueOf(fileSize) + " bytes";
+                } else if(fileSize < 1024*1024){
+                    size = String.valueOf(new DecimalFormat("####0.##").format((double)fileSize/1024)) + " KB";
+                } else if(fileSize < 1024*1024*1024){
+                    size = String.valueOf(new DecimalFormat("####0.##").format((double)fileSize/1024/1024)) + " MB";
+                }
+                String description = size + " - " + file.getAbsolutePath();
+                txtDuongDan.setText(description);
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -96,10 +108,14 @@ public class AdapterListFile extends ArrayAdapter<Object> {
                                             String json = sb.toString();
                                             Gson gson = new Gson();
                                             ObjectUser user = gson.fromJson(json, ObjectUser.class);
-                                            if (data.insertUser(user)) {
-                                                Toast.makeText(mContext, "Đã khôi phục", Toast.LENGTH_SHORT).show();
+                                            if (user.getMasv() == null) {
+                                                Toast.makeText(mContext, "Không thể đọc dữ liệu từ tệp đã chọn", Toast.LENGTH_SHORT).show();
                                             } else {
-                                                Toast.makeText(mContext, "Khôi phục thất bại", Toast.LENGTH_SHORT).show();
+                                                if (data.insertUser(user)) {
+                                                    Toast.makeText(mContext, "Đã khôi phục", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(mContext, "Khôi phục thất bại", Toast.LENGTH_SHORT).show();
+                                                }
                                             }
                                         } catch (Exception e) {
                                             e.printStackTrace();

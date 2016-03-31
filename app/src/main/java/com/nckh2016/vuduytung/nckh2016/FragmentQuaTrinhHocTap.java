@@ -119,6 +119,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         mainChart.setHoleRadius(60);
         mainChart.setTransparentCircleRadius(65);
         mainChart.setDrawCenterText(true);
+        mainChart.setRotationEnabled(false);
         return view;
     }
 

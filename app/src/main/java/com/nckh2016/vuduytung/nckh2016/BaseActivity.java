@@ -204,7 +204,13 @@ public class BaseActivity extends AppCompatActivity
         } else if (id == R.id.nav_niengiam_3){
 
         } else if (id == R.id.nav_niengiam_4){
-
+            toggle.runWhenIdle(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(BaseActivity.this, BackupActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -151,6 +151,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                 mMonHoc.setDiem(data.getDiem(current_user, mMonHoc.getMamh()));
             }
             //lấy tên môn học điều kiện
+            monHocDaQua.clear();
             String dieukien = "";
             String madieukien = mMonHoc.getDieukien();
             if(madieukien != null){
@@ -190,6 +191,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                 View view;
                 ImageView imageViewMonHocDieuKien;
                 TextView textViewMonHocDieuKien;
+                listViewMonHocDieuKien.removeAllViews();
                 if(madieukien.isEmpty()){
                     view = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
                     imageViewMonHocDieuKien = (ImageView)view.findViewById(R.id.imageViewMonHocDieuKien);

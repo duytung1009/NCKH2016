@@ -16,19 +16,19 @@
     <string name="edithoten">họ và tên</string>
     <string name="editemail">email</string>
 
-    <string name="btn_1_fragment_nguoidung">thông tin cá nhân</string>
-    <string name="btn_2_fragment_nguoidung">kế hoạch học tập</string>
-    <string name="btn_3_fragment_nguoidung">xem nhanh</string>
-    <string name="btn_4_fragment_nguoidung">test</string>
+    <string name="btn_1_fragment_nguoidung">Thông tin cá nhân</string>
+    <string name="btn_2_fragment_nguoidung">Kế hoạch học tập</string>
+    <string name="btn_3_fragment_nguoidung">Xem nhanh</string>
+    <string name="btn_4_fragment_nguoidung">Sao lưu - phục hồi</string>
     <string name="btn_5_fragment_nguoidung">test</string>
     <string name="btn_6_fragment_nguoidung">test</string>
     <string name="btn_themmonhoc">thêm môn học</string>
     <string name="btn_luumonhoc">lưu môn học</string>
 
-    <string name="btn_1_fragment_niengiam">chương trình đào tạo</string>
-    <string name="btn_2_fragment_niengiam">bộ môn chủ quản</string>
-    <string name="btn_3_fragment_niengiam">hướng dẫn sử dụng</string>
-    <string name="btn_4_fragment_niengiam">sao lưu - phục hồi</string>
+    <string name="btn_1_fragment_niengiam">Chương trình đào tạo</string>
+    <string name="btn_2_fragment_niengiam">Bộ môn chủ quản</string>
+    <string name="btn_3_fragment_niengiam">Hướng dẫn sử dụng</string>
+    <string name="btn_4_fragment_niengiam">Thông tin</string>
 
     <string name="btn_them_anh">thêm</string>
     <string name="btn_sua_anh">sửa</string>
@@ -41,7 +41,7 @@
     <string name="mon_hoc_chua_qua_activity_tab1_name">môn học chưa qua</string>
     <string name="mon_hoc_chua_qua_activity_tab2_name">môn học cải thiện</string>
 
-    <string name="title_activity_main">Chức năng chính</string>
+    <string name="title_activity_main">Màn hình chính</string>
     <string name="title_activity_search_result">Kết quả tìm kiếm</string>
     <string name="title_activity_thong_tin_ca_nhan">Thông tin cá nhân</string>
     <string name="title_activity_tao_tai_khoan">Hồ sơ mới</string>

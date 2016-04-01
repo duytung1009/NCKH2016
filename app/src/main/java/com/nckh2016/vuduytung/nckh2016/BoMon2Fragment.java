@@ -26,11 +26,9 @@ import java.util.ArrayList;
  */
 public class BoMon2Fragment extends Fragment {
 
-
     public BoMon2Fragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +61,8 @@ public class BoMon2Fragment extends Fragment {
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         imageView.setImageResource(R.drawable.books);
-        txtTieuDe.setText("Bộ môn " + tenBoMon + " - " + mListMonHoc.size() + " môn học");
+        String tieuDe = "Bộ môn " + tenBoMon + " - " + mListMonHoc.size() + " môn học";
+        txtTieuDe.setText(tieuDe);
         return view;
     }
 }

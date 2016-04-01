@@ -23,7 +23,9 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class Nganh1Fragment extends Fragment {
-    ArrayList<Object> mListKhoa, mListNganh;
+    //các biến được khôi phục lại nếu app resume
+    private ArrayList<Object> mListKhoa, mListNganh;
+    //các view
     Spinner mSpinnerKhoa, mSpinnerNganh;
 
     public Nganh1Fragment() {
@@ -35,14 +37,7 @@ public class Nganh1Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_nganh, container, false);
         mSpinnerKhoa = (Spinner)view.findViewById(R.id.spinnerKhoa);
         mSpinnerNganh = (Spinner)view.findViewById(R.id.spinnerNganh);
-        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-        try{
-            data.isCreatedDatabase();
-        }
-        catch (IOException e){
-            Log.e("tag", e.getMessage());
-        }
-        mListKhoa = data.getKhoaCoNganh();
+        loadKhoa();
         List<String> mListTenKhoa = new ArrayList<String>();
         for (Object object : mListKhoa) {
             ObjectKhoa value = (ObjectKhoa) object;
@@ -53,13 +48,7 @@ public class Nganh1Fragment extends Fragment {
         mSpinnerKhoa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-                try {
-                    data.isCreatedDatabase();
-                } catch (IOException e) {
-                    Log.e("tag", e.getMessage());
-                }
-                mListNganh = data.getNganhTheoKhoa(((ObjectKhoa) mListKhoa.get(position)).getMakhoa());
+                loadNganh(position);
                 List<String> mListTenNganh = new ArrayList<String>();
                 for (Object object : mListNganh) {
                     ObjectNganh value = (ObjectNganh) object;
@@ -86,5 +75,32 @@ public class Nganh1Fragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mListKhoa.isEmpty()){
+            loadKhoa();
+        }
+    }
 
+    private void loadKhoa(){
+        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+        try{
+            data.isCreatedDatabase();
+        }
+        catch (IOException e){
+            Log.e("tag", e.getMessage());
+        }
+        mListKhoa = data.getKhoaCoNganh();
+    }
+
+    private void loadNganh(int khoaPosition){
+        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+        try {
+            data.isCreatedDatabase();
+        } catch (IOException e) {
+            Log.e("tag", e.getMessage());
+        }
+        mListNganh = data.getNganhTheoKhoa(((ObjectKhoa) mListKhoa.get(khoaPosition)).getMakhoa());
+    }
 }

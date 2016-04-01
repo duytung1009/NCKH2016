@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc2;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
@@ -29,11 +30,20 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class KeHoachHocTap2Fragment extends Fragment {
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các giá trị Preferences của Activity
+    public static final String PREFS_STATE = "saved_state";
+    public static final String SUB_PREFS_CHECKALL = "checkAll";
+    public static final String SUB_PREFS_HOCKY = "hocKy";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
     public boolean checkAll = false;
-    ObjectHocKy selectedHocKy;
+    private ObjectHocKy selectedHocKy;
+    //các adapter
     AdapterMonHoc2 monHocAdapter;
+    //các view
     ListView mListHocKy;
     Button btnThemMonHoc;
     CheckBox selectAllCheckBox;
@@ -50,7 +60,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ke_hoach_hoc_tap_2, container, false);
         // Restore preferences
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
+        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
@@ -149,28 +159,40 @@ public class KeHoachHocTap2Fragment extends Fragment {
                     monHocAdapter.notifyDataSetChanged();
                 } else {
                     checkAll = false;
-                    monHocAdapter.clear();
+                    monHocAdapter.clearSelected();
                     monHocAdapter.notifyDataSetChanged();
                 }
             }
         });
         switch (selectedHocKy.getHocKy()){
             case -3:
+            {
                 imageView.setImageResource(R.drawable.tuchon_a);
-                txtTieuDe.setText("Tự chọn A - " + monHocAdapter.getCount() + " môn học");
+                String tieuDe = "Tự chọn A - " + monHocAdapter.getCount() + " môn học";
+                txtTieuDe.setText(tieuDe);
                 break;
+            }
             case -2:
+            {
                 imageView.setImageResource(R.drawable.tuchon_b);
-                txtTieuDe.setText("Tự chọn B - " + monHocAdapter.getCount() + " môn học");
+                String tieuDe = "Tự chọn B - " + monHocAdapter.getCount() + " môn học";
+                txtTieuDe.setText(tieuDe);
                 break;
+            }
             case -1:
+            {
                 imageView.setImageResource(R.drawable.tuchon_c);
-                txtTieuDe.setText("Tự chọn C - " + monHocAdapter.getCount() + " môn học");
+                String tieuDe = "Tự chọn C - " + monHocAdapter.getCount() + " môn học";
+                txtTieuDe.setText(tieuDe);
                 break;
+            }
             default:
+            {
                 imageView.setImageResource(R.drawable.books);
-                txtTieuDe.setText("Học kỳ " + maHocKy + " - " + monHocAdapter.getCount() + " môn học");
+                String tieuDe = "Học kỳ " + maHocKy + " - " + monHocAdapter.getCount() + " môn học";
+                txtTieuDe.setText(tieuDe);
                 break;
+            }
         }
         mListHocKy.setAdapter(monHocAdapter);
         btnThemMonHoc.setOnClickListener(new View.OnClickListener() {
@@ -185,5 +207,32 @@ public class KeHoachHocTap2Fragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //lấy dữ liệu Global
+        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        }
+        //lấy dữ liệu được lưu lại khi app Paused
+        SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        checkAll = state.getBoolean(SUB_PREFS_CHECKALL, checkAll);
+        if(selectedHocKy == null){
+            selectedHocKy = new Gson().fromJson(state.getString(SUB_PREFS_HOCKY, null), ObjectHocKy.class);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //lưu dữ liệu ra Preferences
+        SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putBoolean(SUB_PREFS_CHECKALL, checkAll);
+        editor.putString(SUB_PREFS_HOCKY, new Gson().toJson(selectedHocKy));
+        editor.apply();
     }
 }

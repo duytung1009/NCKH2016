@@ -9,23 +9,15 @@ import android.support.v4.app.FragmentTransaction;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
 
 public class QuanLyKeHoachHocTapActivity extends BaseActivity {
-    public final static int NAV_INDEX = 1;
+    //các giá trị để dùng load Fragment
     private static final String FRAG1 = "frag1";
     private static final String FRAG2 = "frag2";
-    public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
-    public String current_user_name = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_quan_ly_ke_hoach_hoc_tap);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //navigationView.getMenu().getItem(NAV_INDEX).setChecked(true);
     }
 
     public void loadPreviousFragment(){

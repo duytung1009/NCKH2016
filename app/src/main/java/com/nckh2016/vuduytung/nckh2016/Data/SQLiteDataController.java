@@ -364,7 +364,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 while(mCursor.moveToNext()){
                     String mamh = mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC));
                     diemSo = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
-                    tinChi = ((ObjectMonHoc) (getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))).get(0))).getTinchi();
+                    tinChi = ((ObjectMonHoc) (getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))))).getTinchi();
                     if(checkTuChon(mamh, "1", -1)){
                         tuChonC.add(new ObjectMonHoc(mamh, diemSo, tinChi));
                     } else if(checkTuChon(mamh, user.getMakhoa() + "0", -2)){
@@ -483,7 +483,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 while(mCursor.moveToNext()){
                     String mamh = mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC));
                     double diem = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
-                    int tinChi = ((ObjectMonHoc) (getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))).get(0))).getTinchi();
+                    int tinChi = ((ObjectMonHoc) (getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))))).getTinchi();
                     if(checkTuChon(mamh, "1", -1)){
                         tuChonC.add(new ObjectMonHoc(mamh, diem, tinChi));
                     } else if(checkTuChon(mamh, user.getMakhoa() + "0", -2)){
@@ -679,8 +679,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
      * @param maMonHoc mã môn học (String)
      * @return
      */
-    public ArrayList<Object> getMonHoc(String maMonHoc){
-        ArrayList<Object> result = new ArrayList<Object>();
+    public ObjectMonHoc getMonHoc(String maMonHoc){
+        ObjectMonHoc result = new ObjectMonHoc();
         Cursor mCursor = null;
         try{
             openDataBase();
@@ -688,7 +688,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     + " WHERE " + MonHocEntry.COLUMN_MA_MON_HOC + " = " + maMonHoc, null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
-                    result.add(new ObjectMonHoc(
+                    result = new ObjectMonHoc(
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_MON_HOC)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_BO_MON)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TEN_MON_HOC)),
@@ -697,7 +697,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
                             mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU)),
                             null
-                    ));
+                    );
+                }
+                if(result.getMamh() == null){
+                    result.setMamh(maMonHoc);
                 }
             }
         } catch (Exception e) {
@@ -809,7 +812,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " = -3", null);
             if(mCursor != null) {
                 while(mCursor.moveToNext()){
-                    result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC))).get(0));
+                    result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC))));
                 }
             }
         } catch (Exception e) {
@@ -931,7 +934,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                         + ") AND " + ChuongTrinhDaoTaoEntry.COLUMN_CHUYEN_NGANH + " = " + chuyenSau, null);
                 if(mCursor != null) {
                     while(mCursor.moveToNext()){
-                        result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC))).get(0));
+                        result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC))));
                     }
                 }
             } else{
@@ -941,7 +944,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                         + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_CHUYEN_NGANH + " = " + chuyenSau, null);
                 if(mCursor != null) {
                     while(mCursor.moveToNext()){
-                        result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC))).get(0));
+                        result.add(getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC))));
                     }
                 }
             }
@@ -965,8 +968,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     public ArrayList<Object> getMonHocChuaQua(String maSinhVien, ArrayList<Object> danhSachMonHoc){
         ArrayList<Object> monHocChuaQua = new ArrayList<Object>();
         for (Object value:danhSachMonHoc) {
-            if(checkMonHocChuaQua(maSinhVien, ((ObjectMonHoc)value).getMamh())){
-                monHocChuaQua.add(value);
+            if(((ObjectMonHoc)value).getMamh() != null){
+                if(checkMonHocChuaQua(maSinhVien, ((ObjectMonHoc)value).getMamh())){
+                    monHocChuaQua.add(value);
+                }
             }
         }
         return monHocChuaQua;
@@ -1378,7 +1383,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if(mCursor != null) {
                 int tinchi = 0;
                 while(mCursor.moveToNext()) {
-                    tinchi = ((ObjectMonHoc) getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))).get(0)).getTinchi();
+                    tinchi = ((ObjectMonHoc) getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC)))).getTinchi();
                     double diemHe10 = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
                     double diemHe4 = 0;
                     if (diemHe10 < 4) {

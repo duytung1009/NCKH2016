@@ -46,13 +46,12 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
     @Override
     public void clear() {
         super.clear();
-        this.selectedMonHoc.clear();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        if(objects.size()!=0) {
+        if (objects.size() != 0) {
             Object mObject = objects.get(position);
             if (mObject != null) {
                 final ObjectMonHoc mMonHoc = (ObjectMonHoc) mObject;
@@ -64,29 +63,31 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
                 final CheckBox ckChon = (CheckBox) view.findViewById(R.id.checkBox);
                 txMaMonHoc.setText(mMonHoc.getMamh());
                 txTenMonHoc.setText(mMonHoc.getTenmh());
-                txSoTinChi.setText(mMonHoc.getTinchi().toString());
+                String soTinChi = "...";
+                if (mMonHoc.getTinchi() != null) {
+                    soTinChi = String.valueOf(mMonHoc.getTinchi());
+                }
+                txSoTinChi.setText(soTinChi);
                 //xet dieu kien
                 String madieukien = mMonHoc.getDieukien();
                 boolean chuaQua = false;
-                if(madieukien != null){
-                    if(madieukien.length() >= 7 ) {
+                if (madieukien != null) {
+                    if (madieukien.length() >= 7) {
                         SQLiteDataController data = SQLiteDataController.getInstance(context);
-                        try{
+                        try {
                             data.isCreatedDatabase();
-                        }
-                        catch (IOException e){
+                        } catch (IOException e) {
                             Log.e("tag", e.getMessage());
                         }
                         String[] items = madieukien.split(",");
-                        for (String item : items)
-                        {
-                            if(data.checkMonHocChuaQua(current_user, item)){
+                        for (String item : items) {
+                            if (data.checkMonHocChuaQua(current_user, item)) {
                                 chuaQua = true;
                             }
                         }
                     }
                 }
-                if(chuaQua){
+                if (chuaQua) {
                     itemLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -95,7 +96,7 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
                             context.startActivity(intent);
                         }
                     });
-                    if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         itemLayout.setBackgroundColor(context.getColor(R.color.black_overlay_2));
                     } else {
                         itemLayout.setBackgroundColor(context.getResources().getColor(R.color.black_overlay_2));
@@ -126,7 +127,11 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
         return view;
     }
 
-    public ArrayList<String> getSelectedMonHoc(){
+    public void clearSelected() {
+        this.selectedMonHoc.clear();
+    }
+
+    public ArrayList<String> getSelectedMonHoc() {
         return selectedMonHoc;
     }
 }

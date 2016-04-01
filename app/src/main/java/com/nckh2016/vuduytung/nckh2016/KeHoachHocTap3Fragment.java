@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHocNhapDiem;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserData;
@@ -30,10 +31,19 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class KeHoachHocTap3Fragment extends Fragment {
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
-    ObjectHocKy selectedHocKy, userHocKy;
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các giá trị Preferences của Activity
+    public static final String PREFS_STATE = "saved_state";
+    public static final String SUB_PREFS_HOCKY = "hocKy";
+    public static final String SUB_PREFS_USERHOCKY = "userHocKy";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
+    private ObjectHocKy selectedHocKy, userHocKy;
+    //các adapter
     AdapterMonHocNhapDiem monHocAdapter;
+    //các view
     ListView mListMonHoc;
     Button btnLuuMonHoc;
 
@@ -48,7 +58,7 @@ public class KeHoachHocTap3Fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ke_hoach_hoc_tap_3, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
+        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         btnLuuMonHoc = (Button)view.findViewById(R.id.btnLuuMonHoc);
@@ -95,4 +105,32 @@ public class KeHoachHocTap3Fragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //lấy dữ liệu Global
+        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        }
+        //lấy dữ liệu được lưu lại khi app Paused
+        SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        if(selectedHocKy == null){
+            selectedHocKy = new Gson().fromJson(state.getString(SUB_PREFS_HOCKY, null), ObjectHocKy.class);
+        }
+        if(userHocKy == null){
+            userHocKy = new Gson().fromJson(state.getString(SUB_PREFS_USERHOCKY, null), ObjectHocKy.class);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //lưu dữ liệu ra Preferences
+        SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putString(SUB_PREFS_HOCKY, new Gson().toJson(selectedHocKy));
+        editor.putString(SUB_PREFS_USERHOCKY, new Gson().toJson(userHocKy));
+        editor.apply();
+    }
 }

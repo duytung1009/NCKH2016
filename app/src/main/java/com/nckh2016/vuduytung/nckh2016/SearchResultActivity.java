@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,14 +28,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchResultActivity extends AppCompatActivity {
-    MainTask mainTask;
-    ArrayList<Object> mListResult = new ArrayList<Object>();
+    //các giá trị Preferences của Activity
+    public static final String PREFS_STATE = "saved_state";
+    public static final String SUB_PREFS_QUERY = "query";
+    //các biến được khôi phục lại nếu app resume
+    private String query;
+    private ArrayList<Object> mListResult = new ArrayList<Object>();
+    //các adapter
     AdapterMonHoc mAdapterResult;
+    //các asynctask
+    MainTask mainTask;
+    //các view
     CircularProgressView progressBar;
     LinearLayout mainLayout;
     TextView txtTieuDe;
     ListView lvResult;
-    String query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +86,6 @@ public class SearchResultActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                /*progressBar.startAnimation(animFadeIn);
-                progressBar.setVisibility(View.VISIBLE);
-                mainLayout.setVisibility(View.GONE);*/
                 Utils.showProcessBar(getApplicationContext(), progressBar, mainLayout);
                 mainTask = new MainTask(getApplicationContext());
                 mainTask.execute(query);
@@ -100,27 +105,38 @@ public class SearchResultActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         query = getIntent().getStringExtra("query");
-        /*progressBar.startAnimation(animFadeIn);
-        progressBar.setVisibility(View.VISIBLE);
-        mainLayout.setVisibility(View.GONE);*/
         Utils.showProcessBar(getApplicationContext(), progressBar, mainLayout);
         mainTask = new MainTask(this);
         mainTask.execute(query);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mainTask.cancel(true);
+    protected void onResume() {
+        super.onResume();
+        //lấy dữ liệu được lưu lại khi app Paused
+        SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        if(query == null){
+            query = state.getString(SUB_PREFS_QUERY, null);
         }
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mainTask.cancel(true);
+    protected void onPause() {
+        super.onPause();
+        //lưu dữ liệu ra Preferences
+        SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putString(SUB_PREFS_QUERY, query);
+        editor.apply();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
         }
     }
 
@@ -166,13 +182,10 @@ public class SearchResultActivity extends AppCompatActivity {
             if(objects != null) {
                 mListResult.clear();
                 mListResult.addAll(objects);
-                txtTieuDe.setText(query + " - " + mListResult.size() + " kết quả");
+                String tieuDe = query + " - " + mListResult.size() + " kết quả";
+                txtTieuDe.setText(tieuDe);
                 mAdapterResult.clear();
                 mAdapterResult.addAll(mListResult);
-                /*progressBar.startAnimation(animFadeOut);
-                mainLayout.startAnimation(animFadeIn);
-                mainLayout.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);*/
                 Utils.hideProcessBar(mContext, progressBar, mainLayout);
             }
         }

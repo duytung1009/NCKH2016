@@ -1,6 +1,8 @@
 package com.nckh2016.vuduytung.nckh2016;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -11,52 +13,92 @@ import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import java.io.IOException;
 
 public class ThongTinCaNhanActivity extends BaseActivity {
-    public final static int NAV_INDEX = 0;
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
+    //các asynctask
+    MainTask mainTask;
+    //các view
+    TextView txtMaSinhVien, txtTenSinhVien, txtKhoa, txtNganh, txtChuyenSau, txtNamThu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_thong_tin_ca_nhan);
+        txtMaSinhVien = (TextView)findViewById(R.id.txtMaSinhVien);
+        txtTenSinhVien = (TextView)findViewById(R.id.txtTenSinhVien);
+        txtKhoa = (TextView)findViewById(R.id.txtKhoa);
+        txtNganh = (TextView)findViewById(R.id.txtNganh);
+        txtChuyenSau = (TextView)findViewById(R.id.txtChuyenSau);
+        txtNamThu = (TextView)findViewById(R.id.txtNamThu);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //navigationView.getMenu().getItem(NAV_INDEX).setChecked(true);
-        TextView txtMaSinhVien = (TextView)findViewById(R.id.txtMaSinhVien);
-        TextView txtTenSinhVien = (TextView)findViewById(R.id.txtTenSinhVien);
-        //TextView txtEmail = (TextView)findViewById(R.id.txtEmail);
-        TextView txtKhoa = (TextView)findViewById(R.id.txtKhoa);
-        TextView txtNganh = (TextView)findViewById(R.id.txtNganh);
-        TextView txtChuyenSau = (TextView)findViewById(R.id.txtChuyenSau);
-        TextView txtNamThu = (TextView)findViewById(R.id.txtNamThu);
-        SQLiteDataController data = SQLiteDataController.getInstance(this);
-        try{
-            data.isCreatedDatabase();
-        }
-        catch (IOException e){
-            Log.e("tag", e.getMessage());
-        }
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if(currentUserData == null){
-            //form dang ky
-        } else{
-            current_user = currentUserData.getString("user_mssv", null);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         }
-        ObjectUser currentUser = data.getUser(current_user);
-        txtMaSinhVien.setText(currentUser.getMasv());
-        txtTenSinhVien.setText(currentUser.getHoten());
-        //txtEmail.setText(currentUser.getEmail());
-        txtKhoa.setText(data.getTenKhoa(currentUser.getMakhoa()));
-        txtNganh.setText(data.getTenNganh(currentUser.getManganh()));
-        txtChuyenSau.setText(data.getTenChuyenSau(currentUser.getManganh(), Integer.parseInt(currentUser.getMachuyensau())));
-        txtNamThu.setText(currentUser.getNamhoc());
+        mainTask = new MainTask(this);
+        mainTask.execute();
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    protected void onPause() {
+        super.onPause();
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
+        }
+    }
+
+    private class MainTask extends AsyncTask<Void, Long, ObjectUser>{
+        private Context mContext;
+        private String tenKhoa, tenNganh, tenChuyenSau;
+
+        public MainTask(Context mContext) {
+            this.mContext = mContext;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected ObjectUser doInBackground(Void... params) {
+            SQLiteDataController data = SQLiteDataController.getInstance(mContext);
+            try{
+                data.isCreatedDatabase();
+            }
+            catch (IOException e){
+                Log.e("tag", e.getMessage());
+            }
+            ObjectUser objectUser = data.getUser(current_user);
+            tenKhoa = data.getTenKhoa(objectUser.getMakhoa());
+            tenNganh = data.getTenNganh(objectUser.getManganh());
+            tenChuyenSau = data.getTenChuyenSau(objectUser.getManganh(), Integer.parseInt(objectUser.getMachuyensau()));
+            return objectUser;
+        }
+
+        @Override
+        protected void onProgressUpdate(Long... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(ObjectUser objectUser) {
+            super.onPostExecute(objectUser);
+            txtMaSinhVien.setText(objectUser.getMasv());
+            txtTenSinhVien.setText(objectUser.getHoten());
+            txtKhoa.setText(tenKhoa);
+            txtNganh.setText(tenNganh);
+            txtChuyenSau.setText(tenChuyenSau);
+            txtNamThu.setText(objectUser.getNamhoc());
+        }
     }
 }

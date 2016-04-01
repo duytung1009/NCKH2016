@@ -32,8 +32,12 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class XemNhanhFragment1 extends Fragment {
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -82,7 +86,7 @@ public class XemNhanhFragment1 extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_mon_hoc_chua_qua_1, container, false);
         final SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
+        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
             data.isCreatedDatabase();

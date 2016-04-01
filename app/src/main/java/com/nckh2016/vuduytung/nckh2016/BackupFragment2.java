@@ -168,8 +168,10 @@ public class BackupFragment2 extends BaseDriveFragment {
     public void onStop() {
         super.onStop();
         mResultsAdapter.clear();
-        if(loadingTask.getStatus() == AsyncTask.Status.RUNNING) {
-            loadingTask.cancel(true);
+        if(loadingTask != null){
+            if(loadingTask.getStatus() == AsyncTask.Status.RUNNING) {
+                loadingTask.cancel(true);
+            }
         }
     }
 
@@ -281,6 +283,14 @@ public class BackupFragment2 extends BaseDriveFragment {
                 return;
             }
             showMessage("Đã xong");
+            if (loadingTask != null) {
+                if (loadingTask.getStatus() == AsyncTask.Status.RUNNING) {
+                    loadingTask.cancel(true);
+                }
+            }
+            Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mResultsListView);
+            loadingTask = new LoadingTask(getContext().getApplicationContext());
+            loadingTask.execute();
         }
     };
 

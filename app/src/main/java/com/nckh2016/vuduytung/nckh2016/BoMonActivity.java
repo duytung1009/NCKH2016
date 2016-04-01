@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.widget.LinearLayout;
 
 public class BoMonActivity extends AppCompatActivity {
+    //các giá trị để dùng load Fragment
     private static final String FRAG1 = "fragment_bo_mon_1";
     private static final String FRAG2 = "fragment_bo_mon_2";
 

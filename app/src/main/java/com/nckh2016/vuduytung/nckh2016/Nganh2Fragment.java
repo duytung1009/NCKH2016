@@ -29,11 +29,9 @@ import java.util.Map;
  */
 public class Nganh2Fragment extends Fragment {
 
-
     public Nganh2Fragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,9 +50,6 @@ public class Nganh2Fragment extends Fragment {
         final ArrayList<Items> mListCTDT = data.getChuongTrinhDaoTao(maNganh);
         ListView mMonHoc = (ListView)view.findViewById(R.id.list_view_chonmonhoc);
         AdapterCTDT mAdapter = new AdapterCTDT(getContext());
-        //lấy học kỳ + chuyên sâu
-        //ArrayList<ObjectHocKy2> listHocKy = new ArrayList<ObjectHocKy2>();
-
 
         LinkedHashMap<String ,LinkedHashMap<Integer ,Integer>> mainMap = new LinkedHashMap<>();
         for(Items a : mListCTDT){
@@ -62,7 +57,6 @@ public class Nganh2Fragment extends Fragment {
             LinkedHashMap<Integer ,Integer> map2 = new LinkedHashMap<>();
             map2.put(value.getHocky(), value.getChuyennganh());
             mainMap.put(String.valueOf(value.getHocky() + "." + value.getChuyennganh()), map2);
-            //ObjectHocKy2 valueHocKy = new ObjectHocKy2(maNganh, value.getHocky(), value.getChuyennganh());
         }
 
         final ArrayList<Items> finalCTDT = new ArrayList<Items>();
@@ -93,7 +87,8 @@ public class Nganh2Fragment extends Fragment {
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         imageView.setImageResource(R.drawable.books);
-        txtTieuDe.setText("Chuyên ngành " + tenNganh);
+        String tieuDe = "Chuyên ngành " + tenNganh;
+        txtTieuDe.setText(tieuDe);
         return view;
     }
 

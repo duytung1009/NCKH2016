@@ -12,7 +12,9 @@ import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import java.io.IOException;
 
 public class QuanLyTaiKhoanActivity extends AppCompatActivity {
+    //các adapter
     AdapterUser userAdapter;
+    //các view
     ListView mListUser;
 
     @Override

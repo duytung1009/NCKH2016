@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.Items;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectCTDT;
+import com.nckh2016.vuduytung.nckh2016.Data.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectNganh;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
@@ -28,11 +29,9 @@ import java.util.ArrayList;
  */
 public class Nganh3Fragment extends Fragment {
 
-
     public Nganh3Fragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,14 +61,14 @@ public class Nganh3Fragment extends Fragment {
                 break;
         }
         final ArrayList<Items> mListCTDT = data.getChuongTrinhDaoTao(maNganh, hocKy, 0);
-        ArrayList<String> mListMaMonHoc = new ArrayList<String>();
+        AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
         for (Object object : mListCTDT) {
             ObjectCTDT value = (ObjectCTDT) object;
-            mListMaMonHoc.add(value != null ? value.getMamh() : null);
+            if(value != null){
+                final ObjectMonHoc mListMonHoc = data.getMonHoc(value.getMamh());
+                mAdapter.add(mListMonHoc);
+            }
         }
-        final ArrayList<Object> mListMonHoc = data.getMonHoc(mListMaMonHoc);
-        AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
-        mAdapter.addAll(mListMonHoc);
         ListView mMonHoc = (ListView)view.findViewById(R.id.list_view_chonmonhoc_2);
         mMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -37,13 +38,24 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class QuanLyKeHoachHocTap2Fragment extends Fragment {
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
-    ObjectHocKy selectedHocKy;
-    ArrayList<Object> userMonHoc;
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    public static final String SUB_PREFS_DATASINHVIEN = "user_data";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
+    private ObjectUserHocKy userData;
+    private ObjectHocKy selectedHocKy;
+    private ArrayList<Object> userMonHoc;
+    //các adapter
     AdapterMonHoc mAdapter;
+    //các asynctask
+    MainTask mainTask;
+    //các view
     ListView lvMonHoc;
-    TextView txtThongBao;
+    TextView txtThongBao, txtTieuDe;
+    Button btnThemMonHoc, btnXoaHocKy;
+    ImageView imageView;
 
     public QuanLyKeHoachHocTap2Fragment() {
         // Required empty public constructor
@@ -55,22 +67,19 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_quan_ly_ke_hoach_hoc_tap_2, container, false);
-        final SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        userData = new Gson().fromJson(currentUserData.getString(SUB_PREFS_DATASINHVIEN, null), ObjectUserHocKy.class);
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
-        final SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-        try{
-            data.isCreatedDatabase();
-        }
-        catch (IOException e){
-            Log.e("tag", e.getMessage());
-        }
-        final ObjectUser user = data.getUser(current_user);
-        userMonHoc = data.getUserData(current_user, selectedHocKy.getNamHoc(), selectedHocKy.getHocKy());
-        final Gson gson = new Gson();
-        final ObjectUserHocKy userData = gson.fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);
 
         txtThongBao = (TextView)view.findViewById(R.id.txtThongBao);
+        imageView = (ImageView)view.findViewById(R.id.imageView);
+        imageView.setImageResource(R.drawable.report_card);
+        txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
+        String tieuDe = "Học kỳ " + selectedHocKy.getHocKy() + " năm thứ " + selectedHocKy.getNamHoc();
+        txtTieuDe.setText(tieuDe);
+        btnThemMonHoc = (Button)view.findViewById(R.id.btnThemMonHoc);
+        btnXoaHocKy = (Button)view.findViewById(R.id.btnXoaHocKy);
         lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
         lvMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -81,88 +90,131 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                 startActivity(intent);
             }
         });
-        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
-        TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
-        imageView.setImageResource(R.drawable.report_card);
-        txtTieuDe.setText("Học kỳ " + selectedHocKy.getHocKy() + " năm thứ " + selectedHocKy.getNamHoc());
-        Button btnThemMonHoc = (Button)view.findViewById(R.id.btnThemMonHoc);
-        btnThemMonHoc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), KeHoachHocTapActivity.class);
-                intent.putExtra("Nganh", data.getTenNganh(user.getManganh()));
-                intent.putExtra("ChuyenSau", data.getTenChuyenSau(user.getManganh(), Integer.parseInt(user.getMachuyensau())));
-                intent.putExtra("HocKy", selectedHocKy.getHocKy());
-                intent.putExtra("NamHoc", selectedHocKy.getNamHoc());
-                startActivityForResult(intent, 1);
-            }
-        });
-        Button btnXoaHocKy = (Button)view.findViewById(R.id.btnXoaHocKy);
-        btnXoaHocKy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(getContext())
-                .setTitle("Xóa học kỳ")
-                .setMessage("Xóa toàn bộ thông tin của học kỳ này?")
-                .setIcon(R.drawable.error)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //xóa
-                        boolean flag = userData.removeHocKy(selectedHocKy);
-                        if (flag) {
-                            SharedPreferences.Editor editor = currentUserData.edit();
-                            editor.putString("user_data", gson.toJson(userData));
-                            editor.commit();
-                            SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-                            try {
-                                data.isCreatedDatabase();
-                            } catch (IOException e) {
-                                Log.e("tag", e.getMessage());
-                            }
-                            ContentValues updateValues = new ContentValues();
-                            updateValues.put(MyContract.UserEntry.COLUMN_HOC_KY, gson.toJson(userData));
-                            data.updateNguoiDung(current_user, updateValues);
-                            data.deleteUserData(current_user, selectedHocKy.getHocKy(), selectedHocKy.getNamHoc());
-                            ((QuanLyKeHoachHocTapActivity) getContext()).loadPreviousFragment();
-                        } else {
-                            Toast.makeText(getContext(), "Lỗi! xóa thất bại", Toast.LENGTH_SHORT).show();
-                        }
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
-            }
-        });
-        if(userMonHoc.size() == 0){
-            lvMonHoc.setVisibility(View.GONE);
-        } else {
-            txtThongBao.setVisibility(View.GONE);
-            mAdapter = new AdapterMonHoc(getContext(), 0);
-            mAdapter.addAll(userMonHoc);
-            lvMonHoc.setAdapter(mAdapter);
-        }
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mainTask = new MainTask(getContext());
+        mainTask.execute();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
+        }
+    }
+
     public void refreshView(){
-        lvMonHoc.setVisibility(View.VISIBLE);
-        txtThongBao.setVisibility(View.GONE);
-        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-        try{
-            data.isCreatedDatabase();
+        mainTask = new MainTask(getContext());
+        mainTask.execute();
+    }
+
+    private class MainTask extends AsyncTask<Void, Long, Void>{
+        private Context mContext;
+        private String tenNganh, tenChuyenSau;
+
+        public MainTask(Context mContext) {
+            this.mContext = mContext;
         }
-        catch (IOException e){
-            Log.e("tag", e.getMessage());
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
-        userMonHoc = data.getUserData(current_user, selectedHocKy.getNamHoc(), selectedHocKy.getHocKy());
-        mAdapter = new AdapterMonHoc(getContext(), 0);
-        mAdapter.addAll(userMonHoc);
-        lvMonHoc.setAdapter(mAdapter);
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SQLiteDataController data = SQLiteDataController.getInstance(mContext);
+            try{
+                data.isCreatedDatabase();
+            }
+            catch (IOException e){
+                Log.e("tag", e.getMessage());
+            }
+            userMonHoc = data.getUserData(current_user, selectedHocKy.getNamHoc(), selectedHocKy.getHocKy());
+            ObjectUser user = data.getUser(current_user);
+            tenNganh = data.getTenNganh(user.getManganh());
+            tenChuyenSau = data.getTenChuyenSau(user.getManganh(), Integer.parseInt(user.getMachuyensau()));
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Long... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(userMonHoc.size() == 0){
+                txtThongBao.setVisibility(View.VISIBLE);
+                lvMonHoc.setVisibility(View.GONE);
+            } else {
+                lvMonHoc.setVisibility(View.VISIBLE);
+                txtThongBao.setVisibility(View.GONE);
+                mAdapter = new AdapterMonHoc(getContext(), 0);
+                mAdapter.addAll(userMonHoc);
+                lvMonHoc.setAdapter(mAdapter);
+            }
+            btnThemMonHoc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), KeHoachHocTapActivity.class);
+                    intent.putExtra("Nganh", tenNganh);
+                    intent.putExtra("ChuyenSau", tenChuyenSau);
+                    intent.putExtra("HocKy", selectedHocKy.getHocKy());
+                    intent.putExtra("NamHoc", selectedHocKy.getNamHoc());
+                    startActivityForResult(intent, 1);
+                }
+            });
+            btnXoaHocKy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Xóa học kỳ")
+                            .setMessage("Xóa toàn bộ thông tin của học kỳ này?")
+                            .setIcon(R.drawable.error)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //xóa
+                                    boolean flag = userData.removeHocKy(selectedHocKy);
+                                    if (flag) {
+                                        SharedPreferences currentUserData = mContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = currentUserData.edit();
+                                        editor.putString(SUB_PREFS_DATASINHVIEN, new Gson().toJson(userData));
+                                        editor.commit();
+                                        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+                                        try {
+                                            data.isCreatedDatabase();
+                                        } catch (IOException e) {
+                                            Log.e("tag", e.getMessage());
+                                        }
+                                        ContentValues updateValues = new ContentValues();
+                                        updateValues.put(MyContract.UserEntry.COLUMN_HOC_KY, new Gson().toJson(userData));
+                                        data.updateNguoiDung(current_user, updateValues);
+                                        data.deleteUserData(current_user, selectedHocKy.getHocKy(), selectedHocKy.getNamHoc());
+                                        ((QuanLyKeHoachHocTapActivity) getContext()).loadPreviousFragment();
+                                    } else {
+                                        Toast.makeText(getContext(), "Lỗi! xóa thất bại", Toast.LENGTH_SHORT).show();
+                                    }
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                }
+            });
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserData;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
@@ -37,15 +40,23 @@ import java.util.Date;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class BangDiemActivity extends BaseActivity {
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_FROM_GALLERY = 2;
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các giá trị Preferences của Activity
+    public static final String PREFS_STATE = "saved_state";
+    public static final String SUB_PREFS_MAMONHOC = "maMonHoc";
+    public static final String SUB_PREFS_PHOTOURI = "picUri";
+    public static final String SUB_PREFS_USERDATA = "userData";
+    //các giá trị để dùng cho ActivityResult
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_FROM_GALLERY = 2;
     //các biến được khôi phục lại nếu app resume
-    public String current_user = null;
-    String userMaMonHoc;
-    Uri mCurrentPhoto;
-
-    ObjectUserData userData;
+    private String current_user = null;
+    private String userMaMonHoc = null;
+    private Uri mCurrentPhoto;
+    private ObjectUserData userData;
+    //các view
     View view1, view2;
     Button btn_1, btn_2, btn_3;
     PhotoViewAttacher mAttacher;
@@ -54,6 +65,7 @@ public class BangDiemActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_bang_diem);
+        userMaMonHoc = getIntent().getStringExtra("MaMonHoc");
         view1 = findViewById(R.id.fullscreen_content);
         view2 = findViewById(R.id.fullscreen_image_content);
         btn_1 = (Button) findViewById(R.id.dummy_button_1);
@@ -62,15 +74,14 @@ public class BangDiemActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        /*for(int i=0; i < navigationView.getMenu().size(); i++) {
-            navigationView.getMenu().getItem(i).setChecked(false);
-        }*/
+    protected void onStart() {
+        super.onStart();
+        //lấy dữ liệu Global
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        }
         userData = new ObjectUserData();
-        userMaMonHoc = getIntent().getStringExtra("MaMonHoc");
         if (current_user != null) {
             SQLiteDataController data = SQLiteDataController.getInstance(getApplicationContext());
             try {
@@ -90,6 +101,9 @@ public class BangDiemActivity extends BaseActivity {
         } else {
             ImageView mImageView = (ImageView) view2;
             mImageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
+            /*BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = calculateInSampleSize(options, 2048, 1536);
+            mImageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length, options));*/
             mAttacher = new PhotoViewAttacher(mImageView);
             view1.setVisibility(View.GONE);
             view2.setVisibility(View.VISIBLE);
@@ -157,9 +171,8 @@ public class BangDiemActivity extends BaseActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
-                                    case 0:
-                                    {
-                                        if(getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+                                    case 0: {
+                                        if (getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
                                             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                             // Ensure that there's a camera activity to handle the intent
                                             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -181,8 +194,7 @@ public class BangDiemActivity extends BaseActivity {
                                         }
                                         break;
                                     }
-                                    case 1:
-                                    {
+                                    case 1: {
                                         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                                         intent.setType("image/*");
                                         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -229,6 +241,44 @@ public class BangDiemActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        //lấy dữ liệu Global
+        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        }
+        //lấy dữ liệu được lưu lại khi app Paused
+        SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        if(userMaMonHoc == null){
+            userMaMonHoc = state.getString(SUB_PREFS_MAMONHOC, null);
+        }
+        if(mCurrentPhoto == null){
+            String photoUri = state.getString(SUB_PREFS_PHOTOURI, null);
+            if(photoUri != null){
+                mCurrentPhoto = Uri.parse(photoUri);
+            }
+        }
+        if(userData == null){
+            userData = new Gson().fromJson(state.getString(SUB_PREFS_USERDATA, null), ObjectUserData.class);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //lưu dữ liệu ra Preferences
+        SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = state.edit();
+        if(mCurrentPhoto != null){
+            editor.putString(SUB_PREFS_PHOTOURI, mCurrentPhoto.toString());
+        }
+        editor.putString(SUB_PREFS_MAMONHOC, userMaMonHoc);
+        editor.putString(SUB_PREFS_USERDATA, new Gson().toJson(userData));
+        editor.apply();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if(mAttacher!=null){
@@ -236,20 +286,37 @@ public class BangDiemActivity extends BaseActivity {
         }
     }
 
-    @Override
+    /*@Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("picUri", mCurrentPhoto);
-        outState.putString("maSinhVien", current_user);
-        outState.putString("maMonHoc", userMaMonHoc);
+        outState.putString(SUB_PREFS_MAMONHOC, userMaMonHoc);
+        outState.putParcelable(SUB_PREFS_PHOTOURI, mCurrentPhoto);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mCurrentPhoto = savedInstanceState.getParcelable("picUri");
-        current_user = savedInstanceState.getString("maSinhVien");
-        userMaMonHoc = savedInstanceState.getString("maMonHoc");
+                userMaMonHoc = savedInstanceState.getString(SUB_PREFS_MAMONHOC);
+        mCurrentPhoto = savedInstanceState.getParcelable(SUB_PREFS_PHOTOURI);
+    }*/
+
+    //http://stackoverflow.com/questions/4837715/how-to-resize-a-bitmap-in-android
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scale = ((float) newWidth) / width;
+        /*float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;*/
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        //matrix.postScale(scaleWidth, scaleHeight);
+        matrix.postScale(scale, scale);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        bm.recycle();
+        return resizedBitmap;
     }
 
     //http://developer.android.com/intl/vi/training/camera/photobasics.html#TaskPhotoView
@@ -295,7 +362,7 @@ public class BangDiemActivity extends BaseActivity {
                     //Bitmap imageBitmap = (Bitmap) extras.get("data");
                     //Uri uri = Uri.parse(mCurrentPhotoPath);
                     try{
-                        Bitmap imageBitmap = toGrayscale(MediaStore.Images.Media.getBitmap(this.getContentResolver(), mCurrentPhoto));
+                        Bitmap imageBitmap = getResizedBitmap(toGrayscale(MediaStore.Images.Media.getBitmap(this.getContentResolver(), mCurrentPhoto)), 2048);
                         //Bitmap imageBitmap = toGrayscale(BitmapFactory.decodeFile(mCurrentPhotoPath));
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
@@ -323,25 +390,33 @@ public class BangDiemActivity extends BaseActivity {
                     Uri selectedImage = data.getData();
                     String[] filePath = { MediaStore.Images.Media.DATA };
                     Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
-                    c.moveToFirst();
-                    int columnIndex = c.getColumnIndex(filePath[0]);
-                    String picturePath = c.getString(columnIndex);
-                    c.close();
-                    Bitmap imageBitmap = toGrayscale(BitmapFactory.decodeFile(picturePath));
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-                    ImageView mImageView = (ImageView) view2;
-                    mImageView.setImageBitmap(imageBitmap);
-                    SQLiteDataController database = SQLiteDataController.getInstance(getApplicationContext());
-                    try {
-                        database.isCreatedDatabase();
-                    } catch (IOException e) {
-                        Log.e("tag", e.getMessage());
+                    String picturePath = null;
+                    try{
+                        c.moveToFirst();
+                        int columnIndex = c.getColumnIndex(filePath[0]);
+                        picturePath = c.getString(columnIndex);
+                        c.close();
+                    } catch (NullPointerException e){
+                        e.printStackTrace();
                     }
-                    ContentValues value = new ContentValues();
-                    value.put(MyContract.UserDataEntry.COLUMN_BANG_DIEM, stream.toByteArray());
-                    database.updateUserData(current_user, userMaMonHoc, value);
-                    recreate();
+                    if(picturePath != null){
+                        Bitmap imageBitmap = getResizedBitmap(toGrayscale(BitmapFactory.decodeFile(picturePath)), 2048);
+                        //Bitmap imageBitmap = toGrayscale(BitmapFactory.decodeFile(picturePath));
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+                        ImageView mImageView = (ImageView) view2;
+                        mImageView.setImageBitmap(imageBitmap);
+                        SQLiteDataController database = SQLiteDataController.getInstance(getApplicationContext());
+                        try {
+                            database.isCreatedDatabase();
+                        } catch (IOException e) {
+                            Log.e("tag", e.getMessage());
+                        }
+                        ContentValues value = new ContentValues();
+                        value.put(MyContract.UserDataEntry.COLUMN_BANG_DIEM, stream.toByteArray());
+                        database.updateUserData(current_user, userMaMonHoc, value);
+                        recreate();
+                    }
                     break;
                 }
                 default:

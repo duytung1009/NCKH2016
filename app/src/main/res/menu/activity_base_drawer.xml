@@ -5,7 +5,7 @@
     <group android:checkableBehavior="none">
         <item
             android:id="@+id/nav_0"
-            android:icon="@drawable/circle"
+            android:icon="@drawable/table"
             android:title="@string/title_activity_main" />
         <item
             android:id="@+id/nav_1"
@@ -21,16 +21,16 @@
             android:title="@string/btn_3_fragment_nguoidung" />
         <item
             android:id="@+id/nav_4"
-            android:icon="@drawable/account_box_outline"
+            android:icon="@drawable/backup_restore"
             android:title="@string/btn_4_fragment_nguoidung" />
-        <item
+        <!--<item
             android:id="@+id/nav_5"
             android:icon="@drawable/account_box_outline"
             android:title="@string/btn_5_fragment_nguoidung" />
         <item
             android:id="@+id/nav_6"
             android:icon="@drawable/account_box_outline"
-            android:title="@string/btn_6_fragment_nguoidung" />
+            android:title="@string/btn_6_fragment_nguoidung" />-->
     </group>
 
     <item android:title="@string/txtCTDT">
@@ -49,7 +49,7 @@
                 android:title="@string/btn_3_fragment_niengiam" />
             <item
                 android:id="@+id/nav_niengiam_4"
-                android:icon="@drawable/backup_restore"
+                android:icon="@drawable/infomation"
                 android:title="@string/btn_4_fragment_niengiam" />
         </menu>
     </item>

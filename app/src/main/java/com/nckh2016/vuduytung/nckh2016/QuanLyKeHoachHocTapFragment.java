@@ -27,14 +27,24 @@ import java.io.IOException;
  * A placeholder fragment containing a simple view.
  */
 public class QuanLyKeHoachHocTapFragment extends Fragment {
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
-    CircularProgressView progressBar;
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    public static final String SUB_PREFS_DATASINHVIEN = "user_data";
+    //các giá trị Preferences của Activity
+    public static final String PREFS_STATE = "saved_state";
+    public static final String SUB_PREFS_USER = "user";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
+    private ObjectUserHocKy user_hocky;
+    private ObjectUser cUser;
+    //các asynctask
     MainTask mainTask;
-    public ObjectUserHocKy user_data;
-    public ObjectUser cUser;
+    //các adapter
     AdapterNamHoc hocTapAdapter;
+    //các view
     ListView listViewHocTap;
+    CircularProgressView progressBar;
 
     public QuanLyKeHoachHocTapFragment() {
     }
@@ -44,8 +54,8 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_quan_ly_ke_hoach_hoc_tap, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
-        user_data = new Gson().fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);
+        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        user_hocky = new Gson().fromJson(currentUserData.getString(SUB_PREFS_DATASINHVIEN, null), ObjectUserHocKy.class);
         progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
         listViewHocTap = (ListView)view.findViewById(R.id.listview_user_data);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
@@ -60,39 +70,55 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        /*progressBar.startAnimation(animFadeIn);
-        listViewHocTap.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);*/
         Utils.showProcessBar(getContext(), progressBar, listViewHocTap);
         mainTask = new MainTask(getContext());
         mainTask.execute();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mainTask.cancel(true);
+    public void onResume() {
+        super.onResume();
+        //lấy dữ liệu Global
+        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        }
+        if(user_hocky == null){
+            user_hocky = new Gson().fromJson(currentUserData.getString(SUB_PREFS_DATASINHVIEN, null), ObjectUserHocKy.class);
+        }
+        //lấy dữ liệu được lưu lại khi app Paused
+        SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        if(cUser == null){
+            cUser = new Gson().fromJson(state.getString(SUB_PREFS_USER, null), ObjectUser.class);
         }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mainTask.cancel(true);
+    public void onPause() {
+        super.onPause();
+        //lưu dữ liệu ra Preferences
+        SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putString(SUB_PREFS_USER, new Gson().toJson(cUser));
+        editor.apply();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
         }
     }
 
     public void refreshView(){
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        user_data = new Gson().fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);
+        user_hocky = new Gson().fromJson(currentUserData.getString(SUB_PREFS_DATASINHVIEN, null), ObjectUserHocKy.class);
         if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
             mainTask.cancel(true);
         }
-        /*progressBar.startAnimation(animFadeIn);
-        listViewHocTap.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);*/
         Utils.showProcessBar(getContext(), progressBar, listViewHocTap);
         mainTask = new MainTask(getContext());
         mainTask.execute();
@@ -124,8 +150,8 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
                 hocTapAdapter.removeAll();
                 for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){
                     hocTapAdapter.addItem(new ObjectHocKy(i+1, 0, cUser.getManganh()));
-                    if(user_data != null){
-                        for(ObjectHocKy value : user_data.getUserData()){
+                    if(user_hocky != null){
+                        for(ObjectHocKy value : user_hocky.getUserData()){
                             if(value.getNamHoc() == i+1){
                                 if(value.getHocKy() != 0){
                                     hocTapAdapter.addItem(new ObjectHocKy(i + 1, value.getHocKy(), cUser.getManganh(), data.getDiemHocKy(cUser.getMasv(), value.getHocKy(), value.getNamHoc())));
@@ -148,10 +174,6 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             hocTapAdapter.notifyDataSetChanged();
-            /*progressBar.startAnimation(animFadeOut);
-            listViewHocTap.startAnimation(animFadeIn);
-            progressBar.setVisibility(View.GONE);
-            listViewHocTap.setVisibility(View.VISIBLE);*/
             Utils.hideProcessBar(getContext(), progressBar, listViewHocTap);
         }
     }

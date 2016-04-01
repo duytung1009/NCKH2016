@@ -24,8 +24,11 @@ import java.io.IOException;
  * A placeholder fragment containing a simple view.
  */
 public class KeHoachHocTap1Fragment extends Fragment {
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
 
     public KeHoachHocTap1Fragment() {
     }
@@ -35,7 +38,7 @@ public class KeHoachHocTap1Fragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ke_hoach_hoc_tap, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
+        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
             data.isCreatedDatabase();
@@ -53,7 +56,7 @@ public class KeHoachHocTap1Fragment extends Fragment {
         final ListView listViewHocTap = (ListView)view.findViewById(R.id.list_view_hoctap);
         final AdapterHocKy hocKyAdapter = new AdapterHocKy(getContext());
         int tongNamHoc = 5;
-        if(cUser.getManganh() == "701" || cUser.getManganh() == "702"){
+        if(cUser.getManganh().equals("701") || cUser.getManganh().equals("702")){
             tongNamHoc = 4;
         }
         for(int i=0; i<tongNamHoc; i++){
@@ -81,5 +84,15 @@ public class KeHoachHocTap1Fragment extends Fragment {
         });
         listViewHocTap.setAdapter(hocKyAdapter);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //lấy dữ liệu Global
+        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        }
     }
 }

@@ -12,7 +12,7 @@ import android.view.View;
 
 public class BackupActivity extends BaseActivity
         implements BackupFragment1.OnFragmentInteractionListener, BackupFragment2.OnFragmentInteractionListener{
-    public final static int NAV_INDEX = 2;
+    //các view
     TabLayout tabLayout;
     TabsPagerAdapter mAdapter;
     ViewPager viewPager;
@@ -27,7 +27,6 @@ public class BackupActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
-        navigationView.getMenu().getItem(NAV_INDEX).setChecked(true);
         loadTabs();
     }
 

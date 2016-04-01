@@ -23,9 +23,15 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class BaseActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    //các giá trị Preferences Global
+    public static final String PREFS_NAME = "current_user";
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    public static final String SUB_PREFS_TENSINHVIEN = "user_name";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user_masv = null;
+    private String current_user_hoten = null;
+    //các view
     public Toolbar toolbar;
     public SmoothActionBarDrawerToggle toggle;
     public AppBarLayout appBarLayout;
@@ -34,9 +40,8 @@ public class BaseActivity extends AppCompatActivity
     public FrameLayout frameLayout;
     public CoordinatorLayout coordinatorLayout;
 
-    public static final String PREFS_NAME = "current_user";
-    public String current_user_masv = null;
-    public String current_user_hoten = null;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,18 +63,18 @@ public class BaseActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new SmoothActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         //disable item icon tint color
         navigationView.setItemIconTintList(null);
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if(currentUserData.getString("user_mssv", null) == null){
+        if(currentUserData.getString(SUB_PREFS_MASINHVIEN, null) == null){
             //chua co du lieu
         } else{
-            current_user_hoten = currentUserData.getString("user_name", null);
-            current_user_masv = currentUserData.getString("user_mssv", null);
+            current_user_hoten = currentUserData.getString(SUB_PREFS_TENSINHVIEN, null);
+            current_user_masv = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
             View headerView = navigationView.getHeaderView(0);
             TextView txtNavTenSinhVien = (TextView) headerView.findViewById(R.id.txtNavTenSinhVien);
             TextView txtNavMaSinhVien = (TextView) headerView.findViewById(R.id.txtNavMaSinhVien);
@@ -79,13 +84,20 @@ public class BaseActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //lấy dữ liệu Global
+        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        current_user_hoten = currentUserData.getString(SUB_PREFS_TENSINHVIEN, null);
+        current_user_masv = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+    }
+
     public void updateNavigationView(){
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if(currentUserData.getString("user_mssv", null) == null){
-            //chua co du lieu
-        } else{
-            current_user_hoten = currentUserData.getString("user_name", null);
-            current_user_masv = currentUserData.getString("user_mssv", null);
+        if(currentUserData.getString(SUB_PREFS_MASINHVIEN, null) != null){
+            current_user_hoten = currentUserData.getString(SUB_PREFS_TENSINHVIEN, null);
+            current_user_masv = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
             View headerView = navigationView.getHeaderView(0);
             TextView txtNavTenSinhVien = (TextView) headerView.findViewById(R.id.txtNavTenSinhVien);
             TextView txtNavMaSinhVien = (TextView) headerView.findViewById(R.id.txtNavMaSinhVien);
@@ -188,12 +200,18 @@ public class BaseActivity extends AppCompatActivity
                 }
             });
         } else if (id == R.id.nav_4) {
-
-        } else if (id == R.id.nav_5) {
+            toggle.runWhenIdle(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(BaseActivity.this, BackupActivity.class);
+                    startActivity(intent);
+                }
+            });
+        } /*else if (id == R.id.nav_5) {
 
         } else if (id == R.id.nav_6) {
 
-        } else if (id == R.id.nav_niengiam_1){
+        }*/ else if (id == R.id.nav_niengiam_1){
             toggle.runWhenIdle(new Runnable() {
                 @Override
                 public void run() {
@@ -212,13 +230,7 @@ public class BaseActivity extends AppCompatActivity
         } else if (id == R.id.nav_niengiam_3){
 
         } else if (id == R.id.nav_niengiam_4){
-            toggle.runWhenIdle(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(BaseActivity.this, BackupActivity.class);
-                    startActivity(intent);
-                }
-            });
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

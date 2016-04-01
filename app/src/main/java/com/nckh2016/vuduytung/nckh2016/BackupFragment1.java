@@ -222,16 +222,10 @@ public class BackupFragment1 extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mainTask.cancel(true);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mainTask.cancel(true);
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
         }
     }
 

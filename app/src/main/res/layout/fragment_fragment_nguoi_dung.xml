@@ -108,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/account_box_outline"
+                    android:src="@drawable/backup_restore"
                     />
                 <TextView
                     android:layout_width="match_parent"
@@ -127,7 +127,7 @@
             android:orientation="horizontal"
             android:layout_weight="1">
 
-            <LinearLayout
+            <!--<LinearLayout
                 style="@style/btn_layout"
                 android:id="@+id/layout_5"
                 android:layout_width="match_parent"
@@ -173,7 +173,7 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="@string/btn_6_fragment_nguoidung"/>
-            </LinearLayout>
+            </LinearLayout>-->
 
         </LinearLayout>
 

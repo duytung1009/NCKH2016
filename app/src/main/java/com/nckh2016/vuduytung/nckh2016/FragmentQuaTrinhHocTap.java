@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
+import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
@@ -39,17 +40,27 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class FragmentQuaTrinhHocTap extends Fragment {
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các giá trị Preferences của Activity
+    public static final String PREFS_STATE = "saved_state";
+    public static final String SUB_PREFS_TONGTINCHI = "tongTinChi";
+    public static final String SUB_PREFS_TONGDIEM = "tongDiem";
+    public static final String SUB_PREFS_YDATA = "yData";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
+    private int tongTinChi;
+    private Double tongDiem;
+    private int[] yData;
+    //các asynctask
     MainTask mainTask;
+    //các view
     PieDataSet dataSet;
     PieData chartData;
-    public PieChart mainChart;
+    PieChart mainChart;
     CircularProgressView progressBar;
     Typeface light = Typeface.create("sans-serif-light", Typeface.NORMAL);
-    int tongTinChi;
-    Double tongDiem;
-    int[] yData;
     DecimalFormat df;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -103,7 +114,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         mainChart = (PieChart)view.findViewById(R.id.mainChart);
         progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
+        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         df = new DecimalFormat("####0.00");
         mainChart.setNoDataTextDescription("no data");
         mainChart.setDrawSliceText(false);  //hide title
@@ -127,27 +138,51 @@ public class FragmentQuaTrinhHocTap extends Fragment {
     public void onStart() {
         super.onStart();
         setUpChart();
-        /*progressBar.startAnimation(animFadeIn);
-        mainChart.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);*/
         Utils.showProcessBar(getContext(), progressBar, mainChart);
         mainTask = new MainTask(getContext());
         mainTask.execute();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mainTask.cancel(true);
+    public void onResume() {
+        super.onResume();
+        //lấy dữ liệu Global
+        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        }
+        //lấy dữ liệu được lưu lại khi app Paused
+        SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        if(tongTinChi == 0){
+            tongTinChi = state.getInt(SUB_PREFS_TONGTINCHI, 0);
+        }
+        if(tongDiem == null || tongDiem.isNaN()){
+            tongDiem = Double.parseDouble(state.getString(SUB_PREFS_TONGDIEM, tongDiem.toString()));
+        }
+        if(yData == null || yData.length == 0){
+            yData = new Gson().fromJson(state.getString(SUB_PREFS_YDATA, null), int[].class);
         }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mainTask.cancel(true);
+    public void onPause() {
+        super.onPause();
+        //lưu dữ liệu ra Preferences
+        SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putInt(SUB_PREFS_TONGTINCHI, tongTinChi);
+        editor.putString(SUB_PREFS_TONGDIEM, tongDiem.toString());
+        editor.putString(SUB_PREFS_YDATA, new Gson().toJson(yData));
+        editor.apply();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
         }
     }
 
@@ -323,10 +358,6 @@ public class FragmentQuaTrinhHocTap extends Fragment {
             } else{
                 mainChart.setCenterText("Tổng điểm\n" + df.format(tongDiem) + "\nTín chỉ tích lũy\n" + tongTinChi);
             }
-            /*mainChart.startAnimation(animFadeIn);
-            progressBar.startAnimation(animFadeOut);
-            mainChart.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);*/
             Utils.hideProcessBar(getContext(), progressBar, mainChart);
             mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
             //mainChart.invalidate();

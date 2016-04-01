@@ -27,9 +27,15 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
     }
 
     @Override
+    public void add(Object object) {
+        super.add(object);
+        this.objects.add(object);
+    }
+
+    @Override
     public void addAll(Collection<?> collection) {
-        this.objects = (ArrayList)collection;
         super.addAll(collection);
+        this.objects = (ArrayList) collection;
     }
 
     @Override
@@ -40,9 +46,9 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        if(objects.size()!=0){
+        if (objects.size() != 0) {
             Object mObject = objects.get(position);
-            if(mObject != null) {
+            if (mObject != null) {
                 ObjectMonHoc mMonHoc = (ObjectMonHoc) mObject;
                 view = LayoutInflater.from(mContext).inflate(R.layout.item_monhoc, parent, false);
                 TextView txtMaMonHoc = (TextView) view.findViewById(R.id.txtMaMonHoc);
@@ -50,12 +56,15 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
                 TextView txtSoTinChi = (TextView) view.findViewById(R.id.txtSoTinChi);
                 TextView txtTinChi = (TextView) view.findViewById(R.id.txtTinChi);
                 ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
-                ImageView imageViewBangDiem = (ImageView)view.findViewById(R.id.imageViewBangDiem);
-                //TextView txtIcon = (TextView)view.findViewById(R.id.txtIcon);
+                ImageView imageViewBangDiem = (ImageView) view.findViewById(R.id.imageViewBangDiem);
                 txtMaMonHoc.setText(mMonHoc.getMamh());
                 txtTenMonHoc.setText(mMonHoc.getTenmh());
-                txtSoTinChi.setText(mMonHoc.getTinchi().toString());
-                if(mMonHoc.isBangdiem()){
+                String soTinChi = "...";
+                if (mMonHoc.getTinchi() != null) {
+                    soTinChi = String.valueOf(mMonHoc.getTinchi());
+                }
+                txtSoTinChi.setText(soTinChi);
+                if (mMonHoc.isBangdiem()) {
                     imageViewBangDiem.setVisibility(View.VISIBLE);
                 } else {
                     imageViewBangDiem.setVisibility(View.GONE);
@@ -63,53 +72,35 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
                 if (mMonHoc.getTuchon() != null) {
                     switch (mMonHoc.getTuchon()) {
                         case "A":
+                        {
                             imageView.setImageResource(R.drawable.tuchon_a);
                             txtMaMonHoc.setVisibility(View.GONE);
                             txtTinChi.setVisibility(View.GONE);
                             txtTenMonHoc.setText("Tự chọn A");
                             txtTenMonHoc.setPadding(0, 0, 0, 0);
-                        /*imageView.setVisibility(View.GONE);
-                        txtMaMonHoc.setVisibility(View.GONE);
-                        txtTinChi.setVisibility(View.GONE);
-                        txtTenMonHoc.setText("Tự chọn A");
-                        txtTenMonHoc.setPadding(0,0,0,0);
-                        txtIcon.setText("A");
-                        txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonA));*/
                             break;
+                        }
                         case "B":
+                        {
                             imageView.setImageResource(R.drawable.tuchon_b);
                             txtMaMonHoc.setVisibility(View.GONE);
                             txtTinChi.setVisibility(View.GONE);
                             txtTenMonHoc.setText("Tự chọn B");
                             txtTenMonHoc.setPadding(0, 0, 0, 0);
-                        /*imageView.setVisibility(View.GONE);
-                        txtMaMonHoc.setVisibility(View.GONE);
-                        txtTinChi.setVisibility(View.GONE);
-                        txtTenMonHoc.setText("Tự chọn B");
-                        txtTenMonHoc.setPadding(0, 0, 0, 0);
-                        txtIcon.setText("B");
-                        txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonB));*/
                             break;
+                        }
                         case "C":
+                        {
                             imageView.setImageResource(R.drawable.tuchon_c);
                             txtMaMonHoc.setVisibility(View.GONE);
                             txtTinChi.setVisibility(View.GONE);
                             txtTenMonHoc.setText("Tự chọn C");
                             txtTenMonHoc.setPadding(0, 0, 0, 0);
-                        /*imageView.setVisibility(View.GONE);
-                        txtMaMonHoc.setVisibility(View.GONE);
-                        txtTinChi.setVisibility(View.GONE);
-                        txtTenMonHoc.setText("Tự chọn C");
-                        txtTenMonHoc.setPadding(0, 0, 0, 0);
-                        txtIcon.setText("C");
-                        txtIcon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.tuchonC));*/
                             break;
+                        }
                         default:
-                            //txtIcon.setVisibility(View.GONE);
                             break;
                     }
-                } else {
-                    //txtIcon.setVisibility(View.GONE);
                 }
                 if (mMonHoc.getDiem() != -1) {
                     TextView txtDiem = (TextView) view.findViewById(R.id.txtDiem);

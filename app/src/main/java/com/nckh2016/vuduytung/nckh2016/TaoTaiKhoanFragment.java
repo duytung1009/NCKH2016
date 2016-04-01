@@ -34,10 +34,17 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class TaoTaiKhoanFragment extends Fragment {
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    ArrayList<Object> mListKhoa, mListNganh, mListChuyenSau;
-    Spinner mSpinnerKhoa, mSpinnerNganh, mSpinnerChuyenSau, mSpinnerNamHoc;
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    public static final String SUB_PREFS_TENSINHVIEN = "user_name";
+    public static final String SUB_PREFS_DATASINHVIEN = "user_data";
+    //các biến được khôi phục lại nếu app resume
+    private ArrayList<Object> mListKhoa, mListNganh, mListChuyenSau;
+    //các asynctask
     MainTask mainTask;
+    //các view
+    Spinner mSpinnerKhoa, mSpinnerNganh, mSpinnerChuyenSau, mSpinnerNamHoc;
 
     public TaoTaiKhoanFragment() {
     }
@@ -165,16 +172,6 @@ public class TaoTaiKhoanFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(mainTask != null){
-            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-                mainTask.cancel(true);
-            }
-        }
-    }
-
     public class MainTask extends AsyncTask<ContentValues, Long, Long> {
         private Context mContext;
         private ContentValues user;
@@ -222,11 +219,11 @@ public class TaoTaiKhoanFragment extends Fragment {
                 Toast.makeText(getContext(), "thêm hồ sơ thất bại", Toast.LENGTH_SHORT).show();
             } else {
                 //((TaoTaiKhoanActivity)getActivity()).loadFragment2();
-                SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, getContext().MODE_PRIVATE);
+                SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString("user_mssv", user.getAsString(UserEntry.COLUMN_MA_SV));
-                editor.putString("user_name", user.getAsString(UserEntry.COLUMN_HO_TEN));
-                editor.putString("user_data", user.getAsString(UserEntry.COLUMN_HOC_KY));
+                editor.putString(SUB_PREFS_MASINHVIEN, user.getAsString(UserEntry.COLUMN_MA_SV));
+                editor.putString(SUB_PREFS_TENSINHVIEN, user.getAsString(UserEntry.COLUMN_HO_TEN));
+                editor.putString(SUB_PREFS_DATASINHVIEN, user.getAsString(UserEntry.COLUMN_HOC_KY));
                 editor.commit();
                 getActivity().setResult(1);
                 ((TaoTaiKhoanActivity)getActivity()).finish();

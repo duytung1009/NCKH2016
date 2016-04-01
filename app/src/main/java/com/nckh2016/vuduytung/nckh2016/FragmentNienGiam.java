@@ -22,8 +22,11 @@ import android.widget.LinearLayout;
  * create an instance of this fragment.
  */
 public class FragmentNienGiam extends Fragment {
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,7 +78,7 @@ public class FragmentNienGiam extends Fragment {
         Button btnHoSo = (Button)view.findViewById(R.id.btnHoSo);
         Button btnDangKy = (Button)view.findViewById(R.id.btnDangKy);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
+        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         if(current_user == null){
             btnHoSo.setVisibility(View.GONE);
         } else {
@@ -111,15 +114,17 @@ public class FragmentNienGiam extends Fragment {
                 startActivity(intent);
             }
         });
-        LinearLayout layout_4 = (LinearLayout)view.findViewById(R.id.layout_4);
-        layout_4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), BackupActivity.class);
-                startActivity(intent);
-            }
-        });
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //lấy dữ liệu Global
+        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

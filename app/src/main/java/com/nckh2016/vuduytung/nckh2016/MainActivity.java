@@ -10,6 +10,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -30,11 +33,17 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity
         implements FragmentQuaTrinhHocTap.OnFragmentInteractionListener, FragmentNguoiDung.OnFragmentInteractionListener, FragmentNienGiam.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener{
-
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    public static final String SUB_PREFS_TENSINHVIEN = "user_name";
+    public static final String SUB_PREFS_DATASINHVIEN = "user_data";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
+    private ArrayList<Object> mListUser;
+    //các asynctask
     MainTask mainTask;
-    ArrayList<Object> mListUser;
+    //các view
     TabLayout tabLayout;
     TabsPagerAdapter mAdapter;
     ViewPager viewPager;
@@ -55,9 +64,6 @@ public class MainActivity extends BaseActivity
     protected void onStart() {
         super.onStart();
         tabLayout.setEnabled(false);
-        /*progressBar.startAnimation(animFadeIn);
-        viewPager.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);*/
         Utils.showProcessBar(this, progressBar, viewPager);
         mainTask = new MainTask(this);
         mainTask.execute();
@@ -66,14 +72,14 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
-        /*for(int i=0; i < navigationView.getMenu().size(); i++) {
-            navigationView.getMenu().getItem(i).setChecked(false);
-        }*/
         if(!(mAdapter == null)){
             mAdapter.notifyDataSetChanged();
         }
-        /*
-        Utils.showProcessBar(this, progressBar, viewPager);
+        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        }
+        /*Utils.showProcessBar(this, progressBar, viewPager);
         mainTask = new MainTask(this);
         mainTask.execute();*/
     }
@@ -89,16 +95,20 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onStop() {
         super.onStop();
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mainTask.cancel(true);
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mainTask.cancel(true);
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
         }
         //SQLiteDataController.getInstance(getApplicationContext()).close();
     }
@@ -111,27 +121,27 @@ public class MainActivity extends BaseActivity
         // Restore preferences
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         if(!users.isEmpty()){
-            if((currentUserData.getString("user_mssv", null) == null) || (currentUserData.getString("user_mssv", null).isEmpty())){
+            if((currentUserData.getString(SUB_PREFS_MASINHVIEN, null) == null) || (currentUserData.getString(SUB_PREFS_MASINHVIEN, null).isEmpty())){
                 SharedPreferences.Editor editor = currentUserData.edit();
-                editor.putString("user_mssv", ((ObjectUser) users.get(0)).getMasv());
-                editor.putString("user_name", ((ObjectUser) users.get(0)).getHoten());
-                editor.putString("user_data", ((ObjectUser) users.get(0)).getHocky());
+                editor.putString(SUB_PREFS_MASINHVIEN, ((ObjectUser) users.get(0)).getMasv());
+                editor.putString(SUB_PREFS_TENSINHVIEN, ((ObjectUser) users.get(0)).getHoten());
+                editor.putString(SUB_PREFS_DATASINHVIEN, ((ObjectUser) users.get(0)).getHocky());
                 editor.commit();
                 updateNavigationView();
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab1_name), 0);
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab2_name), 1);
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab3_name), 2);
             } else{
-                current_user = currentUserData.getString("user_mssv", null);
+                current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab1_name), 0);
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab2_name), 1);
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab3_name), 2);
             }
         } else {
             SharedPreferences.Editor editor = currentUserData.edit();
-            editor.putString("user_mssv", null);
-            editor.putString("user_name", null);
-            editor.putString("user_data", null);
+            editor.putString(SUB_PREFS_MASINHVIEN, null);
+            editor.putString(SUB_PREFS_TENSINHVIEN, null);
+            editor.putString(SUB_PREFS_DATASINHVIEN, null);
             editor.commit();
             updateNavigationView();
             tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab3_name), 0);
@@ -177,9 +187,9 @@ public class MainActivity extends BaseActivity
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("user_mssv", ((ObjectUser) mListUser.get(position)).getMasv());
-                    editor.putString("user_name", ((ObjectUser) mListUser.get(position)).getHoten());
-                    editor.putString("user_data", ((ObjectUser) mListUser.get(position)).getHocky());
+                    editor.putString(SUB_PREFS_MASINHVIEN, ((ObjectUser) mListUser.get(position)).getMasv());
+                    editor.putString(SUB_PREFS_TENSINHVIEN, ((ObjectUser) mListUser.get(position)).getHoten());
+                    editor.putString(SUB_PREFS_DATASINHVIEN, ((ObjectUser) mListUser.get(position)).getHocky());
                     editor.commit();
                     if (tabLayout.getTabCount() > 0) {
                         (tabLayout.getTabAt(0)).select();
@@ -245,30 +255,10 @@ public class MainActivity extends BaseActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == 1){
-            //recreate();
-            //super.onResume();
             tabLayout.setEnabled(false);
-            /*progressBar.startAnimation(animFadeIn);
-            viewPager.setVisibility(View.GONE);
-            progressBar.setVisibility(View.VISIBLE);*/
             Utils.showProcessBar(this, progressBar, viewPager);
             mainTask = new MainTask(this);
             mainTask.execute();
-
-            /*tabLayout.removeAllTabs();
-            // Restore preferences
-            SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            if((currentUserData.getString("user_mssv", null) == null) || (currentUserData.getString("user_mssv", null).isEmpty())){
-                //form dang ky
-                tabLayout.addTab(tabLayout.newTab().setText("niên giám"), 0);
-            } else{
-                current_user = currentUserData.getString("user_mssv", null);
-                tabLayout.addTab(tabLayout.newTab().setText("chức năng"), 0);
-                tabLayout.addTab(tabLayout.newTab().setText("hồ sơ"), 1);
-                tabLayout.addTab(tabLayout.newTab().setText("niên giám"), 2);
-            }
-            mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-            viewPager.setAdapter(mAdapter);*/
         }
     }
 
@@ -306,12 +296,64 @@ public class MainActivity extends BaseActivity
             super.onPostExecute(objects);
             loadTabs(objects);
             loadUser(objects);
-            /*viewPager.startAnimation(animFadeIn);
-            progressBar.startAnimation(animFadeOut);
-            progressBar.setVisibility(View.GONE);
-            viewPager.setVisibility(View.VISIBLE);*/
             tabLayout.setEnabled(true);
             Utils.hideProcessBar(mContext, progressBar, viewPager);
         }
     }
+
+    public class TabsPagerAdapter extends FragmentStatePagerAdapter {
+        FragmentNguoiDung tab1;
+        FragmentQuaTrinhHocTap tab2;
+        FragmentNienGiam tab3;
+        int mNumOfTabs;
+
+        public TabsPagerAdapter(FragmentManager fm, int NumOfTabs) {
+            super(fm);
+            this.mNumOfTabs = NumOfTabs;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (mNumOfTabs){
+                case 1:
+                    if(tab3 == null){
+                        tab3 = new FragmentNienGiam();
+                    }
+                    return tab3;
+                case 3:
+                    switch (position) {
+                        case 0:
+                            if(tab1 == null){
+                                tab1 = FragmentNguoiDung.newInstance(null, null);
+                            }
+                            return tab1;
+                        case 1:
+                            if(tab2 == null){
+                                tab2 = FragmentQuaTrinhHocTap.newInstance(null,null);
+                            }
+                            return tab2;
+                        case 2:
+                            if(tab3 == null){
+                                tab3 = FragmentNienGiam.newInstance(null, null);
+                            }
+                            return tab3;
+                        default:
+                            return null;
+                    }
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
+        public int getCount() {
+            return mNumOfTabs;
+        }
+    }
+
 }

@@ -23,6 +23,7 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class BoMon1Fragment extends Fragment {
+    //các view
     ArrayList<Object> mListKhoa, mListBoMon;
     Spinner mSpinnerKhoa, mSpinnerBoMon;
 

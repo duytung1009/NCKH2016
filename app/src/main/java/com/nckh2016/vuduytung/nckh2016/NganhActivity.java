@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectCTDT;
 
 public class NganhActivity extends AppCompatActivity {
+    //các giá trị để dùng load Fragment
     private static final String FRAG1 = "fragment_nganh_1";
     private static final String FRAG2 = "fragment_nganh_2";
     private static final String FRAG3 = "fragment_nganh_3";

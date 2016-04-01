@@ -1377,13 +1377,30 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     + " AND " + UserDataEntry.COLUMN_NAM_THU + " = '" + namHoc + "'", null);
             if(mCursor != null) {
                 int tinchi = 0;
-                while(mCursor.moveToNext()){
-                    tinchi = ((ObjectMonHoc)getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))).get(0)).getTinchi();
-                    tongDiem += mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)) * tinchi;
+                while(mCursor.moveToNext()) {
+                    tinchi = ((ObjectMonHoc) getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))).get(0)).getTinchi();
+                    double diemHe10 = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
+                    double diemHe4 = 0;
+                    if (diemHe10 < 4) {
+                        diemHe4 = 0;
+                    } else if (diemHe10 < 5) {
+                        diemHe4 = 1;
+                    } else if (diemHe10 < 5.5) {
+                        diemHe4 = 1.5;
+                    } else if (diemHe10 <6.5) {
+                        diemHe4 = 2;
+                    } else if (diemHe10 <7) {
+                        diemHe4 = 2.5;
+                    } else if (diemHe10 <8) {
+                        diemHe4 = 3;
+                    } else if (diemHe10 <8.5) {
+                        diemHe4 = 3.5;
+                    } else {diemHe4 = 4;}
+                    tongDiem += diemHe4 * tinchi;
                     tongTinChi += tinchi;
                 }
                 if(tongTinChi != 0){
-                    result = (tongDiem/tongTinChi)/2.5;
+                    result = (tongDiem/tongTinChi);
                     //http://www.wikihow.com/Convert-a-Percentage-into-a-4.0-Grade-Point-Average
                     //https://vi.wikipedia.org/wiki/H%E1%BB%87_th%E1%BB%91ng_t%C3%ADn_ch%E1%BB%89_t%E1%BA%A1i_Vi%E1%BB%87t_Nam
                 }
@@ -1705,6 +1722,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return tenMonHoc;
     }
+
 
     public ArrayList<Object> searchMonHoc(String query){
         ArrayList<Object> result = new ArrayList<Object>();

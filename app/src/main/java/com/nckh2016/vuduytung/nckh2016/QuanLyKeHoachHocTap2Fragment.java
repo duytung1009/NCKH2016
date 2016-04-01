@@ -53,7 +53,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
     MainTask mainTask;
     //các view
     ListView lvMonHoc;
-    TextView txtThongBao, txtTieuDe;
+    TextView txtThongBao, txtTieuDe, txtTongTinChi;
     Button btnThemMonHoc, btnXoaHocKy;
     ImageView imageView;
 
@@ -76,6 +76,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
         imageView = (ImageView)view.findViewById(R.id.imageView);
         imageView.setImageResource(R.drawable.report_card);
         txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
+        txtTongTinChi = (TextView)view.findViewById(R.id.txtTongTinChi);
         String tieuDe = "Học kỳ " + selectedHocKy.getHocKy() + " năm thứ " + selectedHocKy.getNamHoc();
         txtTieuDe.setText(tieuDe);
         btnThemMonHoc = (Button)view.findViewById(R.id.btnThemMonHoc);
@@ -153,15 +154,23 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if(userMonHoc.size() == 0){
-                txtThongBao.setVisibility(View.VISIBLE);
-                lvMonHoc.setVisibility(View.GONE);
+                Utils.switchView(mContext, lvMonHoc, txtThongBao);
+                /*txtThongBao.setVisibility(View.VISIBLE);
+                lvMonHoc.setVisibility(View.GONE);*/
             } else {
-                lvMonHoc.setVisibility(View.VISIBLE);
-                txtThongBao.setVisibility(View.GONE);
+                Utils.switchView(mContext, txtThongBao, lvMonHoc);
+                /*lvMonHoc.setVisibility(View.VISIBLE);
+                txtThongBao.setVisibility(View.GONE);*/
                 mAdapter = new AdapterMonHoc(getContext(), 0);
                 mAdapter.addAll(userMonHoc);
                 lvMonHoc.setAdapter(mAdapter);
             }
+            int tongTC = 0;
+            for(Object value : userMonHoc){
+                tongTC += ((ObjectMonHoc)value).getTinchi();
+            }
+            String tongTinChi = String.valueOf(tongTC);
+            txtTongTinChi.setText(tongTinChi);
             btnThemMonHoc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

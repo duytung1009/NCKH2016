@@ -374,7 +374,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     } else {
                         //không tính những môn bị điểm F
                         if(diemSo >= 4){
-                            tongDiem += (diemSo * tinChi);
+                            tongDiem += (diemHe10SangHe4(diemSo) * tinChi);
                             tongTinChi += tinChi;
                         }
                         //tính toàn bộ các môn
@@ -391,19 +391,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     int i = 0;
                     while((tinChiTuChonA < maxTinChi) && (i<tuChonA.size())){
                         tinChiTuChonA += ((ObjectMonHoc)tuChonA.get(i)).getTinchi();
-                        diemTuChonA += (((ObjectMonHoc)tuChonA.get(i)).getDiem() * ((ObjectMonHoc)tuChonA.get(i)).getTinchi());
+                        diemTuChonA += (diemHe10SangHe4(((ObjectMonHoc)tuChonA.get(i)).getDiem()) * ((ObjectMonHoc)tuChonA.get(i)).getTinchi());
                         i++;
                     }
                     tongDiem += diemTuChonA;
                     tongTinChi += tinChiTuChonA;
-                    /*diemA = diemTuChonA/tinChiTuChonA;
-                    if(tinChiTuChonA > maxTinChi){
-                        tongDiem += (diemA * maxTinChi);
-                        tongTinChi += maxTinChi;
-                    } else {
-                        tongDiem += (diemA * tinChiTuChonA);
-                        tongTinChi += tinChiTuChonA;
-                    }*/
                 }
                 if(tuChonB.size() != 0){
                     tuChonB = sort(tuChonB);
@@ -414,19 +406,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     int i = 0;
                     while((tinChiTuChonB < maxTinChi) && (i<tuChonB.size())){
                         tinChiTuChonB += ((ObjectMonHoc)tuChonB.get(i)).getTinchi();
-                        diemTuChonB += (((ObjectMonHoc)tuChonB.get(i)).getDiem() * ((ObjectMonHoc)tuChonB.get(i)).getTinchi());
+                        diemTuChonB += (diemHe10SangHe4(((ObjectMonHoc)tuChonB.get(i)).getDiem()) * ((ObjectMonHoc)tuChonB.get(i)).getTinchi());
                         i++;
                     }
                     tongDiem += diemTuChonB;
                     tongTinChi += tinChiTuChonB;
-                    /*diemB = diemTuChonB/tinChiTuChonB;
-                    if(tinChiTuChonB > maxTinChi){
-                        tongDiem += (diemB * maxTinChi);
-                        tongTinChi += maxTinChi;
-                    } else {
-                        tongDiem += (diemB * tinChiTuChonB);
-                        tongTinChi += tinChiTuChonB;
-                    }*/
                 }
                 if(tuChonC.size() != 0){
                     tuChonC = sort(tuChonC);
@@ -437,19 +421,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     int i = 0;
                     while((tinChiTuChonC < maxTinChi) && (i<tuChonC.size())){
                         tinChiTuChonC += ((ObjectMonHoc)tuChonC.get(i)).getTinchi();
-                        diemTuChonC += (((ObjectMonHoc)tuChonC.get(i)).getDiem() * ((ObjectMonHoc)tuChonC.get(i)).getTinchi());
+                        diemTuChonC += (diemHe10SangHe4(((ObjectMonHoc)tuChonC.get(i)).getDiem()) * ((ObjectMonHoc)tuChonC.get(i)).getTinchi());
                         i++;
                     }
                     tongDiem += diemTuChonC;
                     tongTinChi += tinChiTuChonC;
-                    /*diemC = diemTuChonC/tinChiTuChonC;
-                    if(tinChiTuChonC > maxTinChi){
-                        tongDiem += (diemC * maxTinChi);
-                        tongTinChi += maxTinChi;
-                    } else {
-                        tongDiem += (diemC * tinChiTuChonC);
-                        tongTinChi += tinChiTuChonC;
-                    }*/
                 }
             }
         } catch (Exception e) {
@@ -460,7 +436,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
             //close();
         }
-        return (tongDiem / tongTinChi)/10*4;
+        return (tongDiem / tongTinChi);
     }
 
     /**
@@ -1385,23 +1361,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 while(mCursor.moveToNext()) {
                     tinchi = ((ObjectMonHoc) getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC)))).getTinchi();
                     double diemHe10 = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
-                    double diemHe4 = 0;
-                    if (diemHe10 < 4) {
-                        diemHe4 = 0;
-                    } else if (diemHe10 < 5) {
-                        diemHe4 = 1;
-                    } else if (diemHe10 < 5.5) {
-                        diemHe4 = 1.5;
-                    } else if (diemHe10 <6.5) {
-                        diemHe4 = 2;
-                    } else if (diemHe10 <7) {
-                        diemHe4 = 2.5;
-                    } else if (diemHe10 <8) {
-                        diemHe4 = 3;
-                    } else if (diemHe10 <8.5) {
-                        diemHe4 = 3.5;
-                    } else {diemHe4 = 4;}
-                    tongDiem += diemHe4 * tinchi;
+                    tongDiem += diemHe10SangHe4(diemHe10) * tinchi;
                     tongTinChi += tinchi;
                 }
                 if(tongTinChi != 0){
@@ -1419,6 +1379,26 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             //close();
         }
         return result;
+    }
+
+    private double diemHe10SangHe4(double diemHe10){
+        double diemHe4 = 0;
+        if (diemHe10 < 4) {
+            diemHe4 = 0;
+        } else if (diemHe10 < 5) {
+            diemHe4 = 1;
+        } else if (diemHe10 < 5.5) {
+            diemHe4 = 1.5;
+        } else if (diemHe10 <6.5) {
+            diemHe4 = 2;
+        } else if (diemHe10 <7) {
+            diemHe4 = 2.5;
+        } else if (diemHe10 <8) {
+            diemHe4 = 3;
+        } else if (diemHe10 <8.5) {
+            diemHe4 = 3.5;
+        } else {diemHe4 = 4;}
+        return diemHe4;
     }
 
     /**

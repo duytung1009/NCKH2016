@@ -22,7 +22,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -37,7 +36,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import uk.co.senab.photoview.PhotoViewAttacher;
+import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
 public class BangDiemActivity extends BaseActivity {
     //các giá trị Preferences Global
@@ -59,7 +58,6 @@ public class BangDiemActivity extends BaseActivity {
     //các view
     View view1, view2;
     Button btn_1, btn_2, btn_3;
-    PhotoViewAttacher mAttacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,12 +97,12 @@ public class BangDiemActivity extends BaseActivity {
             btn_2.setVisibility(View.GONE);
             btn_3.setVisibility(View.GONE);
         } else {
-            ImageView mImageView = (ImageView) view2;
-            mImageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
-            /*BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = calculateInSampleSize(options, 2048, 1536);
-            mImageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length, options));*/
-            mAttacher = new PhotoViewAttacher(mImageView);
+            ImageViewTouch mImageView = (ImageViewTouch) view2;
+            try{
+                mImageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
+            } catch (OutOfMemoryError e){
+                e.printStackTrace();
+            }
             view1.setVisibility(View.GONE);
             view2.setVisibility(View.VISIBLE);
             btn_1.setVisibility(View.GONE);
@@ -262,6 +260,15 @@ public class BangDiemActivity extends BaseActivity {
         if(userData == null){
             userData = new Gson().fromJson(state.getString(SUB_PREFS_USERDATA, null), ObjectUserData.class);
         }
+        /*byte[] image = userData.getBangdiem();
+        if (image != null) {
+            ImageViewTouch mImageView = (ImageViewTouch) findViewById(R.id.fullscreen_image_content);;
+            try{
+                mImageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
+            } catch (OutOfMemoryError e){
+                e.printStackTrace();
+            }
+        }*/
     }
 
     @Override
@@ -276,14 +283,6 @@ public class BangDiemActivity extends BaseActivity {
         editor.putString(SUB_PREFS_MAMONHOC, userMaMonHoc);
         editor.putString(SUB_PREFS_USERDATA, new Gson().toJson(userData));
         editor.apply();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(mAttacher!=null){
-            mAttacher.cleanup();
-        }
     }
 
     /*@Override
@@ -366,7 +365,7 @@ public class BangDiemActivity extends BaseActivity {
                         //Bitmap imageBitmap = toGrayscale(BitmapFactory.decodeFile(mCurrentPhotoPath));
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-                        ImageView mImageView = (ImageView) view2;
+                        ImageViewTouch mImageView = (ImageViewTouch) view2;
                         mImageView.setImageBitmap(imageBitmap);
                         SQLiteDataController database = SQLiteDataController.getInstance(getApplicationContext());
                         try {
@@ -404,7 +403,7 @@ public class BangDiemActivity extends BaseActivity {
                         //Bitmap imageBitmap = toGrayscale(BitmapFactory.decodeFile(picturePath));
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-                        ImageView mImageView = (ImageView) view2;
+                        ImageViewTouch mImageView = (ImageViewTouch) view2;
                         mImageView.setImageBitmap(imageBitmap);
                         SQLiteDataController database = SQLiteDataController.getInstance(getApplicationContext());
                         try {

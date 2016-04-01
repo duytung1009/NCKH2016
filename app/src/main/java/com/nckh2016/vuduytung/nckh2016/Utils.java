@@ -25,4 +25,13 @@ public class Utils {
         content.setVisibility(View.VISIBLE);
         processBar.setVisibility(View.GONE);
     }
+
+    public static void switchView(Context context, View viewOut, View viewIn){
+        Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
+        Animation animFadeOut = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_out);
+        viewIn.startAnimation(animFadeIn);
+        viewOut.startAnimation(animFadeOut);
+        viewIn.setVisibility(View.VISIBLE);
+        viewOut.setVisibility(View.GONE);
+    }
 }

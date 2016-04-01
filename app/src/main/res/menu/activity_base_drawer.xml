@@ -9,7 +9,7 @@
             android:title="@string/title_activity_main" />
         <item
             android:id="@+id/nav_1"
-            android:icon="@drawable/student"
+            android:icon="@drawable/account_card_details"
             android:title="@string/btn_1_fragment_nguoidung" />
         <item
             android:id="@+id/nav_2"
@@ -17,7 +17,7 @@
             android:title="@string/btn_2_fragment_nguoidung" />
         <item
             android:id="@+id/nav_3"
-            android:icon="@drawable/quick_view"
+            android:icon="@drawable/eye"
             android:title="@string/btn_3_fragment_nguoidung" />
         <item
             android:id="@+id/nav_4"

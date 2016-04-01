@@ -18,12 +18,19 @@
         android:text="@string/bang_diem_content"
         android:textColor="#757575"
         android:textSize="50sp" />
-    <ImageView
+    <!--<ImageView
         android:id="@+id/fullscreen_image_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:keepScreenOn="true" />
+        android:keepScreenOn="true" />-->
+    <it.sephiroth.android.library.imagezoom.ImageViewTouch
+        android:id="@+id/fullscreen_image_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:keepScreenOn="true"/>
+
 
     <FrameLayout
         android:layout_width="match_parent"

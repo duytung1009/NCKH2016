@@ -148,6 +148,7 @@
         <activity
             android:name=".BackupActivity"
             android:label="@string/title_activity_backup"
+            android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

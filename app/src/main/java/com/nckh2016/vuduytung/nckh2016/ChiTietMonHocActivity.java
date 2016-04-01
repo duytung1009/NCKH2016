@@ -146,31 +146,37 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
             catch (IOException e){
                 Log.e("tag", e.getMessage());
             }
-            ObjectMonHoc mMonHoc = (ObjectMonHoc)data.getMonHoc(joined).get(0);
-            if(current_user != null){
-                mMonHoc.setDiem(data.getDiem(current_user, mMonHoc.getMamh()));
-            }
-            //lấy tên môn học điều kiện
-            monHocDaQua.clear();
-            String dieukien = "";
-            String madieukien = mMonHoc.getDieukien();
-            if(madieukien != null){
-                if(madieukien.length() >= 7 ) {
-                    String[] items = madieukien.split(",");
-                    for (String item : items)
-                    {
-                        if(data.getTenMonHoc(item) != null){
-                            dieukien += data.getTenMonHoc(item);
-                            dieukien += "\n";
-                            if(current_user != null){
-                                monHocDaQua.add(data.checkMonHocChuaQua(current_user, item));
+            ArrayList<Object> result = data.getMonHoc(joined);
+            if(result.size() != 0){
+                ObjectMonHoc mMonHoc = (ObjectMonHoc)result.get(0);
+                if(mMonHoc.getMamh() != null && !mMonHoc.getMamh().isEmpty()){
+                    if(current_user != null){
+                        mMonHoc.setDiem(data.getDiem(current_user, mMonHoc.getMamh()));
+                    }
+                    //lấy tên môn học điều kiện
+                    monHocDaQua.clear();
+                    String dieukien = "";
+                    String madieukien = mMonHoc.getDieukien();
+                    if(madieukien != null){
+                        if(madieukien.length() >= 7 ) {
+                            String[] items = madieukien.split(",");
+                            for (String item : items)
+                            {
+                                if(data.getTenMonHoc(item) != null){
+                                    dieukien += data.getTenMonHoc(item);
+                                    dieukien += "\n";
+                                    if(current_user != null){
+                                        monHocDaQua.add(data.checkMonHocChuaQua(current_user, item));
+                                    }
+                                }
                             }
                         }
                     }
+                    mMonHoc.setDieukien(dieukien);
                 }
+                return mMonHoc;
             }
-            mMonHoc.setDieukien(dieukien);
-            return mMonHoc;
+            return null;
         }
 
         @Override

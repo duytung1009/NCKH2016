@@ -27,7 +27,7 @@ public class XemNhanhActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
-        navigationView.getMenu().getItem(NAV_INDEX).setChecked(true);
+        //navigationView.getMenu().getItem(NAV_INDEX).setChecked(true);
         loadTabs();
     }
 

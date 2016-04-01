@@ -24,9 +24,9 @@ public class KeHoachHocTapActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        for(int i=0; i < navigationView.getMenu().size(); i++) {
+        /*for(int i=0; i < navigationView.getMenu().size(); i++) {
             navigationView.getMenu().getItem(i).setChecked(false);
-        }
+        }*/
         String tenNganh = getIntent().getStringExtra("Nganh");
         String tenChuyenSau = getIntent().getStringExtra("ChuyenSau");
         ActionBar ab = getSupportActionBar();

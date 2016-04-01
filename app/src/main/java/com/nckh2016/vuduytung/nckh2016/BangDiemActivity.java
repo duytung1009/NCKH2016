@@ -64,9 +64,9 @@ public class BangDiemActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        for(int i=0; i < navigationView.getMenu().size(); i++) {
+        /*for(int i=0; i < navigationView.getMenu().size(); i++) {
             navigationView.getMenu().getItem(i).setChecked(false);
-        }
+        }*/
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         current_user = currentUserData.getString("user_mssv", null);
         userData = new ObjectUserData();

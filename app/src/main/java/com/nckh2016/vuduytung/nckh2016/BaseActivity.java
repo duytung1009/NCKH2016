@@ -155,7 +155,15 @@ public class BaseActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_1) {
+        if (id == R.id.nav_0) {
+            toggle.runWhenIdle(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(BaseActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            });
+        } else if (id == R.id.nav_1) {
             toggle.runWhenIdle(new Runnable() {
                 @Override
                 public void run() {

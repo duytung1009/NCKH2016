@@ -24,7 +24,7 @@ public class ThongTinCaNhanActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        navigationView.getMenu().getItem(NAV_INDEX).setChecked(true);
+        //navigationView.getMenu().getItem(NAV_INDEX).setChecked(true);
         TextView txtMaSinhVien = (TextView)findViewById(R.id.txtMaSinhVien);
         TextView txtTenSinhVien = (TextView)findViewById(R.id.txtTenSinhVien);
         //TextView txtEmail = (TextView)findViewById(R.id.txtEmail);

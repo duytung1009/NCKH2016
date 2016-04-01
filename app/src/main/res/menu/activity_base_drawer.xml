@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <!--<group android:checkableBehavior="single"></group>-->
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_0"
+            android:icon="@drawable/circle"
+            android:title="@string/title_activity_main" />
         <item
             android:id="@+id/nav_1"
             android:icon="@drawable/student"

@@ -2,7 +2,9 @@ package com.nckh2016.vuduytung.nckh2016;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -118,7 +120,7 @@ public class BackupFragment1 extends Fragment {
             Log.e("tag", e.getMessage());
         }
         listViewFile = (ListView)view.findViewById(R.id.listViewFile);
-        adapterListFile = new AdapterListFile(getContext(), 0);
+        adapterListFile = new AdapterListFile(getContext(), 0, BackupFragment1.this);
         listViewFile.setAdapter(adapterListFile);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -147,42 +149,57 @@ public class BackupFragment1 extends Fragment {
         btnBackup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-                    } else {
-                        Utils.hideProcessBar(getContext(), progressBar, listViewFile);
-                        Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-                    try{
-                        data.isCreatedDatabase();
-                    }
-                    catch (IOException e){
-                        Log.e("tag", e.getMessage());
-                    }
-                    ObjectUser user = data.getUser(current_user);
-                    user.setUserdata(data.getUserData(current_user));
-                    Gson gson = new Gson();
-                    String json = gson.toJson(user);
-                    String filename = current_user + PATTERN;
-                    File file = new File(Environment.getExternalStorageDirectory(), filename);
-                    try {
-                        FileOutputStream outputStream = new FileOutputStream(file);
-                        outputStream.write(json.getBytes());
-                        outputStream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-                        mainTask.cancel(true);
-                    }
-                    Utils.showProcessBar(getContext(), progressBar, listViewFile);
-                    mainTask = new MainTask(getContext());
-                    mainTask.execute();
-                    Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionWriteSuccess) + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
-                }
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Sao lưu dữ liệu")
+                        .setMessage("Sao lưu hồ sơ có mã sinh viên " + current_user + "?")
+                        .setIcon(R.drawable.backup_restore)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                                    } else {
+                                        Utils.hideProcessBar(getContext(), progressBar, listViewFile);
+                                        Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+                                    try {
+                                        data.isCreatedDatabase();
+                                    } catch (IOException e) {
+                                        Log.e("tag", e.getMessage());
+                                    }
+                                    ObjectUser user = data.getUser(current_user);
+                                    user.setUserdata(data.getUserData(current_user));
+                                    Gson gson = new Gson();
+                                    String json = gson.toJson(user);
+                                    String filename = current_user + PATTERN;
+                                    File file = new File(Environment.getExternalStorageDirectory(), filename);
+                                    try {
+                                        FileOutputStream outputStream = new FileOutputStream(file);
+                                        outputStream.write(json.getBytes());
+                                        outputStream.close();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionWriteSuccess) + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
+                                    if (mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                                        mainTask.cancel(true);
+                                    }
+                                    Utils.showProcessBar(getContext(), progressBar, listViewFile);
+                                    mainTask = new MainTask(getContext());
+                                    mainTask.execute();
+                                }
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
             }
         });
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
@@ -317,6 +334,23 @@ public class BackupFragment1 extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void xoaFile(String path){
+        File file = new File(path);
+        boolean deleted = file.delete();
+        if(deleted){
+            if(mainTask != null){
+                if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                    mainTask.cancel(true);
+                }
+            }
+            Utils.showProcessBar(getContext(), progressBar, listViewFile);
+            mainTask = new MainTask(getContext());
+            mainTask.execute();
+        } else {
+            Toast.makeText(getContext(), "Xóa file thất bại", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public class MainTask extends AsyncTask<Void, Long, Void> {

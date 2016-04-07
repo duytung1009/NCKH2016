@@ -1,6 +1,8 @@
 package com.nckh2016.vuduytung.nckh2016;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveContents;
@@ -157,7 +160,23 @@ public class BackupFragment2 extends BaseDriveFragment {
         btnBackup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Drive.DriveApi.newDriveContents(getGoogleApiClient()).setResultCallback(driveContentsCallback);
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Sao lưu dữ liệu")
+                        .setMessage("Sao lưu hồ sơ có mã sinh viên " + current_user + "?")
+                        .setIcon(R.drawable.backup_restore)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Drive.DriveApi.newDriveContents(getGoogleApiClient()).setResultCallback(driveContentsCallback);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
             }
         });
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
@@ -248,7 +267,30 @@ public class BackupFragment2 extends BaseDriveFragment {
         new RetrieveDriveFileContentsTask(getContext()).execute(metadata.getDriveId());
     }
 
-    final private ResultCallback<DriveApi.MetadataBufferResult> metadataCallback = new ResultCallback<DriveApi.MetadataBufferResult>() {
+    public void deleteFile(Metadata metadata){
+        DriveFile file = metadata.getDriveId().asDriveFile();
+        file.trash(getGoogleApiClient()).setResultCallback(trashStatusCallback);
+    }
+
+    private final ResultCallback<Status> trashStatusCallback = new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    if (!status.isSuccess()) {
+                        showMessage("Xóa file thất bại");
+                        return;
+                    }
+                    if(loadingTask != null){
+                        if(loadingTask.getStatus() == AsyncTask.Status.RUNNING) {
+                            loadingTask.cancel(true);
+                        }
+                        Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mResultsListView);
+                        loadingTask = new LoadingTask(getContext().getApplicationContext());
+                        loadingTask.execute();
+                    }
+                }
+            };
+
+    private final ResultCallback<DriveApi.MetadataBufferResult> metadataCallback = new ResultCallback<DriveApi.MetadataBufferResult>() {
         @Override
         public void onResult(DriveApi.MetadataBufferResult result) {
             if (!result.getStatus().isSuccess()) {
@@ -260,7 +302,7 @@ public class BackupFragment2 extends BaseDriveFragment {
         }
     };
 
-    final private ResultCallback<DriveApi.DriveContentsResult> driveContentsCallback = new ResultCallback<DriveApi.DriveContentsResult>() {
+    private final ResultCallback<DriveApi.DriveContentsResult> driveContentsCallback = new ResultCallback<DriveApi.DriveContentsResult>() {
         @Override
         public void onResult(DriveApi.DriveContentsResult result) {
             if (!result.getStatus().isSuccess()) {

@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.nckh2016.vuduytung.nckh2016.BackupFragment1;
 import com.nckh2016.vuduytung.nckh2016.R;
 
 import java.io.BufferedReader;
@@ -30,10 +32,12 @@ public class AdapterListFile extends ArrayAdapter<Object> {
     private static final String PATTERN = "_backup.txt";
     private Context mContext;
     private ArrayList<Object> objects = new ArrayList<Object>();
+    private BackupFragment1 fragment1;
 
-    public AdapterListFile(Context context, int resource) {
+    public AdapterListFile(Context context, int resource, BackupFragment1 fragment1) {
         super(context, resource);
         this.mContext = context;
+        this.fragment1 = fragment1;
     }
 
     @Override
@@ -65,6 +69,7 @@ public class AdapterListFile extends ArrayAdapter<Object> {
                 view = LayoutInflater.from(mContext).inflate(R.layout.item_file, parent, false);
                 TextView txtTenFile = (TextView)view.findViewById(R.id.txtTenFile);
                 TextView txtDuongDan = (TextView)view.findViewById(R.id.txtDuongDan);
+                Button btnXoa = (Button) view.findViewById(R.id.btnXoa);
                 txtTenFile.setText(file.getName());
                 //txtDuongDan.setText(file.getAbsolutePath());
                 String size = "";
@@ -78,6 +83,29 @@ public class AdapterListFile extends ArrayAdapter<Object> {
                 }
                 String description = size + " - " + file.getAbsolutePath();
                 txtDuongDan.setText(description);
+                btnXoa.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final File file = (File) objects.get(staticPosition);
+                        new AlertDialog.Builder(mContext)
+                                .setTitle("Xóa")
+                                .setMessage("Xóa tệp sao lưu có mã sinh viên " + file.getName().replace(PATTERN, "") + "?")
+                                .setIcon(R.drawable.error)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        fragment1.xoaFile(file.getAbsolutePath());
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).show();
+                    }
+                });
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -89,9 +117,9 @@ public class AdapterListFile extends ArrayAdapter<Object> {
                             Log.e("tag", e.getMessage());
                         }
                         final File file = (File) objects.get(staticPosition);
-                        new AlertDialog.Builder(getContext())
+                        new AlertDialog.Builder(mContext)
                                 .setTitle("Khôi phục dữ liệu")
-                                .setMessage("Việc khôi phục dữ liệu sẽ ghi đè lên hồ sơ có mã sinh viên là " + file.getName().replace(PATTERN, "") + ", tiếp tục?")
+                                .setMessage("Việc khôi phục dữ liệu sẽ ghi đè lên hồ sơ có mã sinh viên " + file.getName().replace(PATTERN, "") + ", tiếp tục?")
                                 .setIcon(R.drawable.backup_restore)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override

@@ -1,7 +1,9 @@
 package com.nckh2016.vuduytung.nckh2016.Data;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +53,7 @@ public class AdapterUser extends ArrayAdapter<Object> {
         if(objects.size()!=0){
             final Object mObject = objects.get(position);
             if(mObject != null) {
-                ObjectUser mUser = (ObjectUser) mObject;
+                final ObjectUser mUser = (ObjectUser) mObject;
                 view = LayoutInflater.from(mContext).inflate(R.layout.item_user, parent, false);
                 TextView txtHoTen = (TextView) view.findViewById(R.id.txtHoTen);
                 TextView txtMaSinhVien = (TextView) view.findViewById(R.id.txtMaSinhVien);
@@ -61,7 +63,23 @@ public class AdapterUser extends ArrayAdapter<Object> {
                 btnXoa.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new MainTask(mContext).execute(mObject);
+                        new AlertDialog.Builder(mContext)
+                                .setTitle("Xóa hồ sơ")
+                                .setMessage("Xóa hồ sơ có mã sinh viên " + mUser.getMasv() + "?")
+                                .setIcon(R.drawable.error)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        new MainTask(mContext).execute(mObject);
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).show();
                     }
                 });
             }

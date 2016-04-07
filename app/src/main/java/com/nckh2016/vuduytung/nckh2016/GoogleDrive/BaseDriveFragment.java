@@ -129,4 +129,8 @@ public class BaseDriveFragment extends Fragment implements
     public GoogleApiClient getGoogleApiClient() {
         return mGoogleApiClient;
     }
+
+    public void clearDefaultAccount(){
+        mGoogleApiClient.clearDefaultAccountAndReconnect();
+    }
 }

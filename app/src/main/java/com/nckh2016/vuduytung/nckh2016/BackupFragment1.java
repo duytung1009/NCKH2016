@@ -50,19 +50,24 @@ public class BackupFragment1 extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    //các giá trị Preferences Global
+    public static final String PREFS_NAME = "current_user";
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các giá trị Global trong Activity
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
-
     private static final String PATTERN = "_backup.txt";
-
-    public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
+    //các asynctask + biến liên quan
+    MainTask mainTask;
+    private ArrayList<File> listFile = new ArrayList<File>();
+    //các adapter
+    AdapterListFile adapterListFile;
+    //các view
     CircularProgressView progressBar;
     SwipeRefreshLayout swipeContainer;
-    MainTask mainTask;
     ListView listViewFile;
-    ArrayList<File> listFile = new ArrayList<File>();
-    AdapterListFile adapterListFile;
 
     private OnFragmentInteractionListener mListener;
 
@@ -103,7 +108,7 @@ public class BackupFragment1 extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_backup_fragment_1, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
+        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
         final SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
@@ -143,35 +148,20 @@ public class BackupFragment1 extends Fragment {
             @Override
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    // Should we show an explanation?
                     if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        // Show an expanation to the user *asynchronously* -- don't block
-                        // this thread waiting for the user's response! After the user
-                        // sees the explanation, try again to request the permission.
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
                     } else {
-                        // No explanation needed, we can request the permission.
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-                    }
-                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        ObjectUser user = data.getUser(current_user);
-                        user.setUserdata(data.getUserData(current_user));
-                        Gson gson = new Gson();
-                        String json = gson.toJson(user);
-                        String filename = current_user + PATTERN;
-                        File file = new File(Environment.getExternalStorageDirectory(), filename);
-                        try {
-                            FileOutputStream outputStream = new FileOutputStream(file);
-                            outputStream.write(json.getBytes());
-                            outputStream.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        Toast.makeText(getContext(), "File backup đã lưu tại " + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "Không có quyền truy cập bộ nhớ", Toast.LENGTH_SHORT).show();
+                        Utils.hideProcessBar(getContext(), progressBar, listViewFile);
+                        Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+                    try{
+                        data.isCreatedDatabase();
+                    }
+                    catch (IOException e){
+                        Log.e("tag", e.getMessage());
+                    }
                     ObjectUser user = data.getUser(current_user);
                     user.setUserdata(data.getUserData(current_user));
                     Gson gson = new Gson();
@@ -191,7 +181,7 @@ public class BackupFragment1 extends Fragment {
                     Utils.showProcessBar(getContext(), progressBar, listViewFile);
                     mainTask = new MainTask(getContext());
                     mainTask.execute();
-                    Toast.makeText(getContext(), "File backup đã lưu tại " + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionWriteSuccess) + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -203,19 +193,80 @@ public class BackupFragment1 extends Fragment {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:{
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+                    try{
+                        data.isCreatedDatabase();
+                    }
+                    catch (IOException e){
+                        Log.e("tag", e.getMessage());
+                    }
+                    ObjectUser user = data.getUser(current_user);
+                    user.setUserdata(data.getUserData(current_user));
+                    Gson gson = new Gson();
+                    String json = gson.toJson(user);
+                    String filename = current_user + PATTERN;
+                    File file = new File(Environment.getExternalStorageDirectory(), filename);
+                    try {
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        outputStream.write(json.getBytes());
+                        outputStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                        mainTask.cancel(true);
+                    }
+                    Utils.showProcessBar(getContext(), progressBar, listViewFile);
+                    mainTask = new MainTask(getContext());
+                    mainTask.execute();
+                    Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionWriteSuccess) + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Utils.hideProcessBar(getContext(), progressBar, listViewFile);
+                    Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
+                }
+            }
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:{
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Utils.showProcessBar(getContext(), progressBar, listViewFile);
+                    mainTask = new MainTask(getContext());
+                    mainTask.execute();
+                } else {
+                    Utils.hideProcessBar(getContext(), progressBar, listViewFile);
+                    Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                Utils.hideProcessBar(getContext(), progressBar, listViewFile);
+                Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
             }
         } else {
             Utils.showProcessBar(getContext(), progressBar, listViewFile);
             mainTask = new MainTask(getContext());
             mainTask.execute();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //lấy dữ liệu Global
+        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         }
     }
 
@@ -299,17 +350,22 @@ public class BackupFragment1 extends Fragment {
             adapterListFile.addAll(listFile);
             Utils.hideProcessBar(mContext, progressBar, listViewFile);
             swipeContainer.setRefreshing(false);
+            if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
+            }
         }
 
         public void scanForUserFile(File dir){
             File[] tempListFile = dir.listFiles();
             if (listFile != null) {
-                for (int i = 0; i < tempListFile.length; i++) {
-                    if (tempListFile[i].isDirectory()) {
-                        scanForUserFile(tempListFile[i]);
-                    } else {
-                        if (tempListFile[i].getName().endsWith(PATTERN)){
-                            listFile.add(tempListFile[i]);
+                if(tempListFile != null){
+                    for (int i = 0; i < tempListFile.length; i++) {
+                        if (tempListFile[i].isDirectory()) {
+                            scanForUserFile(tempListFile[i]);
+                        } else {
+                            if (tempListFile[i].getName().endsWith(PATTERN)){
+                                listFile.add(tempListFile[i]);
+                            }
                         }
                     }
                 }

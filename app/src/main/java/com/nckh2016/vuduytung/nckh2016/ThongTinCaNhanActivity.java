@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
@@ -22,6 +24,7 @@ public class ThongTinCaNhanActivity extends BaseActivity {
     MainTask mainTask;
     //các view
     TextView txtMaSinhVien, txtTenSinhVien, txtKhoa, txtNganh, txtChuyenSau, txtNamThu;
+    Button btnUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,13 @@ public class ThongTinCaNhanActivity extends BaseActivity {
         txtNganh = (TextView)findViewById(R.id.txtNganh);
         txtChuyenSau = (TextView)findViewById(R.id.txtChuyenSau);
         txtNamThu = (TextView)findViewById(R.id.txtNamThu);
+        btnUpdate = (Button)findViewById(R.id.btnUpdate);
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override

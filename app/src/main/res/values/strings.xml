@@ -81,6 +81,11 @@
     <string name="txtTuChonC">Tự chọn C</string>
     <string name="txtMemory">Bộ nhớ trong</string>
     <string name="txtGoogleDrive">Google Drive</string>
+    <string name="txtSaoLuu">sao lưu hồ sơ</string>
+    <string name="txtSwitchAccount">đổi tài khoản</string>
+    <string name="txtChinhSuaThongTin">chỉnh sửa thông tin cá nhân</string>
+    <string name="txtPermissionDenided">Không có quyền truy cập bộ nhớ</string>
+    <string name="txtPermissionWriteSuccess">File backup đã lưu tại </string>
 
     <string name="bang_diem_content">CHƯA CÓ\n DỮ LIỆU</string>
 

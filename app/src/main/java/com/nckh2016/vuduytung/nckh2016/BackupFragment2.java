@@ -15,13 +15,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveContents;
+import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
@@ -29,10 +33,13 @@ import com.google.android.gms.drive.query.SearchableField;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.GoogleDrive.ApiClientAsyncTask;
 import com.nckh2016.vuduytung.nckh2016.GoogleDrive.BaseDriveFragment;
 import com.nckh2016.vuduytung.nckh2016.GoogleDrive.ResultsAdapter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -56,16 +63,21 @@ public class BackupFragment2 extends BaseDriveFragment {
     private String mParam1;
     private String mParam2;
 
-    private static final String PATTERN = "_backup.txt";
-
+    //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
-    public String current_user = null;
-
+    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các giá trị Global trong Activity
+    private static final String PATTERN = "_backup.txt";
+    //các biến được khôi phục lại nếu app resume
+    private String current_user = null;
+    //các asynctask + biến liên quan
     LoadingTask loadingTask;
+    //các adapter
+    ResultsAdapter mResultsAdapter;
+    //các view
     CircularProgressView progressBar;
     SwipeRefreshLayout swipeContainer;
-    private ListView mResultsListView;
-    private ResultsAdapter mResultsAdapter;
+    ListView mResultsListView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -106,10 +118,10 @@ public class BackupFragment2 extends BaseDriveFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_backup_fragment_2, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString("user_mssv", null);
+        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         progressBar = (CircularProgressView) view.findViewById(R.id.progressBar);
         mResultsListView = (ListView) view.findViewById(R.id.listViewResults);
-        mResultsAdapter = new ResultsAdapter(getContext());
+        mResultsAdapter = new ResultsAdapter(getContext(), BackupFragment2.this);
         mResultsListView.setAdapter(mResultsAdapter);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -127,6 +139,13 @@ public class BackupFragment2 extends BaseDriveFragment {
                 Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mResultsListView);
                 loadingTask = new LoadingTask(getContext().getApplicationContext());
                 loadingTask.execute();
+            }
+        });
+        Button btnSwitch = (Button)view.findViewById(R.id.btnSwitch);
+        btnSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearDefaultAccount();
             }
         });
         Button btnBackup = (Button)view.findViewById(R.id.btnBackup);
@@ -156,8 +175,18 @@ public class BackupFragment2 extends BaseDriveFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        //lấy dữ liệu Global
+        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        if(current_user == null){
+            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        }
     }
 
     /**
@@ -213,6 +242,10 @@ public class BackupFragment2 extends BaseDriveFragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void restoreUser(Metadata metadata){
+        new RetrieveDriveFileContentsTask(getContext()).execute(metadata.getDriveId());
     }
 
     final private ResultCallback<DriveApi.MetadataBufferResult> metadataCallback = new ResultCallback<DriveApi.MetadataBufferResult>() {
@@ -294,7 +327,6 @@ public class BackupFragment2 extends BaseDriveFragment {
         }
     };
 
-
     private class LoadingTask extends AsyncTask<Void, Long, Void> {
         private Context mContext;
 
@@ -329,6 +361,67 @@ public class BackupFragment2 extends BaseDriveFragment {
             super.onPostExecute(aVoid);
             Utils.hideProcessBar(mContext, progressBar, mResultsListView);
             swipeContainer.setRefreshing(false);
+        }
+    }
+
+    private class RetrieveDriveFileContentsTask extends ApiClientAsyncTask<DriveId, Boolean, String> {
+        public RetrieveDriveFileContentsTask(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected String doInBackgroundConnected(DriveId... params) {
+            String contents = null;
+            DriveFile file = params[0].asDriveFile();
+            DriveApi.DriveContentsResult driveContentsResult =
+                    file.open(getGoogleApiClient(), DriveFile.MODE_READ_ONLY, null).await();
+            if (!driveContentsResult.getStatus().isSuccess()) {
+                return null;
+            }
+            DriveContents driveContents = driveContentsResult.getDriveContents();
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(driveContents.getInputStream()));
+            StringBuilder builder = new StringBuilder();
+            String line;
+            try {
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
+                contents = builder.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            driveContents.discard(getGoogleApiClient());
+            return contents;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if (result == null) {
+                showMessage("Lỗi trong quá trình đọc file");
+                return;
+            } else {
+                Gson gson = new Gson();
+                ObjectUser user = gson.fromJson(result, ObjectUser.class);
+                if (user.getMasv() == null) {
+                    Toast.makeText(getContext(), "Không thể đọc dữ liệu từ tệp đã chọn", Toast.LENGTH_SHORT).show();
+                } else {
+                    SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+                    try{
+                        data.isCreatedDatabase();
+                    }
+                    catch (IOException e){
+                        Log.e("tag", e.getMessage());
+                    }
+                    if (data.insertUser(user)) {
+                        Toast.makeText(getContext(), "Đã khôi phục", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Khôi phục thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
         }
     }
 }

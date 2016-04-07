@@ -45,7 +45,7 @@
                 android:title="@string/btn_2_fragment_niengiam" />
             <item
                 android:id="@+id/nav_niengiam_3"
-                android:icon="@drawable/help"
+                android:icon="@drawable/question"
                 android:title="@string/btn_3_fragment_niengiam" />
             <item
                 android:id="@+id/nav_niengiam_4"

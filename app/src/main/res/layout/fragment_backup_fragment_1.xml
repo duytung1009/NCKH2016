@@ -9,27 +9,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/item_title" />
-
-        <View
-            android:id="@+id/line"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/layoutTieuDe"
-            android:background="#c0c0c0" />
-
         <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/btnBackup"
-            android:layout_below="@+id/line"
             android:descendantFocusability="blocksDescendants">
 
-            <ListView
-                android:id="@+id/listViewFile"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_below="@+id/line"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_title" />
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#c0c0c0" />
+
+                <ListView
+                    android:id="@+id/listViewFile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -55,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:padding="20dp"
-            android:text="sao lưu hồ sơ hiện tại"
+            android:text="@string/txtSaoLuu"
             android:textColor="@color/white" />
 
     </RelativeLayout>

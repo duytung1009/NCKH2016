@@ -10,17 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.BackupFragment1;
 import com.nckh2016.vuduytung.nckh2016.R;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -94,7 +89,7 @@ public class AdapterListFile extends ArrayAdapter<Object> {
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        fragment1.xoaFile(file.getAbsolutePath());
+                                        fragment1.deleteFile(file.getAbsolutePath());
                                         dialog.dismiss();
                                     }
                                 })
@@ -124,30 +119,7 @@ public class AdapterListFile extends ArrayAdapter<Object> {
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        try {
-                                            FileInputStream fis = new FileInputStream(file);
-                                            InputStreamReader isr = new InputStreamReader(fis);
-                                            BufferedReader bufferedReader = new BufferedReader(isr);
-                                            StringBuilder sb = new StringBuilder();
-                                            String line;
-                                            while ((line = bufferedReader.readLine()) != null) {
-                                                sb.append(line);
-                                            }
-                                            String json = sb.toString();
-                                            Gson gson = new Gson();
-                                            ObjectUser user = gson.fromJson(json, ObjectUser.class);
-                                            if (user.getMasv() == null) {
-                                                Toast.makeText(mContext, "Không thể đọc dữ liệu từ tệp đã chọn", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                if (data.insertUser(user)) {
-                                                    Toast.makeText(mContext, "Đã khôi phục", Toast.LENGTH_SHORT).show();
-                                                } else {
-                                                    Toast.makeText(mContext, "Khôi phục thất bại", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
+                                        fragment1.restoreUser(file);
                                         dialog.dismiss();
                                     }
                                 })

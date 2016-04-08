@@ -67,6 +67,7 @@ public class KeHoachHocTapActivity extends BaseActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment frag2 = new KeHoachHocTap2Fragment();
         frag2.setArguments(bundle);
+        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         ft.addToBackStack(FRAG2);
         ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag2, FRAG2);
         ft.commit();
@@ -83,6 +84,7 @@ public class KeHoachHocTapActivity extends BaseActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment frag3 = new KeHoachHocTap3Fragment();
         frag3.setArguments(bundle);
+        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         ft.addToBackStack(FRAG3);
         ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag3, FRAG3);
         ft.commit();

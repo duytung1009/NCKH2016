@@ -1,6 +1,7 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -78,6 +79,7 @@ public class BackupFragment2 extends BaseDriveFragment {
     //các adapter
     ResultsAdapter mResultsAdapter;
     //các view
+    ProgressDialog progressUpload, progressRestore, progressDelete;
     CircularProgressView progressBar;
     SwipeRefreshLayout swipeContainer;
     ListView mResultsListView;
@@ -161,13 +163,20 @@ public class BackupFragment2 extends BaseDriveFragment {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(getContext())
-                        .setTitle("Sao lưu dữ liệu")
+                        .setTitle("Sao lưu hồ sơ")
                         .setMessage("Sao lưu hồ sơ có mã sinh viên " + current_user + "?")
                         .setIcon(R.drawable.backup_restore)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Drive.DriveApi.newDriveContents(getGoogleApiClient()).setResultCallback(driveContentsCallback);
+                                progressUpload = new ProgressDialog(getContext());
+                                progressUpload.setMessage("Sao lưu hồ sơ");
+                                progressUpload.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                progressUpload.setIndeterminate(true);
+                                progressUpload.setProgressNumberFormat(null);
+                                progressUpload.setProgressPercentFormat(null);
+                                progressUpload.show();
                                 dialog.dismiss();
                             }
                         })
@@ -264,10 +273,24 @@ public class BackupFragment2 extends BaseDriveFragment {
     }
 
     public void restoreUser(Metadata metadata){
+        progressRestore = new ProgressDialog(getContext());
+        progressRestore.setMessage("Khôi phục hồ sơ");
+        progressRestore.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressRestore.setIndeterminate(true);
+        progressRestore.setProgressNumberFormat(null);
+        progressRestore.setProgressPercentFormat(null);
+        progressRestore.show();
         new RetrieveDriveFileContentsTask(getContext()).execute(metadata.getDriveId());
     }
 
     public void deleteFile(Metadata metadata){
+        progressDelete = new ProgressDialog(getContext());
+        progressDelete.setMessage("Xóa hồ sơ");
+        progressDelete.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDelete.setIndeterminate(true);
+        progressDelete.setProgressNumberFormat(null);
+        progressDelete.setProgressPercentFormat(null);
+        progressDelete.show();
         DriveFile file = metadata.getDriveId().asDriveFile();
         file.trash(getGoogleApiClient()).setResultCallback(trashStatusCallback);
     }
@@ -276,9 +299,10 @@ public class BackupFragment2 extends BaseDriveFragment {
                 @Override
                 public void onResult(Status status) {
                     if (!status.isSuccess()) {
-                        showMessage("Xóa file thất bại");
+                        showMessage("Xóa hồ sơ thất bại");
                         return;
                     }
+                    progressDelete.dismiss();
                     if(loadingTask != null){
                         if(loadingTask.getStatus() == AsyncTask.Status.RUNNING) {
                             loadingTask.cancel(true);
@@ -363,6 +387,7 @@ public class BackupFragment2 extends BaseDriveFragment {
                     loadingTask.cancel(true);
                 }
             }
+            progressUpload.dismiss();
             Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mResultsListView);
             loadingTask = new LoadingTask(getContext().getApplicationContext());
             loadingTask.execute();
@@ -441,6 +466,7 @@ public class BackupFragment2 extends BaseDriveFragment {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            progressRestore.dismiss();
             if (result == null) {
                 showMessage("Lỗi trong quá trình đọc file");
                 return;
@@ -448,7 +474,7 @@ public class BackupFragment2 extends BaseDriveFragment {
                 Gson gson = new Gson();
                 ObjectUser user = gson.fromJson(result, ObjectUser.class);
                 if (user.getMasv() == null) {
-                    Toast.makeText(getContext(), "Không thể đọc dữ liệu từ tệp đã chọn", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Không thể đọc dữ liệu từ file đã chọn", Toast.LENGTH_SHORT).show();
                 } else {
                     SQLiteDataController data = SQLiteDataController.getInstance(getContext());
                     try{

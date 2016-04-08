@@ -3,6 +3,7 @@ package com.nckh2016.vuduytung.nckh2016;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -31,9 +32,12 @@ import com.nckh2016.vuduytung.nckh2016.Data.AdapterListFile;
 import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
@@ -67,6 +71,7 @@ public class BackupFragment1 extends Fragment {
     //các adapter
     AdapterListFile adapterListFile;
     //các view
+    ProgressDialog progressBackup, progressRestore, progressDelete; //xử lý quá nhanh -> không cần thiết lắm...
     CircularProgressView progressBar;
     SwipeRefreshLayout swipeContainer;
     ListView listViewFile;
@@ -150,7 +155,7 @@ public class BackupFragment1 extends Fragment {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(getContext())
-                        .setTitle("Sao lưu dữ liệu")
+                        .setTitle("Sao lưu hồ sơ")
                         .setMessage("Sao lưu hồ sơ có mã sinh viên " + current_user + "?")
                         .setIcon(R.drawable.backup_restore)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -164,6 +169,13 @@ public class BackupFragment1 extends Fragment {
                                         Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
+                                    progressBackup = new ProgressDialog(getContext());
+                                    progressBackup.setMessage("Sao lưu hồ sơ");
+                                    progressBackup.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                    progressBackup.setIndeterminate(true);
+                                    progressBackup.setProgressNumberFormat(null);
+                                    progressBackup.setProgressPercentFormat(null);
+                                    progressBackup.show();
                                     SQLiteDataController data = SQLiteDataController.getInstance(getContext());
                                     try {
                                         data.isCreatedDatabase();
@@ -183,6 +195,7 @@ public class BackupFragment1 extends Fragment {
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
+                                    progressBackup.dismiss();
                                     Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionWriteSuccess) + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
                                     if (mainTask.getStatus() == AsyncTask.Status.RUNNING) {
                                         mainTask.cancel(true);
@@ -215,6 +228,13 @@ public class BackupFragment1 extends Fragment {
         switch (requestCode){
             case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:{
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    progressBackup = new ProgressDialog(getContext());
+                    progressBackup.setMessage("Sao lưu hồ sơ");
+                    progressBackup.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressBackup.setIndeterminate(true);
+                    progressBackup.setProgressNumberFormat(null);
+                    progressBackup.setProgressPercentFormat(null);
+                    progressBackup.show();
                     SQLiteDataController data = SQLiteDataController.getInstance(getContext());
                     try{
                         data.isCreatedDatabase();
@@ -238,6 +258,7 @@ public class BackupFragment1 extends Fragment {
                     if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
                         mainTask.cancel(true);
                     }
+                    progressBackup.dismiss();
                     Utils.showProcessBar(getContext(), progressBar, listViewFile);
                     mainTask = new MainTask(getContext());
                     mainTask.execute();
@@ -336,9 +357,61 @@ public class BackupFragment1 extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void xoaFile(String path){
+    public void restoreUser(File file){
+        progressRestore = new ProgressDialog(getContext());
+        progressRestore.setMessage("Khôi phục hồ sơ");
+        progressRestore.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressRestore.setIndeterminate(true);
+        progressRestore.setProgressNumberFormat(null);
+        progressRestore.setProgressPercentFormat(null);
+        progressRestore.show();
+        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+        try{
+            data.isCreatedDatabase();
+        }
+        catch (IOException e){
+            Log.e("tag", e.getMessage());
+        }
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+            String json = sb.toString();
+            Gson gson = new Gson();
+            ObjectUser user = gson.fromJson(json, ObjectUser.class);
+            progressRestore.dismiss();
+            if (user.getMasv() == null) {
+                Toast.makeText(getContext(), "Không thể đọc dữ liệu từ tệp đã chọn", Toast.LENGTH_SHORT).show();
+            } else {
+                if (data.insertUser(user)) {
+                    Toast.makeText(getContext(), "Đã khôi phục", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Khôi phục thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            progressRestore.dismiss();
+        }
+    }
+
+    public void deleteFile(String path){
+        progressDelete = new ProgressDialog(getContext());
+        progressDelete.setMessage("Xóa hồ sơ");
+        progressDelete.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDelete.setIndeterminate(true);
+        progressDelete.setProgressNumberFormat(null);
+        progressDelete.setProgressPercentFormat(null);
+        progressDelete.show();
         File file = new File(path);
         boolean deleted = file.delete();
+        progressDelete.dismiss();
         if(deleted){
             if(mainTask != null){
                 if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
@@ -349,7 +422,7 @@ public class BackupFragment1 extends Fragment {
             mainTask = new MainTask(getContext());
             mainTask.execute();
         } else {
-            Toast.makeText(getContext(), "Xóa file thất bại", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Xóa hồ sơ thất bại", Toast.LENGTH_SHORT).show();
         }
     }
 

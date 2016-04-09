@@ -90,25 +90,7 @@ public class BangDiemActivity extends BaseActivity {
             userData = data.getUserData(current_user, userMaMonHoc);
         }
         byte[] image = userData.getBangdiem();
-        if (image == null) {
-            view1.setVisibility(View.VISIBLE);
-            view2.setVisibility(View.GONE);
-            btn_1.setVisibility(View.VISIBLE);
-            btn_2.setVisibility(View.GONE);
-            btn_3.setVisibility(View.GONE);
-        } else {
-            ImageViewTouch mImageView = (ImageViewTouch) view2;
-            try{
-                mImageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
-            } catch (OutOfMemoryError e){
-                e.printStackTrace();
-            }
-            view1.setVisibility(View.GONE);
-            view2.setVisibility(View.VISIBLE);
-            btn_1.setVisibility(View.GONE);
-            btn_2.setVisibility(View.VISIBLE);
-            btn_3.setVisibility(View.VISIBLE);
-        }
+        loadImage(image);
         btn_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,12 +233,12 @@ public class BangDiemActivity extends BaseActivity {
         if(userMaMonHoc == null){
             userMaMonHoc = state.getString(SUB_PREFS_MAMONHOC, null);
         }
-        if(mCurrentPhoto == null){
+        /*if(mCurrentPhoto == null){
             String photoUri = state.getString(SUB_PREFS_PHOTOURI, null);
             if(photoUri != null){
                 mCurrentPhoto = Uri.parse(photoUri);
             }
-        }
+        }*/
         if(userData == null){
             userData = new Gson().fromJson(state.getString(SUB_PREFS_USERDATA, null), ObjectUserData.class);
         }
@@ -277,27 +259,25 @@ public class BangDiemActivity extends BaseActivity {
         //lưu dữ liệu ra Preferences
         SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = state.edit();
-        if(mCurrentPhoto != null){
+        /*if(mCurrentPhoto != null){
             editor.putString(SUB_PREFS_PHOTOURI, mCurrentPhoto.toString());
-        }
+        }*/
         editor.putString(SUB_PREFS_MAMONHOC, userMaMonHoc);
         editor.putString(SUB_PREFS_USERDATA, new Gson().toJson(userData));
         editor.apply();
     }
 
-    /*@Override
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(SUB_PREFS_MAMONHOC, userMaMonHoc);
         outState.putParcelable(SUB_PREFS_PHOTOURI, mCurrentPhoto);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-                userMaMonHoc = savedInstanceState.getString(SUB_PREFS_MAMONHOC);
         mCurrentPhoto = savedInstanceState.getParcelable(SUB_PREFS_PHOTOURI);
-    }*/
+    }
 
     //http://stackoverflow.com/questions/4837715/how-to-resize-a-bitmap-in-android
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth) {
@@ -376,7 +356,8 @@ public class BangDiemActivity extends BaseActivity {
                         ContentValues value = new ContentValues();
                         value.put(MyContract.UserDataEntry.COLUMN_BANG_DIEM, stream.toByteArray());
                         database.updateUserData(current_user, userMaMonHoc, value);
-                        recreate();
+                        //recreate();
+                        loadImage(stream.toByteArray());
                     }catch (FileNotFoundException e){
                         e.printStackTrace();
                     }catch (IOException e){
@@ -414,13 +395,36 @@ public class BangDiemActivity extends BaseActivity {
                         ContentValues value = new ContentValues();
                         value.put(MyContract.UserDataEntry.COLUMN_BANG_DIEM, stream.toByteArray());
                         database.updateUserData(current_user, userMaMonHoc, value);
-                        recreate();
+                        //recreate();
+                        loadImage(stream.toByteArray());
                     }
                     break;
                 }
                 default:
                     break;
             }
+        }
+    }
+
+    private void loadImage(byte[] image) {
+        if (image == null) {
+            view1.setVisibility(View.VISIBLE);
+            view2.setVisibility(View.GONE);
+            btn_1.setVisibility(View.VISIBLE);
+            btn_2.setVisibility(View.GONE);
+            btn_3.setVisibility(View.GONE);
+        } else {
+            ImageViewTouch mImageView = (ImageViewTouch) view2;
+            try{
+                mImageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
+            } catch (OutOfMemoryError e){
+                e.printStackTrace();
+            }
+            view1.setVisibility(View.GONE);
+            view2.setVisibility(View.VISIBLE);
+            btn_1.setVisibility(View.GONE);
+            btn_2.setVisibility(View.VISIBLE);
+            btn_3.setVisibility(View.VISIBLE);
         }
     }
 }

@@ -32,8 +32,10 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
     //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các giá trị global
+    private static final String MONHOC = "MaMonHoc";
     //các giá trị Preferences của Activity
-    public static final String PREFS_STATE = "saved_state";
+    public static final String PREFS_STATE = "saved_state_chitietmonhoc_activity";
     public static final String SUB_PREFS_MAMONHOC = "maMonHoc";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
@@ -68,7 +70,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         ab = getSupportActionBar();
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
-        maMonHoc = getIntent().getStringExtra("MaMonHoc");
+        maMonHoc = getIntent().getStringExtra(MONHOC);
         rightLayout.setVisibility(View.GONE);
     }
 

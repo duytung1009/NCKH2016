@@ -70,7 +70,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         //disable item icon tint color
         navigationView.setItemIconTintList(null);
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if(currentUserData.getString(SUB_PREFS_MASINHVIEN, null) == null){
+        if(currentUserData.getString(SUB_PREFS_MASINHVIEN, null) == null || currentUserData.getString(SUB_PREFS_TENSINHVIEN, null) == null){
             //chua co du lieu
         } else{
             current_user_hoten = currentUserData.getString(SUB_PREFS_TENSINHVIEN, null);

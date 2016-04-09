@@ -38,6 +38,9 @@ public class MainActivity extends BaseActivity
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     public static final String SUB_PREFS_TENSINHVIEN = "user_name";
     public static final String SUB_PREFS_DATASINHVIEN = "user_data";
+    //các giá trị Preferences của Activity
+    public static final String PREFS_STATE = "saved_state_main_activity";
+    public static final String SUB_PREFS_TABLAYOUTSTATE = "tab_position";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
     private ArrayList<Object> mListUser;
@@ -48,6 +51,7 @@ public class MainActivity extends BaseActivity
     TabsPagerAdapter mAdapter;
     ViewPager viewPager;
     CircularProgressView progressBar;
+    Spinner spinnerNguoiDung;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,30 @@ public class MainActivity extends BaseActivity
         viewPager = (ViewPager) findViewById(R.id.pager);
         progressBar = (CircularProgressView)findViewById(R.id.progressBar);
         tabLayout = (TabLayout)findViewById(R.id.tab_layout);
+        spinnerNguoiDung = (Spinner) findViewById(R.id.spinnerNguoiDung);
+        spinnerNguoiDung.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString(SUB_PREFS_MASINHVIEN, ((ObjectUser)mListUser.get(position)).getMasv());
+                editor.putString(SUB_PREFS_TENSINHVIEN, ((ObjectUser)mListUser.get(position)).getHoten());
+                editor.putString(SUB_PREFS_DATASINHVIEN, ((ObjectUser)mListUser.get(position)).getHocky());
+                editor.apply();
+                if (tabLayout.getTabCount() > 0) {
+                    try{
+                        (tabLayout.getTabAt(0)).select();
+                    } catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -79,6 +107,16 @@ public class MainActivity extends BaseActivity
         if(current_user == null){
             current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         }
+        //lấy dữ liệu được lưu lại khi app Paused
+        SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        int position = state.getInt(SUB_PREFS_TABLAYOUTSTATE, 0);
+        if(tabLayout.getTabCount() == 3){
+            try{
+                tabLayout.getTabAt(position).select();
+            } catch (NullPointerException e){
+                e.printStackTrace();
+            }
+        }
         /*Utils.showProcessBar(this, progressBar, viewPager);
         mainTask = new MainTask(this);
         mainTask.execute();*/
@@ -87,6 +125,11 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onPause() {
         super.onPause();
+        //lưu dữ liệu ra Preferences
+        SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putInt(SUB_PREFS_TABLAYOUTSTATE, tabLayout.getSelectedTabPosition());
+        editor.apply();
         /*if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
             mainTask.cancel(true);
         }*/
@@ -105,11 +148,6 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mainTask != null){
-            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-                mainTask.cancel(true);
-            }
-        }
         //SQLiteDataController.getInstance(getApplicationContext()).close();
     }
 
@@ -117,7 +155,6 @@ public class MainActivity extends BaseActivity
         tabLayout.removeAllTabs();
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.whiteTransparent), ContextCompat.getColor(this, R.color.white));
-        tabLayout.removeAllTabs();
         // Restore preferences
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         if(!users.isEmpty()){
@@ -126,7 +163,7 @@ public class MainActivity extends BaseActivity
                 editor.putString(SUB_PREFS_MASINHVIEN, ((ObjectUser) users.get(0)).getMasv());
                 editor.putString(SUB_PREFS_TENSINHVIEN, ((ObjectUser) users.get(0)).getHoten());
                 editor.putString(SUB_PREFS_DATASINHVIEN, ((ObjectUser) users.get(0)).getHocky());
-                editor.commit();
+                editor.apply();
                 updateNavigationView();
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab1_name), 0);
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab2_name), 1);
@@ -142,7 +179,7 @@ public class MainActivity extends BaseActivity
             editor.putString(SUB_PREFS_MASINHVIEN, null);
             editor.putString(SUB_PREFS_TENSINHVIEN, null);
             editor.putString(SUB_PREFS_DATASINHVIEN, null);
-            editor.commit();
+            editor.apply();
             updateNavigationView();
             tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab3_name), 0);
         }
@@ -170,7 +207,6 @@ public class MainActivity extends BaseActivity
     }
 
     public void loadUser(ArrayList<Object> users){
-        Spinner spinnerNguoiDung = (Spinner) findViewById(R.id.spinnerNguoiDung);
         ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerNguoiDung.setAdapter(mAdapter);
@@ -182,26 +218,6 @@ public class MainActivity extends BaseActivity
                 mListTenUser.add(value != null ? value.getHoten() : null);
             }
             mAdapter.addAll(mListTenUser);
-            spinnerNguoiDung.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(SUB_PREFS_MASINHVIEN, ((ObjectUser) mListUser.get(position)).getMasv());
-                    editor.putString(SUB_PREFS_TENSINHVIEN, ((ObjectUser) mListUser.get(position)).getHoten());
-                    editor.putString(SUB_PREFS_DATASINHVIEN, ((ObjectUser) mListUser.get(position)).getHocky());
-                    editor.commit();
-                    if (tabLayout.getTabCount() > 0) {
-                        (tabLayout.getTabAt(0)).select();
-                    }
-                    updateNavigationView();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
             if (current_user != null) {
                 int index = 0;
                 for (Object object : mListUser) {

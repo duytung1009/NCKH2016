@@ -20,6 +20,7 @@ import com.nckh2016.vuduytung.nckh2016.Data.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -35,6 +36,8 @@ public class XemNhanhFragment1 extends Fragment {
     //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
+    //các giá trị global
+    private static final String MONHOC = "MaMonHoc";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
 
@@ -84,7 +87,7 @@ public class XemNhanhFragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_fragment_mon_hoc_chua_qua_1, container, false);
+        View view = inflater.inflate(R.layout.fragment_xem_nhanh_1, container, false);
         final SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         SQLiteDataController data = SQLiteDataController.getInstance(getContext());
@@ -94,21 +97,29 @@ public class XemNhanhFragment1 extends Fragment {
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        double diemMin = 0, diemMax = 4;
-        final ArrayList<Object> userMonHocChuaQua = data.getMonHocChuaQua(current_user, diemMin, diemMax);
+        final ArrayList<Object> userMonHocChuaQua = data.getHocPhanTheDuc(current_user);
         AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
         mAdapter.addAll(userMonHocChuaQua);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
-        imageView.setImageResource(R.drawable.high_priority);
-        txtTieuDe.setText("Môn học chưa qua: " + userMonHocChuaQua.size() + " môn");
+        imageView.setImageResource(R.drawable.sport);
+        String tieuDe = "";
+        if(userMonHocChuaQua.size() < 5){
+            tieuDe = "Còn thiếu: " + String.valueOf(5 - userMonHocChuaQua.size()) + " học phần";
+        } else {
+            double tongDiem = 0;
+            for(Object value : userMonHocChuaQua){
+                tongDiem += ((ObjectMonHoc)value).getDiem();
+            }
+            tieuDe = "Điểm tổng kết: " + new DecimalFormat("####0.##").format(tongDiem/5);
+        }
+        txtTieuDe.setText(tieuDe);
         ListView lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
         lvMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
-                intent.putExtra("MaMonHoc", ((ObjectMonHoc) userMonHocChuaQua.get(position)).getMamh());
-                intent.putExtra("caller", "XemNhanhActivity");
+                intent.putExtra(MONHOC, ((ObjectMonHoc) userMonHocChuaQua.get(position)).getMamh());
                 startActivity(intent);
             }
         });

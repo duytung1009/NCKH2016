@@ -1,5 +1,7 @@
 package com.nckh2016.vuduytung.nckh2016;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -12,6 +14,9 @@ import android.view.View;
 
 public class BackupActivity extends BaseActivity
         implements BackupFragment1.OnFragmentInteractionListener, BackupFragment2.OnFragmentInteractionListener{
+    //các giá trị Preferences của Activity
+    public static final String PREFS_STATE = "saved_state_backup_activity";
+    public static final String SUB_PREFS_TABLAYOUTSTATE = "tab_position";
     //các view
     TabLayout tabLayout;
     TabsPagerAdapter mAdapter;
@@ -25,9 +30,42 @@ public class BackupActivity extends BaseActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        loadTabs();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        loadTabs();
+        //lấy dữ liệu được lưu lại khi app Paused
+        SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        int position = state.getInt(SUB_PREFS_TABLAYOUTSTATE, 0);
+        try{
+            tabLayout.getTabAt(position).select();
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //lưu dữ liệu ra Preferences
+        SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putInt(SUB_PREFS_TABLAYOUTSTATE, tabLayout.getSelectedTabPosition());
+        editor.apply();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //xóa vị trí tab
+        SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putInt(SUB_PREFS_TABLAYOUTSTATE, 0);
+        editor.apply();
     }
 
     public void loadTabs(){

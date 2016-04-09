@@ -65,6 +65,7 @@ public class NganhActivity extends AppCompatActivity {
         bundle.putString("MaNganh", maNganh);
         bundle.putString("TenNganh", tenNganh);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         Fragment frag2 = new Nganh2Fragment();
         frag2.setArguments(bundle);
         ft.addToBackStack(FRAG2);
@@ -94,6 +95,7 @@ public class NganhActivity extends AppCompatActivity {
                     break;
             }
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
             Fragment frag3 = new Nganh3Fragment();
             frag3.setArguments(bundle);
             ft.addToBackStack(FRAG3);

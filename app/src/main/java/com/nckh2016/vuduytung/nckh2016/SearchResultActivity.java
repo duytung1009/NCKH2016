@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class SearchResultActivity extends AppCompatActivity {
     //các giá trị Preferences của Activity
-    public static final String PREFS_STATE = "saved_state";
+    public static final String PREFS_STATE = "saved_state_searchresult_activity";
     public static final String SUB_PREFS_QUERY = "query";
     //các biến được khôi phục lại nếu app resume
     private String query;

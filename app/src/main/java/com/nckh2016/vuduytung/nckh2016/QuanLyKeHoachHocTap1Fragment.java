@@ -26,13 +26,13 @@ import java.io.IOException;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class QuanLyKeHoachHocTapFragment extends Fragment {
+public class QuanLyKeHoachHocTap1Fragment extends Fragment {
     //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     public static final String SUB_PREFS_DATASINHVIEN = "user_data";
     //các giá trị Preferences của Activity
-    public static final String PREFS_STATE = "saved_state";
+    public static final String PREFS_STATE = "saved_state_quanlykehoachhoctap1_fragment";
     public static final String SUB_PREFS_USER = "user";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
@@ -46,7 +46,7 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
     ListView listViewHocTap;
     CircularProgressView progressBar;
 
-    public QuanLyKeHoachHocTapFragment() {
+    public QuanLyKeHoachHocTap1Fragment() {
     }
 
     @Override
@@ -55,7 +55,8 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_quan_ly_ke_hoach_hoc_tap, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
-        user_hocky = new Gson().fromJson(currentUserData.getString(SUB_PREFS_DATASINHVIEN, null), ObjectUserHocKy.class);
+        //user_hocky = new Gson().fromJson(getArguments().getString(USER_HOCKY), ObjectUserHocKy.class);
+        //user_hocky = new Gson().fromJson(currentUserData.getString(SUB_PREFS_DATASINHVIEN, null), ObjectUserHocKy.class);
         progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
         listViewHocTap = (ListView)view.findViewById(R.id.listview_user_data);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
@@ -84,6 +85,7 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
             current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         }
         if(user_hocky == null){
+            //user_hocky = new Gson().fromJson(getArguments().getString(USER_HOCKY), ObjectUserHocKy.class);
             user_hocky = new Gson().fromJson(currentUserData.getString(SUB_PREFS_DATASINHVIEN, null), ObjectUserHocKy.class);
         }
         //lấy dữ liệu được lưu lại khi app Paused
@@ -113,17 +115,6 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
         }
     }
 
-    public void refreshView(){
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        user_hocky = new Gson().fromJson(currentUserData.getString(SUB_PREFS_DATASINHVIEN, null), ObjectUserHocKy.class);
-        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mainTask.cancel(true);
-        }
-        Utils.showProcessBar(getContext(), progressBar, listViewHocTap);
-        mainTask = new MainTask(getContext());
-        mainTask.execute();
-    }
-
     public class MainTask extends AsyncTask<Void, Long, Void> {
         private Context mContext;
 
@@ -146,6 +137,7 @@ public class QuanLyKeHoachHocTapFragment extends Fragment {
                 Log.e("tag", e.getMessage());
             }
             cUser = data.getUser(current_user);
+            user_hocky = new Gson().fromJson(cUser.getHocky(), ObjectUserHocKy.class);
             if(cUser != null){
                 hocTapAdapter.removeAll();
                 for(int i=0; i<Integer.parseInt(cUser.getNamhoc()); i++){

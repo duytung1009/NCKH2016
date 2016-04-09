@@ -44,15 +44,17 @@ public class FragmentQuaTrinhHocTap extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các giá trị Preferences của Activity
-    public static final String PREFS_STATE = "saved_state";
+    public static final String PREFS_STATE = "saved_state_quatrinhhoctap_fragment";
     public static final String SUB_PREFS_TONGTINCHI = "tongTinChi";
     public static final String SUB_PREFS_TONGDIEM = "tongDiem";
+    public static final String SUB_PREFS_TONGTINCHINGANH = "tongTinChiNganh";
     public static final String SUB_PREFS_YDATA = "yData";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
     private int tongTinChi;
     private Double tongDiem;
     private int[] yData;
+    private int tongTinChiNganh;//
     //các asynctask
     MainTask mainTask;
     //các view
@@ -159,6 +161,9 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         if(tongDiem == null || tongDiem.isNaN()){
             tongDiem = Double.parseDouble(state.getString(SUB_PREFS_TONGDIEM, tongDiem.toString()));
         }
+        if(tongTinChiNganh == 0){
+            tongTinChiNganh = state.getInt(SUB_PREFS_TONGTINCHINGANH, 0);
+        }
         if(yData == null || yData.length == 0){
             yData = new Gson().fromJson(state.getString(SUB_PREFS_YDATA, null), int[].class);
         }
@@ -172,6 +177,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         SharedPreferences.Editor editor = state.edit();
         editor.putInt(SUB_PREFS_TONGTINCHI, tongTinChi);
         editor.putString(SUB_PREFS_TONGDIEM, tongDiem.toString());
+        editor.putInt(SUB_PREFS_TONGTINCHINGANH, tongTinChiNganh);
         editor.putString(SUB_PREFS_YDATA, new Gson().toJson(yData));
         editor.apply();
     }

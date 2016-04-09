@@ -38,8 +38,9 @@
     <string name="main_activity_tab2_name">điểm số</string>
     <string name="main_activity_tab3_name">niên giám</string>
 
-    <string name="mon_hoc_chua_qua_activity_tab1_name">môn học chưa qua</string>
-    <string name="mon_hoc_chua_qua_activity_tab2_name">môn học cải thiện</string>
+    <string name="mon_hoc_chua_qua_activity_tab1_name">giáo dục thể chất</string>
+    <string name="mon_hoc_chua_qua_activity_tab2_name">môn học chưa qua</string>
+    <string name="mon_hoc_chua_qua_activity_tab3_name">môn học cải thiện</string>
 
     <string name="title_activity_main">Màn hình chính</string>
     <string name="title_activity_search_result">Kết quả tìm kiếm</string>

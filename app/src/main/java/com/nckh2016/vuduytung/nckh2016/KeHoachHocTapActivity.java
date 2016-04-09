@@ -18,7 +18,7 @@ public class KeHoachHocTapActivity extends BaseActivity {
     private static final String FRAG2 = "frag2";
     private static final String FRAG3 = "frag3";
     //các giá trị Preferences của Activity
-    public static final String PREFS_STATE = "saved_state";
+    public static final String PREFS_STATE = "saved_state_kehoachhoctap_activity";
     public static final String SUB_PREFS_HOCKY = "hocKy";
     //các biến được khôi phục lại nếu app resume
     private ObjectHocKy selectedHocKy;
@@ -65,9 +65,9 @@ public class KeHoachHocTapActivity extends BaseActivity {
         bundle.putInt("namhoc", selectedHocKy.getNamHoc());
         bundle.putInt("hocky", selectedHocKy.getHocKy());
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         Fragment frag2 = new KeHoachHocTap2Fragment();
         frag2.setArguments(bundle);
-        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         ft.addToBackStack(FRAG2);
         ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag2, FRAG2);
         ft.commit();
@@ -82,9 +82,9 @@ public class KeHoachHocTapActivity extends BaseActivity {
         bundle.putInt("user_namhoc", getIntent().getIntExtra("NamHoc", -1));
         bundle.putInt("user_hocky", getIntent().getIntExtra("HocKy", -1));
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         Fragment frag3 = new KeHoachHocTap3Fragment();
         frag3.setArguments(bundle);
-        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         ft.addToBackStack(FRAG3);
         ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag3, FRAG3);
         ft.commit();

@@ -62,7 +62,7 @@ public class BoMonActivity extends AppCompatActivity {
         bundle.putString("MaBoMon", maBoMon);
         bundle.putString("TenBoMon", tenBoMon);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        //ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         Fragment frag2 = new BoMon2Fragment();
         frag2.setArguments(bundle);
         ft.addToBackStack(FRAG2);

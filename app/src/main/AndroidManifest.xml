@@ -86,6 +86,7 @@
         <activity
             android:name=".ChiTietMonHocActivity"
             android:label="@string/title_activity_chi_tiet_mon_hoc"
+            android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

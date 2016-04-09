@@ -43,7 +43,7 @@ public class BangDiemActivity extends BaseActivity {
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các giá trị Preferences của Activity
-    public static final String PREFS_STATE = "saved_state";
+    public static final String PREFS_STATE = "saved_state_bangdiem_activity";
     public static final String SUB_PREFS_MAMONHOC = "maMonHoc";
     public static final String SUB_PREFS_PHOTOURI = "picUri";
     public static final String SUB_PREFS_USERDATA = "userData";

@@ -34,7 +34,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các giá trị Preferences của Activity
-    public static final String PREFS_STATE = "saved_state";
+    public static final String PREFS_STATE = "saved_state_kehoachhoctap2_fragment";
     public static final String SUB_PREFS_CHECKALL = "checkAll";
     public static final String SUB_PREFS_HOCKY = "hocKy";
     //các biến được khôi phục lại nếu app resume
@@ -149,8 +149,8 @@ public class KeHoachHocTap2Fragment extends Fragment {
             chuyenSau = Integer.parseInt(data.getUser(current_user).getMachuyensau());
             mArrayList = data.getChuongTrinhDaoTao(selectedHocKy.getNganh(), selectedHocKy.getNamHoc(), maHocKy, chuyenSau);
         }
-        ArrayList<Object> mMonHocChuaQua = data.getMonHocChuaQua(current_user, mArrayList);
-        monHocAdapter = new AdapterMonHoc2(this, 0, mMonHocChuaQua, current_user);
+        ArrayList<Object> mMonHocCaiThien = data.getMonHocCaiThien(current_user, mArrayList);
+        monHocAdapter = new AdapterMonHoc2(this, 0, mMonHocCaiThien, current_user);
         selectAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -164,6 +164,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
                 }
             }
         });
+        selectAllCheckBox.setChecked(false);
         switch (selectedHocKy.getHocKy()){
             case -3:
             {

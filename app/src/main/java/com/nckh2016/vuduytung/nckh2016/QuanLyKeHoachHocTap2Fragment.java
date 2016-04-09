@@ -42,6 +42,11 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     public static final String SUB_PREFS_DATASINHVIEN = "user_data";
+    //các giá trị Preferences của Activity
+    public static final String PREFS_STATE = "saved_state_quanlykehoachhoctap2_fragment";
+    //các giá trị global
+    private static final String HOCKY = "hocky";
+    private static final String MONHOC = "MaMonHoc";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
     private ObjectUserHocKy userData;
@@ -61,7 +66,6 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,7 +74,8 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         userData = new Gson().fromJson(currentUserData.getString(SUB_PREFS_DATASINHVIEN, null), ObjectUserHocKy.class);
-        selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
+        selectedHocKy = new Gson().fromJson(getArguments().getString(HOCKY), ObjectHocKy.class);
+        //selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
 
         txtThongBao = (TextView)view.findViewById(R.id.txtThongBao);
         imageView = (ImageView)view.findViewById(R.id.imageView);
@@ -86,8 +91,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
-                intent.putExtra("MaMonHoc", ((ObjectMonHoc) userMonHoc.get(position)).getMamh());
-                intent.putExtra("caller", "QuanLyKeHoachHocTapActivity");
+                intent.putExtra(MONHOC, ((ObjectMonHoc) userMonHoc.get(position)).getMamh());
                 startActivity(intent);
             }
         });
@@ -155,12 +159,8 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
             super.onPostExecute(aVoid);
             if(userMonHoc.size() == 0){
                 Utils.switchView(mContext, lvMonHoc, txtThongBao);
-                /*txtThongBao.setVisibility(View.VISIBLE);
-                lvMonHoc.setVisibility(View.GONE);*/
             } else {
                 Utils.switchView(mContext, txtThongBao, lvMonHoc);
-                /*lvMonHoc.setVisibility(View.VISIBLE);
-                txtThongBao.setVisibility(View.GONE);*/
                 mAdapter = new AdapterMonHoc(getContext(), 0);
                 mAdapter.addAll(userMonHoc);
                 lvMonHoc.setAdapter(mAdapter);
@@ -198,7 +198,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                                         SharedPreferences currentUserData = mContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = currentUserData.edit();
                                         editor.putString(SUB_PREFS_DATASINHVIEN, new Gson().toJson(userData));
-                                        editor.commit();
+                                        editor.apply();
                                         SQLiteDataController data = SQLiteDataController.getInstance(getContext());
                                         try {
                                             data.isCreatedDatabase();
@@ -209,7 +209,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                                         updateValues.put(MyContract.UserEntry.COLUMN_HOC_KY, new Gson().toJson(userData));
                                         data.updateNguoiDung(current_user, updateValues);
                                         data.deleteUserData(current_user, selectedHocKy.getHocKy(), selectedHocKy.getNamHoc());
-                                        ((QuanLyKeHoachHocTapActivity) getContext()).loadPreviousFragment();
+                                        ((QuanLyKeHoachHocTapActivity) getContext()).loadFragment1();
                                     } else {
                                         Toast.makeText(getContext(), "Lỗi! xóa thất bại", Toast.LENGTH_SHORT).show();
                                     }

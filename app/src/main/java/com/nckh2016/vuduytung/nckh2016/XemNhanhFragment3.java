@@ -26,12 +26,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link XemNhanhFragment2.OnFragmentInteractionListener} interface
+ * {@link XemNhanhFragment3.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link XemNhanhFragment2#newInstance} factory method to
+ * Use the {@link XemNhanhFragment3#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class XemNhanhFragment2 extends Fragment {
+public class XemNhanhFragment3 extends Fragment {
     //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
@@ -51,7 +51,7 @@ public class XemNhanhFragment2 extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public XemNhanhFragment2() {
+    public XemNhanhFragment3() {
         // Required empty public constructor
     }
 
@@ -61,11 +61,11 @@ public class XemNhanhFragment2 extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment XemNhanhFragment2.
+     * @return A new instance of fragment XemNhanhFragment3.
      */
     // TODO: Rename and change types and number of parameters
-    public static XemNhanhFragment2 newInstance(String param1, String param2) {
-        XemNhanhFragment2 fragment = new XemNhanhFragment2();
+    public static XemNhanhFragment3 newInstance(String param1, String param2) {
+        XemNhanhFragment3 fragment = new XemNhanhFragment3();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -86,7 +86,7 @@ public class XemNhanhFragment2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_xem_nhanh_2, container, false);
+        View view = inflater.inflate(R.layout.fragment_xem_nhanh_3, container, false);
         final SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         SQLiteDataController data = SQLiteDataController.getInstance(getContext());
@@ -96,14 +96,14 @@ public class XemNhanhFragment2 extends Fragment {
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        double diemMin = 0, diemMax = 4;
+        double diemMin = 4, diemMax = 5.5;
         final ArrayList<Object> userMonHocChuaQua = data.getMonHocChuaQua(current_user, diemMin, diemMax);
         AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
         mAdapter.addAll(userMonHocChuaQua);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
-        imageView.setImageResource(R.drawable.high_priority);
-        txtTieuDe.setText("Môn học chưa qua: " + userMonHocChuaQua.size() + " môn");
+        imageView.setImageResource(R.drawable.error);
+        txtTieuDe.setText("Môn học cải thiện: " + userMonHocChuaQua.size() + " môn");
         ListView lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
         lvMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

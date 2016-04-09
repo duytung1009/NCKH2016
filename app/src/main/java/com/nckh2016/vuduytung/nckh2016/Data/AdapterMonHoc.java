@@ -1,15 +1,19 @@
 package com.nckh2016.vuduytung.nckh2016.Data;
 
 import android.content.Context;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.R;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,6 +55,7 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
             if (mObject != null) {
                 ObjectMonHoc mMonHoc = (ObjectMonHoc) mObject;
                 view = LayoutInflater.from(mContext).inflate(R.layout.item_monhoc, parent, false);
+                RelativeLayout itemLayout = (RelativeLayout) view.findViewById(R.id.mainLayout);
                 TextView txtMaMonHoc = (TextView) view.findViewById(R.id.txtMaMonHoc);
                 TextView txtTenMonHoc = (TextView) view.findViewById(R.id.txtTenMonHoc);
                 TextView txtSoTinChi = (TextView) view.findViewById(R.id.txtSoTinChi);
@@ -59,6 +64,19 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
                 ImageView imageViewBangDiem = (ImageView) view.findViewById(R.id.imageViewBangDiem);
                 txtMaMonHoc.setText(mMonHoc.getMamh());
                 txtTenMonHoc.setText(mMonHoc.getTenmh());
+                SQLiteDataController data = SQLiteDataController.getInstance(mContext);
+                try {
+                    data.isCreatedDatabase();
+                } catch (IOException e) {
+                    Log.e("tag", e.getMessage());
+                }
+                if(data.checkMonHocBoQua(mMonHoc.getMamh())){
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        itemLayout.setBackgroundColor(mContext.getColor(R.color.black_overlay_2));
+                    } else {
+                        itemLayout.setBackgroundColor(mContext.getResources().getColor(R.color.black_overlay_2));
+                    }
+                }
                 String soTinChi = "...";
                 if (mMonHoc.getTinchi() != null) {
                     soTinChi = String.valueOf(mMonHoc.getTinchi());

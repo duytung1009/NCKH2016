@@ -35,7 +35,7 @@ public class KeHoachHocTap3Fragment extends Fragment {
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các giá trị Preferences của Activity
-    public static final String PREFS_STATE = "saved_state";
+    public static final String PREFS_STATE = "saved_state_kehoachhoctap3_fragment";
     public static final String SUB_PREFS_HOCKY = "hocKy";
     public static final String SUB_PREFS_USERHOCKY = "userHocKy";
     //các biến được khôi phục lại nếu app resume

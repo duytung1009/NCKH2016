@@ -29,7 +29,7 @@ import android.widget.Toast;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterListFile;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.BufferedReader;

@@ -14,8 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterHocKy;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;

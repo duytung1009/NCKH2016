@@ -24,8 +24,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;

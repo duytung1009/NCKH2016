@@ -7,7 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.google.gson.Gson;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
+import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
 
 public class QuanLyKeHoachHocTapActivity extends BaseActivity {
     //các giá trị Preferences Global

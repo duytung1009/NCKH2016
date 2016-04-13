@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc2;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
@@ -39,8 +39,9 @@ public class KeHoachHocTap2Fragment extends Fragment {
     public static final String SUB_PREFS_HOCKY = "hocKy";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
-    public boolean checkAll = false;
     private ObjectHocKy selectedHocKy;
+    //các biến được khởi tạo lại nếu app resume
+    public boolean checkAll = false;
     //các adapter
     AdapterMonHoc2 monHocAdapter;
     //các view
@@ -164,7 +165,6 @@ public class KeHoachHocTap2Fragment extends Fragment {
                 }
             }
         });
-        selectAllCheckBox.setChecked(false);
         switch (selectedHocKy.getHocKy()){
             case -3:
             {
@@ -220,10 +220,12 @@ public class KeHoachHocTap2Fragment extends Fragment {
         }
         //lấy dữ liệu được lưu lại khi app Paused
         SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
-        checkAll = state.getBoolean(SUB_PREFS_CHECKALL, checkAll);
+        //checkAll = state.getBoolean(SUB_PREFS_CHECKALL, checkAll);
         if(selectedHocKy == null){
             selectedHocKy = new Gson().fromJson(state.getString(SUB_PREFS_HOCKY, null), ObjectHocKy.class);
         }
+        //unchecked all checkbox
+        selectAllCheckBox.setChecked(false);
     }
 
     @Override
@@ -232,7 +234,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
         //lưu dữ liệu ra Preferences
         SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = state.edit();
-        editor.putBoolean(SUB_PREFS_CHECKALL, checkAll);
+        //editor.putBoolean(SUB_PREFS_CHECKALL, checkAll);
         editor.putString(SUB_PREFS_HOCKY, new Gson().toJson(selectedHocKy));
         editor.apply();
     }

@@ -26,8 +26,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserData;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUserData;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

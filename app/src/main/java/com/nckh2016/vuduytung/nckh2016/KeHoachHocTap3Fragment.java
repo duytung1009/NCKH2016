@@ -1,6 +1,7 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,11 +18,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHocNhapDiem;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserData;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUserData;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,7 +71,7 @@ public class KeHoachHocTap3Fragment extends Fragment {
         } catch (IOException e) {
             Log.e("tag", e.getMessage());
         }
-        ArrayList<Object> mArrayList = data.getMonHoc(getArguments().getStringArrayList("mamonhoc"));
+        final ArrayList<Object> mArrayList = data.getMonHoc(getArguments().getStringArrayList("mamonhoc"));
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
         userHocKy = new ObjectHocKy(getArguments().getInt("user_namhoc"), getArguments().getInt("user_hocky"), getArguments().getString("nganh"));
         monHocAdapter = new AdapterMonHocNhapDiem(getActivity(), 0, mArrayList);
@@ -78,6 +81,13 @@ public class KeHoachHocTap3Fragment extends Fragment {
         btnLuuMonHoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ProgressDialog progressInsert = new ProgressDialog(getContext());
+                progressInsert.setMessage("Đang xử lý");
+                progressInsert.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressInsert.setIndeterminate(true);
+                progressInsert.setProgressNumberFormat(null);
+                progressInsert.setProgressPercentFormat(null);
+                progressInsert.show();
                 ArrayList<ObjectUserData> values = new ArrayList<ObjectUserData>();
                 HashMap<String, Float> diemValue = monHocAdapter.getDiem();
                 for (Map.Entry<String, Float> entry : diemValue.entrySet()) {
@@ -91,18 +101,48 @@ public class KeHoachHocTap3Fragment extends Fragment {
                             value.toString()
                     ));
                 }
-                boolean flag = data.insertUserData(values);
-                if (flag) {
-                    getActivity().setResult(1);
-                    ((KeHoachHocTapActivity) getActivity()).finish();
+                //loại học kỳ phụ
+                if(selectedHocKy.getHocKy() == 3 || selectedHocKy.getHocKy() == 4) {
+                    insertDiem(data, values);
                 } else {
-                    Toast.makeText(getContext(), "Lỗi", Toast.LENGTH_SHORT).show();
+                    //loại học kỳ cuối - 2 điều kiện xử lý cho ngành học 4 năm và ngành học 5 năm (đáng ra phải đưa phần này vào trong database cơ mà lười...)
+                    if(((selectedHocKy.getNamHoc() == 5 && selectedHocKy.getHocKy() == 2)) ||
+                            ((selectedHocKy.getNganh().equals("701") || selectedHocKy.getNganh().equals("702")) && selectedHocKy.getNamHoc() == 4 && selectedHocKy.getHocKy() == 2)){
+                        insertDiem(data, values);
+                    } else {
+                        double tongDiem = data.tongDiem(current_user);
+                        if(tongDiem < 2){
+                            int tinChi = 0;
+                            for(Object value : mArrayList){
+                                tinChi += ((ObjectMonHoc)value).getTinchi();
+                            }
+                            tinChi += ((KeHoachHocTapActivity)getActivity()).tinChiHocKy;
+                            if(tinChi > 14){
+                                Toast.makeText(getContext(), "Đăng ký quá giới hạn 14 tín chỉ\nTổng điểm hiện tại: " + String.valueOf(new DecimalFormat("####0.00").format(tongDiem)), Toast.LENGTH_SHORT).show();
+                            } else {
+                                insertDiem(data, values);
+                            }
+                        } else {
+                            insertDiem(data, values);
+                        }
+                    }
                 }
+                progressInsert.dismiss();
             }
         });
         imageView.setImageResource(R.drawable.edit);
         txtTieuDe.setText(R.string.txtNhapDiem);
         return view;
+    }
+
+    private void insertDiem(SQLiteDataController mData, ArrayList<ObjectUserData> values){
+        boolean flag = mData.insertUserData(values);
+        if (flag) {
+            getActivity().setResult(1);
+            getActivity().finish();
+        } else {
+            Toast.makeText(getContext(), "Lỗi", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

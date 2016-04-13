@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectMonHoc;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;

@@ -13,7 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.LinearLayout;
 
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectCTDT;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectCTDT;
 
 public class NganhActivity extends AppCompatActivity {
     //các giá trị để dùng load Fragment

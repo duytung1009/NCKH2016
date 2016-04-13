@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.QuanLyKeHoachHocTapActivity;
 import com.nckh2016.vuduytung.nckh2016.R;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUserHocKy;
 
 import java.io.IOException;
 import java.text.DecimalFormat;

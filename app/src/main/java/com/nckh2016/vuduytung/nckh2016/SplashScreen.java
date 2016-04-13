@@ -36,22 +36,6 @@ public class SplashScreen extends AppCompatActivity {
         FrameLayout mainLayout = (FrameLayout)findViewById(R.id.mainLayout);
         mainLayout.setLayoutTransition(new LayoutTransition());
 
-        /*Thread timerThread = new Thread(){
-            public void run(){
-                try{
-                    sleep(SPLASH_TIME_OUT);
-                }catch(InterruptedException e){
-                    e.printStackTrace();
-                }finally{
-                    Intent intent = new Intent(SplashScreen.this,MainActivity.class);
-                    startActivity(intent);
-                    // close this activity
-                    finish();
-                }
-            }
-        };
-        timerThread.start();*/
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

@@ -1,9 +1,9 @@
-package com.nckh2016.vuduytung.nckh2016.Data;
+package com.nckh2016.vuduytung.nckh2016.object;
 
 /**
  * Created by Tung on 24/2/2016.
  */
-public class ObjectMonHoc implements Items{
+public class ObjectMonHoc implements Items {
     String mamh;
     String mabm;
     String tenmh;

@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.R;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 
 import java.util.ArrayList;
 

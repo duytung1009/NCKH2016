@@ -24,14 +24,16 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectMonHoc;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserHocKy;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUserHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -116,6 +118,11 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
     }
 
     public void refreshView(){
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
+        }
         mainTask = new MainTask(getContext());
         mainTask.execute();
     }
@@ -167,9 +174,14 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
             }
             int tongTC = 0;
             for(Object value : userMonHoc){
-                tongTC += ((ObjectMonHoc)value).getTinchi();
+                String[] danhSachBoQua = new String[] {"4010701","4010702","4010703","4010704","4010705","4080508","4080509"};
+                List<String> listBoQua = Arrays.asList(danhSachBoQua);
+                if(!listBoQua.contains(((ObjectMonHoc)value).getMamh())) {
+                    tongTC += ((ObjectMonHoc)value).getTinchi();
+                }
             }
             String tongTinChi = String.valueOf(tongTC);
+            final int finalTongTC = tongTC;
             txtTongTinChi.setText(tongTinChi);
             btnThemMonHoc.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -179,6 +191,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                     intent.putExtra("ChuyenSau", tenChuyenSau);
                     intent.putExtra("HocKy", selectedHocKy.getHocKy());
                     intent.putExtra("NamHoc", selectedHocKy.getNamHoc());
+                    intent.putExtra("TinChi", finalTongTC);
                     startActivityForResult(intent, 1);
                 }
             });

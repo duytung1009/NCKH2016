@@ -8,7 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 
 import com.google.gson.Gson;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
+import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ public class KeHoachHocTapActivity extends BaseActivity {
     public static final String SUB_PREFS_HOCKY = "hocKy";
     //các biến được khôi phục lại nếu app resume
     private ObjectHocKy selectedHocKy;
+    public int tinChiHocKy = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class KeHoachHocTapActivity extends BaseActivity {
         super.onResume();
         String tenNganh = getIntent().getStringExtra("Nganh");
         String tenChuyenSau = getIntent().getStringExtra("ChuyenSau");
+        tinChiHocKy = getIntent().getIntExtra("TinChi", 0);
         ActionBar ab = getSupportActionBar();
         try{
             ab.setTitle(tenNganh);

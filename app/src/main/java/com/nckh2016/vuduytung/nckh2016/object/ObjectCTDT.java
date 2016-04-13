@@ -1,9 +1,9 @@
-package com.nckh2016.vuduytung.nckh2016.Data;
+package com.nckh2016.vuduytung.nckh2016.object;
 
 /**
  * Created by Tung on 3/3/2016.
  */
-public class ObjectCTDT implements Items{
+public class ObjectCTDT implements Items {
     String mabm;
     String mamh;
     int hocky;

@@ -19,11 +19,11 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectChuyenSau;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectHocKy;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectKhoa;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectNganh;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectUserHocKy;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectChuyenSau;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectKhoa;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectNganh;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUserHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.nckh2016.vuduytung.nckh2016;
+package com.nckh2016.vuduytung.nckh2016.main;
 
 import android.animation.LayoutTransition;
 import android.app.Activity;
@@ -22,6 +22,16 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.nckh2016.vuduytung.nckh2016.BackupActivity;
+import com.nckh2016.vuduytung.nckh2016.BoMonActivity;
+import com.nckh2016.vuduytung.nckh2016.MainActivity;
+import com.nckh2016.vuduytung.nckh2016.NganhActivity;
+import com.nckh2016.vuduytung.nckh2016.QuanLyKeHoachHocTapActivity;
+import com.nckh2016.vuduytung.nckh2016.R;
+import com.nckh2016.vuduytung.nckh2016.SearchResultActivity;
+import com.nckh2016.vuduytung.nckh2016.ThongTinCaNhanActivity;
+import com.nckh2016.vuduytung.nckh2016.XemNhanhActivity;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //các giá trị Preferences Global

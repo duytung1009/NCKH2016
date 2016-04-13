@@ -1,4 +1,4 @@
-package com.nckh2016.vuduytung.nckh2016.Data;
+package com.nckh2016.vuduytung.nckh2016.object;
 
 import java.util.ArrayList;
 

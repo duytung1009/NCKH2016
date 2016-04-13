@@ -11,8 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectBoMon;
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectKhoa;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectBoMon;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectKhoa;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;

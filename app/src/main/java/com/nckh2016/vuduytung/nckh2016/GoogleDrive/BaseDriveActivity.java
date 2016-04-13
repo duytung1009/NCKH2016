@@ -10,7 +10,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
-import com.nckh2016.vuduytung.nckh2016.BaseActivity;
+import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
 
 /**
  * Created by Tung on 21/3/2016.

@@ -1,16 +1,20 @@
 package com.nckh2016.vuduytung.nckh2016;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.nckh2016.vuduytung.nckh2016.Data.ObjectUser;
+import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 
 import java.io.IOException;
 
@@ -20,11 +24,13 @@ public class ThongTinCaNhanActivity extends BaseActivity {
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
+    private ObjectUser objectUser;
     //các asynctask
     MainTask mainTask;
     //các view
     TextView txtMaSinhVien, txtTenSinhVien, txtKhoa, txtNganh, txtChuyenSau, txtNamThu;
-    Button btnUpdate;
+    Button btnAddYear;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +42,30 @@ public class ThongTinCaNhanActivity extends BaseActivity {
         txtNganh = (TextView)findViewById(R.id.txtNganh);
         txtChuyenSau = (TextView)findViewById(R.id.txtChuyenSau);
         txtNamThu = (TextView)findViewById(R.id.txtNamThu);
-        btnUpdate = (Button)findViewById(R.id.btnUpdate);
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
+        fab = (FloatingActionButton)findViewById(R.id.fab);
+        btnAddYear = (Button)findViewById(R.id.btnAddYear);
+        btnAddYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(current_user != null && objectUser != null){
+                    SQLiteDataController data = SQLiteDataController.getInstance(getApplicationContext());
+                    try{
+                        data.isCreatedDatabase();
+                    }
+                    catch (IOException e){
+                        Log.e("tag", e.getMessage());
+                    }
+                    ContentValues newData = new ContentValues();
+                    newData.put(MyContract.UserEntry.COLUMN_NAM_HOC, (Integer.parseInt(objectUser.getNamhoc()) + 1));
+                    data.updateNguoiDung(current_user, newData);
+                    if(mainTask != null){
+                        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                            mainTask.cancel(true);
+                        }
+                    }
+                    mainTask = new MainTask(getApplicationContext());
+                    mainTask.execute();
+                }
             }
         });
     }
@@ -88,7 +113,7 @@ public class ThongTinCaNhanActivity extends BaseActivity {
             catch (IOException e){
                 Log.e("tag", e.getMessage());
             }
-            ObjectUser objectUser = data.getUser(current_user);
+            objectUser = data.getUser(current_user);
             tenKhoa = data.getTenKhoa(objectUser.getMakhoa());
             tenNganh = data.getTenNganh(objectUser.getManganh());
             tenChuyenSau = data.getTenChuyenSau(objectUser.getManganh(), Integer.parseInt(objectUser.getMachuyensau()));
@@ -103,6 +128,9 @@ public class ThongTinCaNhanActivity extends BaseActivity {
         @Override
         protected void onPostExecute(ObjectUser objectUser) {
             super.onPostExecute(objectUser);
+            if(objectUser.getNamhoc().equals("5") || (objectUser.getNamhoc().equals("4") && objectUser.getMakhoa().equals("7"))){
+                btnAddYear.setVisibility(View.GONE);
+            }
             txtMaSinhVien.setText(objectUser.getMasv());
             txtTenSinhVien.setText(objectUser.getHoten());
             txtKhoa.setText(tenKhoa);

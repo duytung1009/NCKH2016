@@ -1,5 +1,9 @@
 package com.nckh2016.vuduytung.nckh2016;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,11 +12,17 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.animation.AnimatorPath;
+import com.nckh2016.vuduytung.nckh2016.animation.PathEvaluator;
 import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 
@@ -30,19 +40,36 @@ public class ThongTinCaNhanActivity extends BaseActivity {
     //các view
     TextView txtMaSinhVien, txtTenSinhVien, txtKhoa, txtNganh, txtChuyenSau, txtNamThu;
     Button btnAddYear;
-    FloatingActionButton fab;
+    FloatingActionButton mFab;
+    //test
+    private FrameLayout mFabContainer;
+    private LinearLayout mControlsContainer;
+    private boolean mRevealFlag;
+    public final static float SCALE_FACTOR      = 20f;
+    public final static int ANIMATION_DURATION  = 300;
+    public final static int MINIMUN_X_DISTANCE  = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_thong_tin_ca_nhan);
+        //test
+        mFabContainer = (FrameLayout) findViewById(R.id.fab_container);
+        mControlsContainer = (LinearLayout)findViewById(R.id.layout1);
+
         txtMaSinhVien = (TextView)findViewById(R.id.txtMaSinhVien);
         txtTenSinhVien = (TextView)findViewById(R.id.txtTenSinhVien);
         txtKhoa = (TextView)findViewById(R.id.txtKhoa);
         txtNganh = (TextView)findViewById(R.id.txtNganh);
         txtChuyenSau = (TextView)findViewById(R.id.txtChuyenSau);
         txtNamThu = (TextView)findViewById(R.id.txtNamThu);
-        fab = (FloatingActionButton)findViewById(R.id.fab);
+        mFab = (FloatingActionButton)findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFabPressed(v);
+            }
+        });
         btnAddYear = (Button)findViewById(R.id.btnAddYear);
         btnAddYear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +117,59 @@ public class ThongTinCaNhanActivity extends BaseActivity {
             }
         }
     }
+
+    public void onFabPressed(View view) {
+        final float startX = mFab.getX();
+
+        AnimatorPath path = new AnimatorPath();
+        path.moveTo(0, 0);
+        path.curveTo(-200, 200, -400, 100, -600, 50);
+
+        final ObjectAnimator anim = ObjectAnimator.ofObject(this, "fabLoc",
+                new PathEvaluator(), path.getPoints().toArray());
+
+        anim.setInterpolator(new AccelerateInterpolator());
+        anim.setDuration(ANIMATION_DURATION);
+        anim.start();
+
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if (Math.abs(startX - mFab.getX()) > MINIMUN_X_DISTANCE) {
+                    if (!mRevealFlag) {
+                        mFab.animate()
+                                .scaleXBy(SCALE_FACTOR)
+                                .scaleYBy(SCALE_FACTOR)
+                                .setListener(mEndRevealListener)
+                                .setDuration(ANIMATION_DURATION);
+
+                        mRevealFlag = true;
+                    }
+                }
+            }
+        });
+    }
+
+    private AnimatorListenerAdapter mEndRevealListener = new AnimatorListenerAdapter() {
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            super.onAnimationEnd(animation);
+
+            mFab.setVisibility(View.INVISIBLE);
+
+            for (int i = 0; i < mControlsContainer.getChildCount(); i++) {
+                View v = mControlsContainer.getChildAt(i);
+                ViewPropertyAnimator animator = v.animate()
+                        .scaleX(1).scaleY(1)
+                        .setDuration(ANIMATION_DURATION);
+
+                animator.setStartDelay(i * 50);
+                animator.start();
+            }
+        }
+    };
 
     private class MainTask extends AsyncTask<Void, Long, ObjectUser>{
         private Context mContext;

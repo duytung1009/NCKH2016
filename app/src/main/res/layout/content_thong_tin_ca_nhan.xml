@@ -20,7 +20,7 @@
                 android:id="@+id/topLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:background="@drawable/humg_background"
                 android:padding="20dp">
 
@@ -45,82 +45,92 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/layout1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/txtKhoa"
+                            style="@style/normalText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@+id/txtNganh"
+                            android:padding="10dp" />
+
+                        <TextView
+                            android:id="@+id/txtNganh"
+                            style="@style/normalText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:padding="10dp" />
+
+                        <TextView
+                            android:id="@+id/txtChuyenSau"
+                            style="@style/normalText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txtNganh"
+                            android:padding="10dp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/normalText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/txtNamThu"
+                            android:layout_centerHorizontal="true"
+                            android:text="@string/txtNam" />
+
+                        <TextView
+                            android:id="@+id/txtNamThu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:fontFamily="sans-serif-thin"
+                            android:text="0"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="112sp" />
+                    </RelativeLayout>
+                </LinearLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
-                    <TextView
-                        android:id="@+id/txtKhoa"
-                        style="@style/normalText"
-                        android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/btnAddYear"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_above="@+id/txtNganh"
-                        android:padding="10dp" />
-
-                    <TextView
-                        android:id="@+id/txtNganh"
-                        style="@style/normalText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:padding="10dp" />
-
-                    <TextView
-                        android:id="@+id/txtChuyenSau"
-                        style="@style/normalText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/txtNganh"
-                        android:padding="10dp" />
+                        android:layout_alignParentBottom="true"
+                        android:padding="20dp"
+                        android:text="@string/txtAddYear"
+                        android:textColor="@color/white" />
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/normalText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_alignTop="@+id/txtNamThu"
-                        android:text="@string/txtNam" />
-                    <TextView
-                        android:id="@+id/txtNamThu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:fontFamily="sans-serif-thin"
-                        android:text="0"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="112sp" />
-                </RelativeLayout>
             </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <Button
-                    android:id="@+id/btnAddYear"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:padding="20dp"
-                    android:text="@string/txtAddYear"
-                    android:textColor="@color/white"/>
-
-            </RelativeLayout>
 
         </LinearLayout>
 
@@ -128,12 +138,15 @@
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/activity_horizontal_margin"
             android:clickable="true"
             android:src="@drawable/edit_mode"
+            app:backgroundTint="@color/tuchonC"
             app:layout_anchor="@id/topLayout"
-            app:layout_anchorGravity="bottom|right|end"/>
+            app:layout_anchorGravity="bottom|right|end" />
 
     </android.support.design.widget.CoordinatorLayout>
+
+    <include layout="@layout/fragment_cap_nhat_thong_tin_ca_nhan" />
 
 </FrameLayout>

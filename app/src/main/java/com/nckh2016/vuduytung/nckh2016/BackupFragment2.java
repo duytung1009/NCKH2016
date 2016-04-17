@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +84,7 @@ public class BackupFragment2 extends BaseDriveFragment {
     CircularProgressView progressBar;
     SwipeRefreshLayout swipeContainer;
     ListView mResultsListView;
+    RelativeLayout mainLayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -124,6 +126,7 @@ public class BackupFragment2 extends BaseDriveFragment {
         View view = inflater.inflate(R.layout.fragment_backup_fragment_2, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        mainLayout = (RelativeLayout)view.findViewById(R.id.mainLayout);
         progressBar = (CircularProgressView) view.findViewById(R.id.progressBar);
         mResultsListView = (ListView) view.findViewById(R.id.listViewResults);
         mResultsAdapter = new ResultsAdapter(getContext(), BackupFragment2.this);
@@ -141,7 +144,7 @@ public class BackupFragment2 extends BaseDriveFragment {
                         loadingTask.cancel(true);
                     }
                 }
-                Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mResultsListView);
+                Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mainLayout);
                 loadingTask = new LoadingTask(getContext().getApplicationContext());
                 loadingTask.execute();
             }
@@ -235,7 +238,7 @@ public class BackupFragment2 extends BaseDriveFragment {
     @Override
     public void onConnected(Bundle connectionHint) {
         super.onConnected(connectionHint);
-        Utils.showProcessBar(getContext(), progressBar, mResultsListView);
+        Utils.showProcessBar(getContext(), progressBar, mainLayout);
         loadingTask = new LoadingTask(getContext());
         loadingTask.execute();
     }
@@ -307,7 +310,7 @@ public class BackupFragment2 extends BaseDriveFragment {
                         if(loadingTask.getStatus() == AsyncTask.Status.RUNNING) {
                             loadingTask.cancel(true);
                         }
-                        Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mResultsListView);
+                        Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mainLayout);
                         loadingTask = new LoadingTask(getContext().getApplicationContext());
                         loadingTask.execute();
                     }
@@ -388,7 +391,7 @@ public class BackupFragment2 extends BaseDriveFragment {
                 }
             }
             progressUpload.dismiss();
-            Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mResultsListView);
+            Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mainLayout);
             loadingTask = new LoadingTask(getContext().getApplicationContext());
             loadingTask.execute();
         }
@@ -426,7 +429,7 @@ public class BackupFragment2 extends BaseDriveFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Utils.hideProcessBar(mContext, progressBar, mResultsListView);
+            Utils.hideProcessBar(mContext, progressBar, mainLayout);
             swipeContainer.setRefreshing(false);
         }
     }

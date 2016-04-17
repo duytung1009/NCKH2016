@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +76,7 @@ public class BackupFragment1 extends Fragment {
     CircularProgressView progressBar;
     SwipeRefreshLayout swipeContainer;
     ListView listViewFile;
+    RelativeLayout mainLayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -116,6 +118,7 @@ public class BackupFragment1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_backup_fragment_1, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        mainLayout = (RelativeLayout)view.findViewById(R.id.mainLayout);
         progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
         final SQLiteDataController data = SQLiteDataController.getInstance(getContext());
         try{
@@ -140,7 +143,7 @@ public class BackupFragment1 extends Fragment {
                         mainTask.cancel(true);
                     }
                 }
-                Utils.showProcessBar(getContext(), progressBar, listViewFile);
+                Utils.showProcessBar(getContext(), progressBar, mainLayout);
                 mainTask = new MainTask(getContext());
                 mainTask.execute();
             }
@@ -165,7 +168,7 @@ public class BackupFragment1 extends Fragment {
                                     if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
                                     } else {
-                                        Utils.hideProcessBar(getContext(), progressBar, listViewFile);
+                                        Utils.hideProcessBar(getContext(), progressBar, mainLayout);
                                         Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
@@ -200,7 +203,7 @@ public class BackupFragment1 extends Fragment {
                                     if (mainTask.getStatus() == AsyncTask.Status.RUNNING) {
                                         mainTask.cancel(true);
                                     }
-                                    Utils.showProcessBar(getContext(), progressBar, listViewFile);
+                                    Utils.showProcessBar(getContext(), progressBar, mainLayout);
                                     mainTask = new MainTask(getContext());
                                     mainTask.execute();
                                 }
@@ -259,22 +262,22 @@ public class BackupFragment1 extends Fragment {
                         mainTask.cancel(true);
                     }
                     progressBackup.dismiss();
-                    Utils.showProcessBar(getContext(), progressBar, listViewFile);
+                    Utils.showProcessBar(getContext(), progressBar, mainLayout);
                     mainTask = new MainTask(getContext());
                     mainTask.execute();
                     Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionWriteSuccess) + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
                 } else {
-                    Utils.hideProcessBar(getContext(), progressBar, listViewFile);
+                    Utils.hideProcessBar(getContext(), progressBar, mainLayout);
                     Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
                 }
             }
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:{
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Utils.showProcessBar(getContext(), progressBar, listViewFile);
+                    Utils.showProcessBar(getContext(), progressBar, mainLayout);
                     mainTask = new MainTask(getContext());
                     mainTask.execute();
                 } else {
-                    Utils.hideProcessBar(getContext(), progressBar, listViewFile);
+                    Utils.hideProcessBar(getContext(), progressBar, mainLayout);
                     Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -288,11 +291,11 @@ public class BackupFragment1 extends Fragment {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             } else {
-                Utils.hideProcessBar(getContext(), progressBar, listViewFile);
+                Utils.hideProcessBar(getContext(), progressBar, mainLayout);
                 Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Utils.showProcessBar(getContext(), progressBar, listViewFile);
+            Utils.showProcessBar(getContext(), progressBar, mainLayout);
             mainTask = new MainTask(getContext());
             mainTask.execute();
         }
@@ -418,7 +421,7 @@ public class BackupFragment1 extends Fragment {
                     mainTask.cancel(true);
                 }
             }
-            Utils.showProcessBar(getContext(), progressBar, listViewFile);
+            Utils.showProcessBar(getContext(), progressBar, mainLayout);
             mainTask = new MainTask(getContext());
             mainTask.execute();
         } else {
@@ -455,7 +458,7 @@ public class BackupFragment1 extends Fragment {
             super.onPostExecute(aVoid);
             adapterListFile.clear();
             adapterListFile.addAll(listFile);
-            Utils.hideProcessBar(mContext, progressBar, listViewFile);
+            Utils.hideProcessBar(mContext, progressBar, mainLayout);
             swipeContainer.setRefreshing(false);
             if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();

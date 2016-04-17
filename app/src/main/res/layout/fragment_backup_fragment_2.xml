@@ -5,75 +5,76 @@
     android:layout_height="match_parent"
     tools:context="com.nckh2016.vuduytung.nckh2016.BackupFragment2">
 
-    <RelativeLayout
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/swipeContainer"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/bottomLayout">
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <include layout="@layout/item_title" />
+
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/layoutTieuDe"
+                android:background="#c0c0c0" />
+
+            <RelativeLayout
+                android:id="@+id/mainLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/line"
-                android:orientation="vertical">
-
-                <include layout="@layout/item_title" />
-
-                <View
-                    android:id="@+id/line"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#c0c0c0" />
+                android:layout_below="@+id/line">
 
                 <ListView
                     android:id="@+id/listViewResults"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/bottomLayout"/>
 
-            </LinearLayout>
+                <com.github.rahatarmanahmed.cpv.CircularProgressView
+                    android:id="@+id/progressBar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    app:cpv_animAutostart="true"
+                    app:cpv_color="@color/colorPrimary"
+                    app:cpv_indeterminate="true" />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+                <LinearLayout
+                    android:id="@+id/bottomLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="horizontal">
 
-        <com.github.rahatarmanahmed.cpv.CircularProgressView
-            android:id="@+id/progressBar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerInParent="true"
-            app:cpv_animAutostart="true"
-            app:cpv_color="@color/colorPrimary"
-            app:cpv_indeterminate="true" />
+                    <Button
+                        android:id="@+id/btnSwitch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:text="@string/txtSwitchAccount"
+                        android:textColor="@color/white" />
 
-        <LinearLayout
-            android:id="@+id/bottomLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentBottom="true">
+                    <Button
+                        android:id="@+id/btnBackup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:text="@string/txtSaoLuu"
+                        android:textColor="@color/white" />
 
-            <Button
-                android:id="@+id/btnSwitch"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="20dp"
-                android:text="@string/txtSwitchAccount"
-                android:textColor="@color/white" />
+                </LinearLayout>
 
-            <Button
-                android:id="@+id/btnBackup"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="20dp"
-                android:text="@string/txtSaoLuu"
-                android:textColor="@color/white" />
+            </RelativeLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
 
-    </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-</FrameLayout>
+ </FrameLayout>

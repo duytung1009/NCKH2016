@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nckh2016.vuduytung.nckh2016.BackupActivity;
 import com.nckh2016.vuduytung.nckh2016.BoMonActivity;
@@ -97,6 +98,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
+        updateNavigationView();
         //lấy dữ liệu Global
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         current_user_hoten = currentUserData.getString(SUB_PREFS_TENSINHVIEN, null);
@@ -105,14 +107,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     public void updateNavigationView(){
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        View headerView = navigationView.getHeaderView(0);
+        TextView txtNavTenSinhVien = (TextView) headerView.findViewById(R.id.txtNavTenSinhVien);
+        TextView txtNavMaSinhVien = (TextView) headerView.findViewById(R.id.txtNavMaSinhVien);
         if(currentUserData.getString(SUB_PREFS_MASINHVIEN, null) != null){
             current_user_hoten = currentUserData.getString(SUB_PREFS_TENSINHVIEN, null);
             current_user_masv = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
-            View headerView = navigationView.getHeaderView(0);
-            TextView txtNavTenSinhVien = (TextView) headerView.findViewById(R.id.txtNavTenSinhVien);
-            TextView txtNavMaSinhVien = (TextView) headerView.findViewById(R.id.txtNavMaSinhVien);
             txtNavTenSinhVien.setText(current_user_hoten);
             txtNavMaSinhVien.setText(current_user_masv);
+        } else {
+            String hoten = getResources().getString(R.string.txthoten);
+            String masinhvien = getResources().getString(R.string.txtmasinhvien);
+            txtNavTenSinhVien.setText(hoten);
+            txtNavMaSinhVien.setText(masinhvien);
         }
     }
 
@@ -181,40 +188,60 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             toggle.runWhenIdle(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(BaseActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    if(current_user_masv == null){
+                        Toast.makeText(getApplicationContext(), "Bạn cần tạo hồ sơ trước", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(BaseActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 }
             });
         } else if (id == R.id.nav_1) {
             toggle.runWhenIdle(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(BaseActivity.this, ThongTinCaNhanActivity.class);
-                    startActivity(intent);
+                    if(current_user_masv == null){
+                        Toast.makeText(getApplicationContext(), "Bạn cần tạo hồ sơ trước", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(BaseActivity.this, ThongTinCaNhanActivity.class);
+                        startActivity(intent);
+                    }
                 }
             });
         } else if (id == R.id.nav_2) {
             toggle.runWhenIdle(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(BaseActivity.this, QuanLyKeHoachHocTapActivity.class);
-                    startActivity(intent);
+                    if(current_user_masv == null){
+                        Toast.makeText(getApplicationContext(), "Bạn cần tạo hồ sơ trước", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(BaseActivity.this, QuanLyKeHoachHocTapActivity.class);
+                        startActivity(intent);
+                    }
                 }
             });
         } else if (id == R.id.nav_3) {
             toggle.runWhenIdle(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(BaseActivity.this, XemNhanhActivity.class);
-                    startActivity(intent);
+                    if(current_user_masv == null){
+                        Toast.makeText(getApplicationContext(), "Bạn cần tạo hồ sơ trước", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(BaseActivity.this, XemNhanhActivity.class);
+                        startActivity(intent);
+                    }
                 }
             });
         } else if (id == R.id.nav_4) {
             toggle.runWhenIdle(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(BaseActivity.this, BackupActivity.class);
-                    startActivity(intent);
+                    if(current_user_masv == null){
+                        Toast.makeText(getApplicationContext(), "Bạn cần tạo hồ sơ trước", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(BaseActivity.this, BackupActivity.class);
+                        startActivity(intent);
+                    }
                 }
             });
         } /*else if (id == R.id.nav_5) {

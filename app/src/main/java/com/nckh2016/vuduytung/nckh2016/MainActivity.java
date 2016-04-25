@@ -276,6 +276,7 @@ public class MainActivity extends BaseActivity
             Utils.showProcessBar(this, progressBar, viewPager);
             mainTask = new MainTask(this);
             mainTask.execute();
+            updateNavigationView();
         }
     }
 

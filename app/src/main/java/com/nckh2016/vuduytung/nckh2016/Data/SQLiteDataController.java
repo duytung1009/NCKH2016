@@ -1772,6 +1772,51 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     /**
+     * lấy danh sách các môn đang học
+     * @param masv mã sinh viên (String)
+     * @return
+     */
+    public ArrayList<Object> getMonDangHoc(String masv){
+        ArrayList<Object> result = new ArrayList<Object>();
+        Cursor mCursor = null;
+        String dangHoc = "'-1'";
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT " + MonHocEntry.TABLE_NAME + ".*,"
+                    + UserDataEntry.COLUMN_DIEM_SO + "," + UserDataEntry.COLUMN_BANG_DIEM
+                    + " FROM " + UserDataEntry.TABLE_NAME
+                    + " LEFT JOIN " + MonHocEntry.TABLE_NAME
+                    + " ON " + UserDataEntry.TABLE_NAME + "." + UserDataEntry.COLUMN_MA_MON_HOC + " = " + MonHocEntry.TABLE_NAME + "." + MonHocEntry.COLUMN_MA_MON_HOC
+                    + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = '" + masv + "'"
+                    + " AND " + UserDataEntry.COLUMN_DIEM_SO + " = " + dangHoc, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectMonHoc(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_MA_BO_MON)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TEN_MON_HOC)),
+                            mCursor.getInt(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TIN_CHI)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_DIEU_KIEN)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_NOI_DUNG)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(MonHocEntry.COLUMN_TAI_LIEU)),
+                            null,
+                            mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)),
+                            (mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM)) != null)
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(mCursor != null){
+                mCursor.close();
+            }
+            //close();
+        }
+        return result;
+    }
+
+    /**
      * lấy danh sách môn học chưa qua (điểm số tùy biến)
      * @param masv mã sinh viên (String)
      * @param diemMin điểm số làm mốc dưới (Double)

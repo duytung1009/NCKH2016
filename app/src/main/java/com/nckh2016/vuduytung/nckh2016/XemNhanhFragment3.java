@@ -97,19 +97,19 @@ public class XemNhanhFragment3 extends Fragment {
             Log.e("tag", e.getMessage());
         }
         double diemMin = 4, diemMax = 5.5;
-        final ArrayList<Object> userMonHocChuaQua = data.getMonHocChuaQua(current_user, diemMin, diemMax);
+        final ArrayList<Object> userMonHocCaiThien = data.getMonHocChuaQua(current_user, diemMin, diemMax);
         AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
-        mAdapter.addAll(userMonHocChuaQua);
+        mAdapter.addAll(userMonHocCaiThien);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         imageView.setImageResource(R.drawable.error);
-        txtTieuDe.setText("Môn học cải thiện: " + userMonHocChuaQua.size() + " môn");
+        txtTieuDe.setText("Môn học cải thiện: " + userMonHocCaiThien.size() + " môn");
         ListView lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
         lvMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
-                intent.putExtra(MONHOC, ((ObjectMonHoc) userMonHocChuaQua.get(position)).getMamh());
+                intent.putExtra(MONHOC, ((ObjectMonHoc) userMonHocCaiThien.get(position)).getMamh());
                 startActivity(intent);
             }
         });

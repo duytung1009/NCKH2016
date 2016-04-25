@@ -15,6 +15,8 @@
     <string name="editmasv">mã sinh viên</string>
     <string name="edithoten">họ và tên</string>
     <string name="editemail">email</string>
+    <string name="txthoten">họ tên</string>
+    <string name="txtmasinhvien">mã sinh viên</string>
 
     <string name="btn_1_fragment_nguoidung">Thông tin cá nhân</string>
     <string name="btn_2_fragment_nguoidung">Kế hoạch học tập</string>
@@ -39,9 +41,10 @@
     <string name="main_activity_tab2_name">điểm số</string>
     <string name="main_activity_tab3_name">niên giám</string>
 
-    <string name="mon_hoc_chua_qua_activity_tab1_name">giáo dục\nthể chất</string>
+    <string name="mon_hoc_chua_qua_activity_tab1_name">môn\nđang học</string>
     <string name="mon_hoc_chua_qua_activity_tab2_name">môn học\nchưa qua</string>
     <string name="mon_hoc_chua_qua_activity_tab3_name">môn học\ncải thiện</string>
+    <string name="mon_hoc_chua_qua_activity_tab4_name">giáo dục\nthể chất</string>
 
     <string name="title_activity_main">Màn hình chính</string>
     <string name="title_activity_search_result">Kết quả tìm kiếm</string>

@@ -392,6 +392,7 @@ public class BackupFragment1 extends Fragment {
                 Toast.makeText(getContext(), "Không thể đọc dữ liệu từ tệp đã chọn", Toast.LENGTH_SHORT).show();
             } else {
                 if (data.insertUser(user)) {
+                    ((BackupActivity)getActivity()).updateNavigationView();
                     Toast.makeText(getContext(), "Đã khôi phục", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Khôi phục thất bại", Toast.LENGTH_SHORT).show();

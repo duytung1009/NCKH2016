@@ -16,22 +16,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
-import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
+import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link XemNhanhFragment1.OnFragmentInteractionListener} interface
+ * {@link XemNhanhFragment4.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link XemNhanhFragment1#newInstance} factory method to
+ * Use the {@link XemNhanhFragment4#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class XemNhanhFragment1 extends Fragment {
+public class XemNhanhFragment4 extends Fragment {
     //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
@@ -51,7 +52,7 @@ public class XemNhanhFragment1 extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public XemNhanhFragment1() {
+    public XemNhanhFragment4() {
         // Required empty public constructor
     }
 
@@ -61,11 +62,11 @@ public class XemNhanhFragment1 extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment XemNhanhFragment1.
+     * @return A new instance of fragment XemNhanhFragment4.
      */
     // TODO: Rename and change types and number of parameters
-    public static XemNhanhFragment1 newInstance(String param1, String param2) {
-        XemNhanhFragment1 fragment = new XemNhanhFragment1();
+    public static XemNhanhFragment4 newInstance(String param1, String param2) {
+        XemNhanhFragment4 fragment = new XemNhanhFragment4();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -86,7 +87,7 @@ public class XemNhanhFragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_xem_nhanh_1, container, false);
+        View view = inflater.inflate(R.layout.fragment_xem_nhanh_4, container, false);
         final SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
         SQLiteDataController data = SQLiteDataController.getInstance(getContext());
@@ -96,19 +97,29 @@ public class XemNhanhFragment1 extends Fragment {
         catch (IOException e){
             Log.e("tag", e.getMessage());
         }
-        final ArrayList<Object> userMonDangHoc = data.getMonDangHoc(current_user);
+        final ArrayList<Object> userHocPhanTheDuc = data.getHocPhanTheDuc(current_user);
         AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
-        mAdapter.addAll(userMonDangHoc);
+        mAdapter.addAll(userHocPhanTheDuc);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
-        imageView.setImageResource(R.drawable.learning);
-        txtTieuDe.setText("Môn đang học: " + userMonDangHoc.size() + " môn");
+        imageView.setImageResource(R.drawable.sport);
+        String tieuDe = "";
+        if(userHocPhanTheDuc.size() < 5){
+            tieuDe = "Còn thiếu: " + String.valueOf(5 - userHocPhanTheDuc.size()) + " học phần";
+        } else {
+            double tongDiem = 0;
+            for(Object value : userHocPhanTheDuc){
+                tongDiem += ((ObjectMonHoc)value).getDiem();
+            }
+            tieuDe = "Điểm tổng kết: " + new DecimalFormat("####0.##").format(tongDiem/5);
+        }
+        txtTieuDe.setText(tieuDe);
         ListView lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
         lvMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
-                intent.putExtra(MONHOC, ((ObjectMonHoc) userMonDangHoc.get(position)).getMamh());
+                intent.putExtra(MONHOC, ((ObjectMonHoc) userHocPhanTheDuc.get(position)).getMamh());
                 startActivity(intent);
             }
         });

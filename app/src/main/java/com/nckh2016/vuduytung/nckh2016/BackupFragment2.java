@@ -487,6 +487,7 @@ public class BackupFragment2 extends BaseDriveFragment {
                         Log.e("tag", e.getMessage());
                     }
                     if (data.insertUser(user)) {
+                        ((BackupActivity)getActivity()).updateNavigationView();
                         Toast.makeText(getContext(), "Đã khôi phục", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), "Khôi phục thất bại", Toast.LENGTH_SHORT).show();

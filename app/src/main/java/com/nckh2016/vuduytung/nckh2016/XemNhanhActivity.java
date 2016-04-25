@@ -15,7 +15,7 @@ import android.view.View;
 import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
 
 public class XemNhanhActivity extends BaseActivity
-        implements XemNhanhFragment1.OnFragmentInteractionListener, XemNhanhFragment2.OnFragmentInteractionListener, XemNhanhFragment3.OnFragmentInteractionListener{
+        implements XemNhanhFragment1.OnFragmentInteractionListener, XemNhanhFragment4.OnFragmentInteractionListener, XemNhanhFragment2.OnFragmentInteractionListener, XemNhanhFragment3.OnFragmentInteractionListener{
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_xemnhanh_activity";
     public static final String SUB_PREFS_TABLAYOUTSTATE = "tab_position";
@@ -78,6 +78,7 @@ public class XemNhanhActivity extends BaseActivity
         tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab1_name), 0);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab2_name), 1);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab3_name), 2);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab4_name), 3);
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -124,6 +125,9 @@ public class XemNhanhActivity extends BaseActivity
                 }
                 case 2:{
                     return XemNhanhFragment3.newInstance(null, null);
+                }
+                case 3:{
+                    return XemNhanhFragment4.newInstance(null, null);
                 }
                 default:
                     return null;

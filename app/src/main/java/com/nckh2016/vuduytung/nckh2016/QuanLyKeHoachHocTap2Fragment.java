@@ -33,6 +33,8 @@ import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -61,7 +63,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
     //các view
     ListView lvMonHoc;
     TextView txtThongBao, txtTieuDe, txtTongTinChi;
-    Button btnThemMonHoc, btnXoaHocKy;
+    Button btnThemMonHoc, btnSuaHocKy, btnXoaHocKy;
     ImageView imageView;
 
     public QuanLyKeHoachHocTap2Fragment() {
@@ -87,6 +89,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
         String tieuDe = "Học kỳ " + selectedHocKy.getHocKy() + " năm thứ " + selectedHocKy.getNamHoc();
         txtTieuDe.setText(tieuDe);
         btnThemMonHoc = (Button)view.findViewById(R.id.btnThemMonHoc);
+        btnSuaHocKy = (Button)view.findViewById(R.id.btnSuaHocKy);
         btnXoaHocKy = (Button)view.findViewById(R.id.btnXoaHocKy);
         lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
         lvMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -168,6 +171,17 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                 Utils.switchView(mContext, lvMonHoc, txtThongBao);
             } else {
                 Utils.switchView(mContext, txtThongBao, lvMonHoc);
+
+                if(userMonHoc.size() > 1){
+                    Collections.sort(userMonHoc, new Comparator<Object>() {
+                        public int compare(Object o1, Object o2) {
+                            ObjectMonHoc mh1 = (ObjectMonHoc)o1;
+                            ObjectMonHoc mh2 = (ObjectMonHoc)o2;
+                            return mh1.getMamh().compareTo(mh2.getMamh());
+                        }
+                    });
+                }
+
                 mAdapter = new AdapterMonHoc(getContext(), 0);
                 mAdapter.addAll(userMonHoc);
                 lvMonHoc.setAdapter(mAdapter);
@@ -176,7 +190,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
             for(Object value : userMonHoc){
                 String[] danhSachBoQua = new String[] {"4010701","4010702","4010703","4010704","4010705","4080508","4080509"};
                 List<String> listBoQua = Arrays.asList(danhSachBoQua);
-                if(!listBoQua.contains(((ObjectMonHoc)value).getMamh())) {
+                if(!listBoQua.contains(((ObjectMonHoc)value).getMamh()) && ((ObjectMonHoc)value).getDiem() != -1f) {
                     tongTC += ((ObjectMonHoc)value).getTinchi();
                 }
             }
@@ -193,6 +207,16 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                     intent.putExtra("NamHoc", selectedHocKy.getNamHoc());
                     intent.putExtra("TinChi", finalTongTC);
                     startActivityForResult(intent, 1);
+                }
+            });
+            btnSuaHocKy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ArrayList<String> danhSachMonHoc = new ArrayList<String>();
+                    for(Object value : userMonHoc){
+                        danhSachMonHoc.add(((ObjectMonHoc)value).getMamh());
+                    }
+                    ((QuanLyKeHoachHocTapActivity)mContext).loadFragment3(selectedHocKy, danhSachMonHoc);
                 }
             });
             btnXoaHocKy.setOnClickListener(new View.OnClickListener() {

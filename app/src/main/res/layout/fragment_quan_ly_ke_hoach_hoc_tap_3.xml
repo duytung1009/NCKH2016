@@ -1,0 +1,51 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    tools:context="com.nckh2016.vuduytung.nckh2016.QuanLyKeHoachHocTap3Fragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/item_title" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/layoutTieuDe"
+            android:background="#c0c0c0" />
+
+        <TextView
+            android:id="@+id/txtThongBao"
+            style="@style/bigText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnCapNhatMonHoc"
+            android:layout_below="@+id/line"
+            android:gravity="center"
+            android:text="@string/khong"
+            android:textColor="@color/colorPrimary" />
+
+        <ListView
+            android:id="@+id/lvMonHoc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnCapNhatMonHoc"
+            android:layout_below="@+id/line" />
+
+        <Button
+            android:id="@+id/btnCapNhatMonHoc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="20dp"
+            android:text="@string/btn_capnhatmonhoc"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
+
+</FrameLayout>

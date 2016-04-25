@@ -14,8 +14,9 @@
     <!-- 3F51B5 -->
     <color name="diemD">#FFD54F</color>
     <!-- FFC107 -->
-    <color name="diemF">#90A4AE</color>
+    <color name="diemF">#E57373</color>
     <!-- 607D8B -->
+    <color name="danghoc">#90A4AE</color>
 
     <color name="tuchonA">#16a085</color>
     <color name="tuchonB">#2980b9</color>

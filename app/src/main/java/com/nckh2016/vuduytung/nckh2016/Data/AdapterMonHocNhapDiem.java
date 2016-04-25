@@ -58,8 +58,19 @@ public class AdapterMonHocNhapDiem extends ArrayAdapter<Object> {
                     edDiem.requestFocus();
                 }
             });
-            if(diemValues.containsKey(mMonHoc.getMamh())){
-                edDiem.setText(diemValues.get(mMonHoc.getMamh()).toString());
+            if(mMonHoc.getDiem() != -1){
+                diemValues.put(mMonHoc.getMamh(), (float)mMonHoc.getDiem());
+                edDiem.setText(String.valueOf(mMonHoc.getDiem()));
+            } else {
+                if(!diemValues.containsKey(mMonHoc.getMamh())){
+                    diemValues.put(mMonHoc.getMamh(), -1f);
+                }
+                /*if(diemValues.containsKey(mMonHoc.getMamh())){
+                    String diem = diemValues.get(mMonHoc.getMamh()).toString();
+                    edDiem.setText(diem);
+                } else {
+                    diemValues.put(mMonHoc.getMamh(), -1f);
+                }*/
             }
             edDiem.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -75,7 +86,9 @@ public class AdapterMonHocNhapDiem extends ArrayAdapter<Object> {
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-                        if(s.length() != 0){
+                        if(s.length() == 0){
+                            diemValues.put(mMonHoc.getMamh(), -1f);
+                        } else {
                             float val = Float.parseFloat(s.toString());
                             if(val > 10) {
                                 s.replace(0, s.length(), "10", 0, 2);

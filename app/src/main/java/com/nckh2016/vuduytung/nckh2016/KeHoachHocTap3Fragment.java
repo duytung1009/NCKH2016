@@ -26,6 +26,8 @@ import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,7 +73,18 @@ public class KeHoachHocTap3Fragment extends Fragment {
         } catch (IOException e) {
             Log.e("tag", e.getMessage());
         }
-        final ArrayList<Object> mArrayList = data.getMonHoc(getArguments().getStringArrayList("mamonhoc"));
+        final ArrayList<Object> mArrayList = data.getMonHoc(null, getArguments().getStringArrayList("mamonhoc"));
+
+        if(mArrayList.size() > 1){
+            Collections.sort(mArrayList, new Comparator<Object>() {
+                public int compare(Object o1, Object o2) {
+                    ObjectMonHoc mh1 = (ObjectMonHoc)o1;
+                    ObjectMonHoc mh2 = (ObjectMonHoc)o2;
+                    return mh1.getMamh().compareTo(mh2.getMamh());
+                }
+            });
+        }
+
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
         userHocKy = new ObjectHocKy(getArguments().getInt("user_namhoc"), getArguments().getInt("user_hocky"), getArguments().getString("nganh"));
         monHocAdapter = new AdapterMonHocNhapDiem(getActivity(), 0, mArrayList);

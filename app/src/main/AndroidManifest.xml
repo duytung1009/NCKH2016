@@ -103,7 +103,9 @@
             android:name=".QuanLyKeHoachHocTapActivity"
             android:label="@string/title_activity_quan_ly_ke_hoach_hoc_tap"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
+        <!-- http://stackoverflow.com/questions/5615436/when-the-soft-keyboard-appears-it-makes-my-edittext-field-lose-focus -->
         <activity
             android:name=".XemNhanhActivity"
             android:label="@string/title_activity_xem_nhanh"

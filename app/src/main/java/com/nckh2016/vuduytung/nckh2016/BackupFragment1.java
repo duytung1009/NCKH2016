@@ -473,9 +473,12 @@ public class BackupFragment1 extends Fragment {
                         if (tempListFile[i].isDirectory()) {
                             scanForUserFile(tempListFile[i]);
                         } else {
-                            if (tempListFile[i].getName().endsWith(PATTERN)){
+                            if (tempListFile[i].getName().equals(current_user + PATTERN)){
                                 listFile.add(tempListFile[i]);
                             }
+                            /*if (tempListFile[i].getName().endsWith(PATTERN)){
+                                listFile.add(tempListFile[i]);
+                            }*/
                         }
                     }
                 }

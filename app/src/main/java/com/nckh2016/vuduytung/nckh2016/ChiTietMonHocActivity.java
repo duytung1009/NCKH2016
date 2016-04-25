@@ -67,6 +67,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         //txtDieuKien = (TextView) findViewById(R.id.txtDieuKien);
         txtNoiDung = (TextView) findViewById(R.id.txtNoiDung);
         txtTaiLieu = (TextView) findViewById(R.id.txtTaiLieu);
+        btnBangDiem = (Button)findViewById(R.id.btnBangDiem);
         ab = getSupportActionBar();
         SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
@@ -181,7 +182,12 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
             catch (IOException e){
                 Log.e("tag", e.getMessage());
             }
-            ObjectMonHoc result = data.getMonHoc(joined);
+            ObjectMonHoc result = new ObjectMonHoc();
+            try{
+                result = data.getMonHoc(joined);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
             if(result != null){
                 if(result.getMamh() != null && !result.getMamh().isEmpty()){
                     if(current_user != null){
@@ -263,8 +269,8 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                 //txtDieuKien.setText(objectMonHoc.getDieukien());
                 txtNoiDung.setText(objectMonHoc.getNoidung());
                 txtTaiLieu.setText(objectMonHoc.getTailieu());
+                //nếu có điểm
                 if(objectMonHoc.getDiem() != -1){
-                    btnBangDiem = (Button)findViewById(R.id.btnBangDiem);
                     btnBangDiem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

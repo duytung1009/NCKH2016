@@ -415,7 +415,7 @@ public class BackupFragment2 extends BaseDriveFragment {
                     .addFilter(Filters.and(
                             Filters.eq(SearchableField.MIME_TYPE, "text/plain"),
                             Filters.eq(SearchableField.TRASHED, false),
-                            Filters.contains(SearchableField.TITLE, "_backup")))
+                            Filters.contains(SearchableField.TITLE, current_user)))
                     .build();
             Drive.DriveApi.query(getGoogleApiClient(), query).setResultCallback(metadataCallback);
             return null;

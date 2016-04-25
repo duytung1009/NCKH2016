@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 
@@ -45,8 +46,8 @@ public class KeHoachHocTapActivity extends BaseActivity {
             e.printStackTrace();
         }
         //lấy dữ liệu được lưu lại khi app Paused
-        SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
         if(selectedHocKy == null){
+            SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
             selectedHocKy = new Gson().fromJson(state.getString(SUB_PREFS_HOCKY, null), ObjectHocKy.class);
         }
     }
@@ -67,13 +68,10 @@ public class KeHoachHocTapActivity extends BaseActivity {
         bundle.putString("nganh", selectedHocKy.getNganh());
         bundle.putInt("namhoc", selectedHocKy.getNamHoc());
         bundle.putInt("hocky", selectedHocKy.getHocKy());
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+
         Fragment frag2 = new KeHoachHocTap2Fragment();
         frag2.setArguments(bundle);
-        ft.addToBackStack(FRAG2);
-        ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag2, FRAG2);
-        ft.commit();
+        replaceFragment(frag2, FRAG2);
     }
 
     public void loadFragment3(ObjectHocKy hocKy, ArrayList<String> selectedMonHoc){
@@ -84,12 +82,21 @@ public class KeHoachHocTapActivity extends BaseActivity {
         bundle.putInt("hocky", hocKy.getHocKy());
         bundle.putInt("user_namhoc", getIntent().getIntExtra("NamHoc", -1));
         bundle.putInt("user_hocky", getIntent().getIntExtra("HocKy", -1));
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+
         Fragment frag3 = new KeHoachHocTap3Fragment();
         frag3.setArguments(bundle);
-        ft.addToBackStack(FRAG3);
-        ft.replace(R.id.fragment_ke_hoach_hoc_tap, frag3, FRAG3);
-        ft.commit();
+        replaceFragment(frag3, FRAG3);
+    }
+
+    private void replaceFragment(Fragment fragment, String frag){
+        FragmentManager manager = getSupportFragmentManager();
+        boolean fragmentPopped = manager.popBackStackImmediate(frag, 0);
+        if (!fragmentPopped){ //fragment not in back stack, create it.
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+            ft.replace(R.id.fragment, fragment, frag);
+            ft.addToBackStack(frag);
+            ft.commit();
+        }
     }
 }

@@ -19,11 +19,14 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc2;
-import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -151,6 +154,17 @@ public class KeHoachHocTap2Fragment extends Fragment {
             mArrayList = data.getChuongTrinhDaoTao(selectedHocKy.getNganh(), selectedHocKy.getNamHoc(), maHocKy, chuyenSau);
         }
         ArrayList<Object> mMonHocCaiThien = data.getMonHocCaiThien(current_user, mArrayList);
+
+        if(mMonHocCaiThien.size() > 1){
+            Collections.sort(mMonHocCaiThien, new Comparator<Object>() {
+                public int compare(Object o1, Object o2) {
+                    ObjectMonHoc mh1 = (ObjectMonHoc)o1;
+                    ObjectMonHoc mh2 = (ObjectMonHoc)o2;
+                    return mh1.getMamh().compareTo(mh2.getMamh());
+                }
+            });
+        }
+
         monHocAdapter = new AdapterMonHoc2(this, 0, mMonHocCaiThien, current_user);
         selectAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

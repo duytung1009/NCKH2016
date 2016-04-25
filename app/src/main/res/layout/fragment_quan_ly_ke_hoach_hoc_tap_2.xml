@@ -37,9 +37,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toEndOf="@+id/imageView"
-                android:layout_toLeftOf="@+id/btnXoaHocKy"
+                android:layout_toLeftOf="@+id/btnSuaHocKy"
                 android:layout_toRightOf="@+id/imageView"
-                android:layout_toStartOf="@+id/btnXoaHocKy"
+                android:layout_toStartOf="@+id/btnSuaHocKy"
                 android:orientation="vertical">
 
                 <TextView
@@ -76,6 +76,15 @@
                 </RelativeLayout>
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSuaHocKy"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_toLeftOf="@+id/btnXoaHocKy"
+                android:layout_toStartOf="@+id/btnXoaHocKy"
+                android:layout_margin="10dp"
+                android:background="@drawable/edit_mode" />
 
             <Button
                 android:id="@+id/btnXoaHocKy"

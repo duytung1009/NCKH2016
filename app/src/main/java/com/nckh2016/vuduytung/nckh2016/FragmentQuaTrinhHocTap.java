@@ -120,7 +120,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         df = new DecimalFormat("####0.00");
         mainChart.setNoDataTextDescription("no data");
         mainChart.setDrawSliceText(false);  //hide title
-        mainChart.setDescription("Điểm số");
+        mainChart.setDescription("");
         mainChart.setDescriptionTypeface(light);
         mainChart.setDescriptionTextSize(20);
         mainChart.setDescriptionColor(Color.DKGRAY);
@@ -194,14 +194,15 @@ public class FragmentQuaTrinhHocTap extends Fragment {
 
     public void setUpChart(){
         tongDiem = Double.NaN;
-        yData = new int[5];
-        final String[] xData = {"F","D","C","B","A"};
+        yData = new int[6];
+        final String[] xData = {"Đang học","F","D","C","B","A"};
         tongTinChi = 0;
         /*for(int value : yData){
             tongTinChi += value;
         }*/
         //không tính tín chỉ bị F
-        for(int i=1; i<yData.length; i++){
+        //bỏ qua i=1 là số tín chỉ đang học
+        for(int i=2; i<yData.length; i++){
             tongTinChi += yData[i];
         }
         ArrayList<Entry> yVals = new ArrayList<Entry>();
@@ -217,6 +218,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         dataSet.setSliceSpace(3);
         dataSet.setSelectionShift(5);
         dataSet.setColors(new int[] {
+                ContextCompat.getColor(getContext(), R.color.danghoc),
                 ContextCompat.getColor(getContext(), R.color.diemF),
                 ContextCompat.getColor(getContext(), R.color.diemD),
                 ContextCompat.getColor(getContext(), R.color.diemC),
@@ -236,7 +238,13 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         mainChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-                mainChart.setCenterText("Điểm " + xData[e.getXIndex()] + "\n" + new DecimalFormat("####0").format(e.getVal()) + " tín chỉ");
+                String centerText = "";
+                if(e.getXIndex() == 0){
+                    centerText = "Đang học" + "\n" + new DecimalFormat("####0").format(e.getVal()) + " tín chỉ";
+                } else {
+                    centerText = "Điểm " + xData[e.getXIndex()] + "\n" + new DecimalFormat("####0").format(e.getVal()) + " tín chỉ";
+                }
+                mainChart.setCenterText(centerText);
             }
 
             @Override
@@ -250,9 +258,10 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         });
         //edit legend
         Legend legend = mainChart.getLegend();
-        legend.setForm(Legend.LegendForm.SQUARE);
         legend.setDirection(Legend.LegendDirection.RIGHT_TO_LEFT);
-        legend.setPosition(Legend.LegendPosition.BELOW_CHART_RIGHT);
+        legend.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
+        legend.setWordWrapEnabled(true);
+
         //set pie data and refresh
         //mainChart.setData(chartData);
         //mainChart.animateXY(2000, 2000, Easing.EasingOption.EaseOutCirc, Easing.EasingOption.EaseOutCirc);
@@ -320,9 +329,10 @@ public class FragmentQuaTrinhHocTap extends Fragment {
             }
             tongDiem = data.tongDiem(current_user);
             yData = data.soTinChi(current_user);
-            final String[] xData = {"F","D","C","B","A"};
+            final String[] xData = {"Đang học", "F","D","C","B","A"};
             tongTinChi = 0;
-            for(int i=1; i<yData.length; i++){
+            //bỏ qua i=0 là số tín chỉ đang học, i=1 là số tín chỉ điểm F
+            for(int i=2; i<yData.length; i++){
                 tongTinChi += yData[i];
             }
             ArrayList<Entry> yVals = new ArrayList<Entry>();
@@ -338,6 +348,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
             dataSet.setSliceSpace(3);
             dataSet.setSelectionShift(5);
             dataSet.setColors(new int[] {
+                    ContextCompat.getColor(getContext(), R.color.danghoc),
                     ContextCompat.getColor(getContext(), R.color.diemF),
                     ContextCompat.getColor(getContext(), R.color.diemD),
                     ContextCompat.getColor(getContext(), R.color.diemC),

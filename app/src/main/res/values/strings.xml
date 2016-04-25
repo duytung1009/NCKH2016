@@ -23,6 +23,7 @@
     <string name="btn_5_fragment_nguoidung">test</string>
     <string name="btn_6_fragment_nguoidung">test</string>
     <string name="btn_themmonhoc">thêm môn học</string>
+    <string name="btn_capnhatmonhoc">cập nhật điểm số</string>
     <string name="btn_luumonhoc">lưu môn học</string>
 
     <string name="btn_1_fragment_niengiam">Chương trình đào tạo</string>
@@ -38,9 +39,9 @@
     <string name="main_activity_tab2_name">điểm số</string>
     <string name="main_activity_tab3_name">niên giám</string>
 
-    <string name="mon_hoc_chua_qua_activity_tab1_name">giáo dục thể chất</string>
-    <string name="mon_hoc_chua_qua_activity_tab2_name">môn học chưa qua</string>
-    <string name="mon_hoc_chua_qua_activity_tab3_name">môn học cải thiện</string>
+    <string name="mon_hoc_chua_qua_activity_tab1_name">giáo dục\nthể chất</string>
+    <string name="mon_hoc_chua_qua_activity_tab2_name">môn học\nchưa qua</string>
+    <string name="mon_hoc_chua_qua_activity_tab3_name">môn học\ncải thiện</string>
 
     <string name="title_activity_main">Màn hình chính</string>
     <string name="title_activity_search_result">Kết quả tìm kiếm</string>
@@ -74,6 +75,7 @@
     <string name="txtTimKiem">Tìm kiếm môn học</string>
     <string name="txtNhapDiem">Nhập điểm</string>
     <string name="txtCTDT">Chương trình đào tạo</string>
+    <string name="txtCapNhatDiem">Cập nhật</string>
     <string name="txtBangDiem">Bảng điểm</string>
     <string name="txtChonAnh">Lấy ảnh từ</string>
     <string name="txtXoaAnh">Xóa bảng điểm</string>

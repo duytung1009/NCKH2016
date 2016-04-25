@@ -121,8 +121,10 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
                             break;
                     }
                 }
-                if (mMonHoc.getDiem() != -1) {
-                    TextView txtDiem = (TextView) view.findViewById(R.id.txtDiem);
+                TextView txtDiem = (TextView) view.findViewById(R.id.txtDiem);
+                if (mMonHoc.getDiem() == -1){
+                    //txtDiem.setText("");
+                } else {
                     txtDiem.setText(new DecimalFormat("####0.#").format(mMonHoc.getDiem()));
                 }
             }

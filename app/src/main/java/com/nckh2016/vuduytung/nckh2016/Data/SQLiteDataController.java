@@ -1533,8 +1533,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     if(!checkMonHocBoQua(mamh)){
                         tinchi = getMonHoc(mamh).getTinchi();
                         double diemHe10 = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
-                        tongDiem += diemHe10SangHe4(diemHe10) * tinchi;
-                        tongTinChi += tinchi;
+                        if(diemHe10 != -1){
+                            tongDiem += diemHe10SangHe4(diemHe10) * tinchi;
+                            tongTinChi += tinchi;
+                        }
                     }
                 }
                 if(tongTinChi != 0){

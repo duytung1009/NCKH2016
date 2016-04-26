@@ -56,7 +56,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     //singleton
-    public static SQLiteDataController getInstance(Context cont){
+    public static synchronized SQLiteDataController getInstance(Context cont){
         if (mInstance == null) {
             mInstance = new SQLiteDataController(cont.getApplicationContext());
         }

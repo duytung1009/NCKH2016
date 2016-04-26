@@ -94,7 +94,7 @@ public class KeHoachHocTapActivity extends BaseActivity {
         if (!fragmentPopped){ //fragment not in back stack, create it.
             FragmentTransaction ft = manager.beginTransaction();
             ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-            ft.replace(R.id.fragment, fragment, frag);
+            ft.replace(R.id.fragment_ke_hoach_hoc_tap, fragment, frag);
             ft.addToBackStack(frag);
             ft.commit();
         }

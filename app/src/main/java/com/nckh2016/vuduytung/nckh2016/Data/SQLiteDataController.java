@@ -213,6 +213,51 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     /**
+     * thêm nhiều người dùng
+     * @param values thông tin người dùng cần thêm (ArrayList<ObjectUser>)
+     * @return
+     */
+    public boolean insertUser(ArrayList<ObjectUser> values){
+        boolean flag = true;
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            for(ObjectUser value : values){
+                ContentValues newUser = new ContentValues();
+                newUser.put(UserEntry.COLUMN_HO_TEN, value.getHoten());
+                newUser.put(UserEntry.COLUMN_EMAIL, value.getEmail());
+                newUser.put(UserEntry.COLUMN_MA_KHOA, value.getMakhoa());
+                newUser.put(UserEntry.COLUMN_MA_NGANH, value.getManganh());
+                newUser.put(UserEntry.COLUMN_NAM_HOC, value.getNamhoc());
+                newUser.put(UserEntry.COLUMN_HOC_KY, value.getHocky());
+                newUser.put(UserEntry.COLUMN_MA_CHUYEN_SAU, value.getMachuyensau());
+                long num = -1;
+                mCursor = database.rawQuery("SELECT * FROM " + UserEntry.TABLE_NAME
+                                + " WHERE " + UserEntry.COLUMN_MA_SV + " = " + value.getMasv(), null);
+                //insert (thay vì update) hồ sơ nếu đã có
+                if(mCursor.moveToFirst()) {
+                    num = database.update(UserEntry.TABLE_NAME, newUser,
+                            UserEntry.COLUMN_MA_SV + " = ?",
+                            new String[]{value.getMasv()});
+                } else{
+                    num = database.insert(UserEntry.TABLE_NAME, null, newUser);
+                }
+                if (num == -1) {
+                    flag = false;
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            if(mCursor != null){
+                mCursor.close();
+            }
+            //close();
+            return flag;
+        }
+    }
+
+    /**
      * thêm người dùng + dữ liệu người dùng (điểm số...)
      * @param user thông tin người dùng cần thêm (ObjectUser)
      * @return
@@ -1464,8 +1509,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
      * lấy thông tin toàn bộ người dùng
      * @return
      */
-    public ArrayList<Object> getUser(){
-        ArrayList<Object> result = new ArrayList<Object>();
+    public ArrayList<ObjectUser> getUser(){
+        ArrayList<ObjectUser> result = new ArrayList<ObjectUser>();
         Cursor mCursor = null;
         try{
             openDataBase();
@@ -1628,6 +1673,39 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             //close();
         }
         return flag;
+    }
+
+    /**
+     * lấy toàn bộ thông tin của bảng dữ liệu người dùng
+     * @return
+     */
+    public ArrayList<ObjectUserData> getUserData(){
+        ArrayList<ObjectUserData> result = new ArrayList<ObjectUserData>();
+        Cursor mCursor = null;
+        try{
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME, null);
+            if(mCursor != null) {
+                while(mCursor.moveToNext()){
+                    result.add(new ObjectUserData(
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_SV)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_HOC_KY)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_NAM_THU)),
+                            mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)),
+                            mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM))
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(mCursor != null){
+                mCursor.close();
+            }
+            //close();
+        }
+        return result;
     }
 
     /**

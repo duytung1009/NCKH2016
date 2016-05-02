@@ -44,7 +44,7 @@ public class MainActivity extends BaseNavActivity
     public static final String SUB_PREFS_TABLAYOUTSTATE = "tab_position";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
-    private ArrayList<Object> mListUser;
+    private ArrayList<ObjectUser> mListUser;
     //các asynctask
     MainTask mainTask;
     //các view
@@ -69,9 +69,9 @@ public class MainActivity extends BaseNavActivity
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString(SUB_PREFS_MASINHVIEN, ((ObjectUser)mListUser.get(position)).getMasv());
-                editor.putString(SUB_PREFS_TENSINHVIEN, ((ObjectUser)mListUser.get(position)).getHoten());
-                editor.putString(SUB_PREFS_DATASINHVIEN, ((ObjectUser)mListUser.get(position)).getHocky());
+                editor.putString(SUB_PREFS_MASINHVIEN, (mListUser.get(position)).getMasv());
+                editor.putString(SUB_PREFS_TENSINHVIEN, (mListUser.get(position)).getHoten());
+                editor.putString(SUB_PREFS_DATASINHVIEN, (mListUser.get(position)).getHocky());
                 editor.apply();
                 if (tabLayout.getTabCount() > 0) {
                     try{
@@ -152,7 +152,7 @@ public class MainActivity extends BaseNavActivity
         //SQLiteDataController.getInstance(getApplicationContext()).close();
     }
 
-    public void loadTabs(ArrayList<Object> users){
+    public void loadTabs(ArrayList<ObjectUser> users){
         tabLayout.removeAllTabs();
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.whiteTransparent), ContextCompat.getColor(this, R.color.white));
@@ -161,9 +161,9 @@ public class MainActivity extends BaseNavActivity
         if(!users.isEmpty()){
             if((currentUserData.getString(SUB_PREFS_MASINHVIEN, null) == null) || (currentUserData.getString(SUB_PREFS_MASINHVIEN, null).isEmpty())){
                 SharedPreferences.Editor editor = currentUserData.edit();
-                editor.putString(SUB_PREFS_MASINHVIEN, ((ObjectUser) users.get(0)).getMasv());
-                editor.putString(SUB_PREFS_TENSINHVIEN, ((ObjectUser) users.get(0)).getHoten());
-                editor.putString(SUB_PREFS_DATASINHVIEN, ((ObjectUser) users.get(0)).getHocky());
+                editor.putString(SUB_PREFS_MASINHVIEN, (users.get(0)).getMasv());
+                editor.putString(SUB_PREFS_TENSINHVIEN, (users.get(0)).getHoten());
+                editor.putString(SUB_PREFS_DATASINHVIEN, (users.get(0)).getHocky());
                 editor.apply();
                 updateNavigationView();
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab1_name), 0);
@@ -207,24 +207,22 @@ public class MainActivity extends BaseNavActivity
         viewPager.setAdapter(mAdapter);
     }
 
-    public void loadUser(ArrayList<Object> users){
+    public void loadUser(ArrayList<ObjectUser> users){
         ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerNguoiDung.setAdapter(mAdapter);
         if(!users.isEmpty()){
             mListUser = users;
             List<String> mListTenUser = new ArrayList<String>();
-            for (Object object : mListUser) {
-                ObjectUser value = (ObjectUser) object;
-                mListTenUser.add(value != null ? value.getHoten() : null);
+            for (ObjectUser object : mListUser) {
+                mListTenUser.add(object != null ? object.getHoten() : null);
             }
             mAdapter.addAll(mListTenUser);
             if (current_user != null) {
                 int index = 0;
-                for (Object object : mListUser) {
-                    ObjectUser value = (ObjectUser) object;
-                    if (value.getMasv().equals(current_user)){
-                        index = mListUser.indexOf(value);
+                for (ObjectUser object : mListUser) {
+                    if (object.getMasv().equals(current_user)){
+                        index = mListUser.indexOf(object);
                     }
                 }
                 spinnerNguoiDung.setSelection(index);
@@ -280,7 +278,7 @@ public class MainActivity extends BaseNavActivity
         }
     }
 
-    public class MainTask extends AsyncTask<Void, Long, ArrayList<Object>> {
+    public class MainTask extends AsyncTask<Void, Long, ArrayList<ObjectUser>> {
         private Context mContext;
 
         public MainTask(Context mContext) {
@@ -293,7 +291,7 @@ public class MainActivity extends BaseNavActivity
         }
 
         @Override
-        protected ArrayList<Object> doInBackground(Void... params) {
+        protected ArrayList<ObjectUser> doInBackground(Void... params) {
             SQLiteDataController data = SQLiteDataController.getInstance(mContext);
             try{
                 data.isCreatedDatabase();
@@ -310,7 +308,7 @@ public class MainActivity extends BaseNavActivity
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Object> objects) {
+        protected void onPostExecute(ArrayList<ObjectUser> objects) {
             super.onPostExecute(objects);
             loadTabs(objects);
             loadUser(objects);

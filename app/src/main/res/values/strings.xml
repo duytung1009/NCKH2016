@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sổ tay học tập</string>
+    <string name="app_name">HUMG StudyPlanner</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -39,6 +39,7 @@
 
     <string name="btn_huy">hủy</string>
     <string name="btn_capnhat">cập nhật</string>
+    <string name="btn_capnhatCTDT">cập nhật CTDT</string>
 
     <string name="main_activity_tab1_name">chức năng</string>
     <string name="main_activity_tab2_name">điểm số</string>

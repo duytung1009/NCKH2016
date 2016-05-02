@@ -10,12 +10,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
-import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
+import com.nckh2016.vuduytung.nckh2016.main.BaseNavActivity;
 
 /**
  * Created by Tung on 21/3/2016.
  */
-public abstract class BaseDriveActivity extends BaseActivity implements
+public abstract class BaseDriveActivity extends BaseNavActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 

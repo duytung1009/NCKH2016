@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import com.nckh2016.vuduytung.nckh2016.BackupActivity;
 import com.nckh2016.vuduytung.nckh2016.BoMonActivity;
+import com.nckh2016.vuduytung.nckh2016.GioiThieuActivity;
+import com.nckh2016.vuduytung.nckh2016.HuongDanSuDungActivity;
 import com.nckh2016.vuduytung.nckh2016.MainActivity;
 import com.nckh2016.vuduytung.nckh2016.NganhActivity;
 import com.nckh2016.vuduytung.nckh2016.QuanLyKeHoachHocTapActivity;
@@ -34,7 +36,7 @@ import com.nckh2016.vuduytung.nckh2016.SearchResultActivity;
 import com.nckh2016.vuduytung.nckh2016.ThongTinCaNhanActivity;
 import com.nckh2016.vuduytung.nckh2016.XemNhanhActivity;
 
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class BaseNavActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
@@ -57,12 +59,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_base);
+        //setContentView(R.layout.activity_base_nav);
     }
 
     @Override
     public void setContentView(int layoutResID) {
-        fullLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
+        fullLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_base_nav, null);
         frameLayout = (FrameLayout) fullLayout.findViewById(R.id.drawer_frame);
         getLayoutInflater().inflate(layoutResID, frameLayout, true);
         super.setContentView(fullLayout);
@@ -191,7 +193,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if(current_user_masv == null){
                         Toast.makeText(getApplicationContext(), "Bạn cần tạo hồ sơ trước", Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent intent = new Intent(BaseActivity.this, MainActivity.class);
+                        Intent intent = new Intent(BaseNavActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
                 }
@@ -203,7 +205,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if(current_user_masv == null){
                         Toast.makeText(getApplicationContext(), "Bạn cần tạo hồ sơ trước", Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent intent = new Intent(BaseActivity.this, ThongTinCaNhanActivity.class);
+                        Intent intent = new Intent(BaseNavActivity.this, ThongTinCaNhanActivity.class);
                         startActivity(intent);
                     }
                 }
@@ -215,7 +217,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if(current_user_masv == null){
                         Toast.makeText(getApplicationContext(), "Bạn cần tạo hồ sơ trước", Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent intent = new Intent(BaseActivity.this, QuanLyKeHoachHocTapActivity.class);
+                        Intent intent = new Intent(BaseNavActivity.this, QuanLyKeHoachHocTapActivity.class);
                         startActivity(intent);
                     }
                 }
@@ -227,7 +229,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if(current_user_masv == null){
                         Toast.makeText(getApplicationContext(), "Bạn cần tạo hồ sơ trước", Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent intent = new Intent(BaseActivity.this, XemNhanhActivity.class);
+                        Intent intent = new Intent(BaseNavActivity.this, XemNhanhActivity.class);
                         startActivity(intent);
                     }
                 }
@@ -239,7 +241,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if(current_user_masv == null){
                         Toast.makeText(getApplicationContext(), "Bạn cần tạo hồ sơ trước", Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent intent = new Intent(BaseActivity.this, BackupActivity.class);
+                        Intent intent = new Intent(BaseNavActivity.this, BackupActivity.class);
                         startActivity(intent);
                     }
                 }
@@ -252,7 +254,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             toggle.runWhenIdle(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(BaseActivity.this, NganhActivity.class);
+                    Intent intent = new Intent(BaseNavActivity.this, NganhActivity.class);
                     startActivity(intent);
                 }
             });
@@ -260,14 +262,26 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             toggle.runWhenIdle(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(BaseActivity.this, BoMonActivity.class);
+                    Intent intent = new Intent(BaseNavActivity.this, BoMonActivity.class);
                     startActivity(intent);
                 }
             });
         } else if (id == R.id.nav_niengiam_3){
-
+            toggle.runWhenIdle(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(BaseNavActivity.this, HuongDanSuDungActivity.class);
+                    startActivity(intent);
+                }
+            });
         } else if (id == R.id.nav_niengiam_4){
-
+            toggle.runWhenIdle(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(BaseNavActivity.this, GioiThieuActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

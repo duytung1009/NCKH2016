@@ -114,6 +114,22 @@ public class FragmentNienGiam extends Fragment {
                 startActivity(intent);
             }
         });
+        LinearLayout layout_3 = (LinearLayout)view.findViewById(R.id.layout_3);
+        layout_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), HuongDanSuDungActivity.class);
+                startActivity(intent);
+            }
+        });
+        LinearLayout layout_4 = (LinearLayout)view.findViewById(R.id.layout_4);
+        layout_4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), GioiThieuActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 

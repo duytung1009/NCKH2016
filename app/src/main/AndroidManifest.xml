@@ -93,7 +93,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
         </activity>
-
         <activity
             android:name=".ThongTinCaNhanActivity"
             android:label="@string/title_activity_thong_tin_ca_nhan"
@@ -104,7 +103,7 @@
             android:label="@string/title_activity_quan_ly_ke_hoach_hoc_tap"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <!-- http://stackoverflow.com/questions/5615436/when-the-soft-keyboard-appears-it-makes-my-edittext-field-lose-focus -->
         <activity
             android:name=".XemNhanhActivity"
@@ -147,6 +146,26 @@
                 android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
         </activity>
         <activity
+            android:name=".HuongDanSuDungActivity"
+            android:label="@string/title_activity_huong_dan_su_dung"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
+        </activity>
+        <activity
+            android:name=".GioiThieuActivity"
+            android:label="@string/title_activity_gioi_thieu"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
+        </activity>
+        <activity
             android:name=".BackupActivity"
             android:label="@string/title_activity_backup"
             android:launchMode="singleTask"
@@ -156,7 +175,7 @@
                 android:value="com.nckh2016.vuduytung.nckh2016.MainActivity" />
         </activity>
         <activity
-            android:name=".main.BaseActivity"
+            android:name=".main.BaseNavActivity"
             android:label="@string/title_activity_base"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

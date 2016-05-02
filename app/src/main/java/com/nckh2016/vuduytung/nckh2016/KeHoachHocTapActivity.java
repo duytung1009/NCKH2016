@@ -10,11 +10,11 @@ import android.support.v7.app.ActionBar;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
-import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
+import com.nckh2016.vuduytung.nckh2016.main.BaseNavActivity;
 
 import java.util.ArrayList;
 
-public class KeHoachHocTapActivity extends BaseActivity {
+public class KeHoachHocTapActivity extends BaseNavActivity {
     //các giá trị để dùng load Fragment
     private static final String FRAG1 = "frag1";
     private static final String FRAG2 = "frag2";

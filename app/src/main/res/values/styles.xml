@@ -20,6 +20,7 @@
 
     <style name="btn_layout" parent="AppTheme">
         <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 
@@ -27,6 +28,11 @@
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="hugeText">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">24sp</item>
     </style>
 
     <style name="bigText">

@@ -153,7 +153,9 @@ public class BackupFragment2 extends BaseDriveFragment {
         btnSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clearDefaultAccount();
+                if(getGoogleApiClient().isConnected()){
+                    clearDefaultAccount();
+                }
             }
         });
         Button btnBackup = (Button)view.findViewById(R.id.btnBackup);
@@ -208,6 +210,7 @@ public class BackupFragment2 extends BaseDriveFragment {
     @Override
     public void onStart() {
         super.onStart();
+        Utils.showProcessBar(getContext(), progressBar, mainLayout);
     }
 
     @Override
@@ -384,7 +387,7 @@ public class BackupFragment2 extends BaseDriveFragment {
                 showMessage("Lỗi trong quá trình khởi tạo hồ sơ sao lưu");
                 return;
             }
-            showMessage("Đã xong");
+            showMessage("Sao lưu hoàn tất");
             if (loadingTask != null) {
                 if (loadingTask.getStatus() == AsyncTask.Status.RUNNING) {
                     loadingTask.cancel(true);

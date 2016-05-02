@@ -12,9 +12,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
+import com.nckh2016.vuduytung.nckh2016.main.BaseNavActivity;
 
-public class XemNhanhActivity extends BaseActivity
+public class XemNhanhActivity extends BaseNavActivity
         implements XemNhanhFragment1.OnFragmentInteractionListener, XemNhanhFragment4.OnFragmentInteractionListener, XemNhanhFragment2.OnFragmentInteractionListener, XemNhanhFragment3.OnFragmentInteractionListener{
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_xemnhanh_activity";

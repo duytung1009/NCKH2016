@@ -10,21 +10,21 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
-import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
+import com.nckh2016.vuduytung.nckh2016.main.BaseNavActivity;
 
 import java.util.ArrayList;
 
-public class QuanLyKeHoachHocTapActivity extends BaseActivity {
+public class QuanLyKeHoachHocTapActivity extends BaseNavActivity {
     //các giá trị Preferences Global
     /*public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     public static final String SUB_PREFS_DATASINHVIEN = "user_data";*/
     //các giá trị để dùng load Fragment
     private static final String BLANK_FRAGMENT = "blank";
-    private static final String FRAG1 = "frag1";
-    private static final String FRAG2 = "frag2";
-    private static final String FRAG3 = "frag3";
-    private static final String FRAG4 = "frag4";
+    private static final String FRAG1 = "FRAG1";
+    private static final String FRAG2 = "FRAG2";
+    private static final String FRAG3 = "FRAG3";
+    private static final String FRAG4 = "FRAG4";
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_quanlykehoachhoctap_activity";
     public static final String SUB_PREFS_HOCKY = "hocKy";
@@ -117,28 +117,37 @@ public class QuanLyKeHoachHocTapActivity extends BaseActivity {
     }
 
     private void replaceFragment(Fragment fragment, String frag){
-        FragmentManager manager = getSupportFragmentManager();
-        boolean fragmentPopped = manager.popBackStackImmediate(frag, 0);
+        FragmentManager fm = getSupportFragmentManager();
+        boolean fragmentPopped = fm.popBackStackImmediate(frag, 0);
         if (!fragmentPopped){ //fragment not in back stack, create it.
-            FragmentTransaction ft = manager.beginTransaction();
+            FragmentTransaction ft = fm.beginTransaction();
             ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-            ft.replace(R.id.fragment_quanlykehoachhoctap, fragment, frag);
             ft.addToBackStack(frag);
+            ft.replace(R.id.fragment_quanlykehoachhoctap, fragment, frag);
             ft.commit();
         }
     }
-    /*public void loadPreviousFragment(){
+
+    public void refreshFragment1(){
         FragmentManager fm = getSupportFragmentManager();
+        //lỗi: không tìm thấy fragment (vì fragment đầu tiên được activity tự động load vào (ko có tag đi kèm) chứ không sử dụng phương thức loadFragment
+        //Giải quyết: thêm tag cho fragment gốc (add android:tag=tên_tag vào file xml chứa fragment gốc)
+        fm.executePendingTransactions();
         QuanLyKeHoachHocTap1Fragment frag1 = (QuanLyKeHoachHocTap1Fragment)fm.findFragmentByTag(FRAG1);
-        frag1.refreshView();
-        fm.popBackStack();
-    }*/
+        if(frag1 == null){
+            loadFragment1();
+        } else {
+            frag1.refreshView();
+            fm.popBackStack();
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == 1){
             FragmentManager fm = getSupportFragmentManager();
+            fm.executePendingTransactions();
             QuanLyKeHoachHocTap2Fragment frag2 = (QuanLyKeHoachHocTap2Fragment)fm.findFragmentByTag(FRAG2);
             if(frag2 == null){
                 loadFragment2(selectedHocKy);

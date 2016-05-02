@@ -26,13 +26,13 @@ import android.widget.Spinner;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
-import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
+import com.nckh2016.vuduytung.nckh2016.main.BaseNavActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity
+public class MainActivity extends BaseNavActivity
         implements FragmentQuaTrinhHocTap.OnFragmentInteractionListener, FragmentNguoiDung.OnFragmentInteractionListener, FragmentNienGiam.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener{
     //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";

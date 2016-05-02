@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUserData;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
-import com.nckh2016.vuduytung.nckh2016.main.BaseActivity;
+import com.nckh2016.vuduytung.nckh2016.main.BaseNavActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,7 +39,7 @@ import java.util.Date;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
-public class BangDiemActivity extends BaseActivity {
+public class BangDiemActivity extends BaseNavActivity {
     //các giá trị Preferences Global
     public static final String PREFS_NAME = "current_user";
     public static final String SUB_PREFS_MASINHVIEN = "user_mssv";

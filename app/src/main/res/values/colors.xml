@@ -26,6 +26,9 @@
     <color name="black_overlay_2">#66808080</color>
     <!-- 3B6272 -->
 
+    <color name="yes">#69F0AE</color>
+    <color name="no">#FF5252</color>
+
     <color name="white">#FFFFFF</color>
     <!-- Transparent: 70% #ECEFF1-->
     <color name="whiteTransparent">#B3FFFFFF</color>

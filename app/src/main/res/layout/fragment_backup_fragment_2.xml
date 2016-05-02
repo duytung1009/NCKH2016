@@ -35,15 +35,6 @@
                     android:layout_height="match_parent"
                     android:layout_above="@+id/bottomLayout"/>
 
-                <com.github.rahatarmanahmed.cpv.CircularProgressView
-                    android:id="@+id/progressBar"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_centerInParent="true"
-                    app:cpv_animAutostart="true"
-                    app:cpv_color="@color/colorPrimary"
-                    app:cpv_indeterminate="true" />
-
                 <LinearLayout
                     android:id="@+id/bottomLayout"
                     android:layout_width="match_parent"
@@ -72,6 +63,15 @@
                 </LinearLayout>
 
             </RelativeLayout>
+
+            <com.github.rahatarmanahmed.cpv.CircularProgressView
+                android:id="@+id/progressBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                app:cpv_animAutostart="true"
+                app:cpv_color="@color/colorPrimary"
+                app:cpv_indeterminate="true" />
 
         </RelativeLayout>
 

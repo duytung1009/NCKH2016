@@ -246,7 +246,8 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                                         updateValues.put(MyContract.UserEntry.COLUMN_HOC_KY, new Gson().toJson(userData));
                                         data.updateNguoiDung(current_user, updateValues);
                                         data.deleteUserData(current_user, selectedHocKy.getHocKy(), selectedHocKy.getNamHoc());
-                                        ((QuanLyKeHoachHocTapActivity) getContext()).loadFragment1();
+                                        //((QuanLyKeHoachHocTapActivity) getContext()).loadFragment1();
+                                        ((QuanLyKeHoachHocTapActivity) getContext()).refreshFragment1();
                                     } else {
                                         Toast.makeText(getContext(), "Lỗi! xóa thất bại", Toast.LENGTH_SHORT).show();
                                     }

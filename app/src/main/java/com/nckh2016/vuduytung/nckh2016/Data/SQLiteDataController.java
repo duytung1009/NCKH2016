@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.BoMonEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuongTrinhDaoTaoEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.ChuyenSauEntry;
@@ -21,11 +22,13 @@ import com.nckh2016.vuduytung.nckh2016.object.Items;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectBoMon;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectCTDT;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectChuyenSau;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectKhoa;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectNganh;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUserData;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUserHocKy;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +42,8 @@ import java.util.List;
 
 /**
  * Created by Tung on 20/2/2016.
+ * Nếu bạn đang đọc những dòng này, nghĩa là bạn đang làm tiếp dự án cũ của mình
+ * Thành thật xin lỗi vì đống code… mong trời phật phù hộ cho bạn ._.
  */
 public class SQLiteDataController extends SQLiteOpenHelper {
     public static SQLiteDataController mInstance = null;
@@ -55,7 +60,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         // TODO Auto-generated constructor stub
     }
 
-    //singleton
+    //Design pattern: Singleton
     public static synchronized SQLiteDataController getInstance(Context cont){
         if (mInstance == null) {
             mInstance = new SQLiteDataController(cont.getApplicationContext());
@@ -271,6 +276,25 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         long flag = -1;
         try{
             openDataBase();
+            Integer namThu = values.getAsInteger(UserEntry.COLUMN_NAM_HOC);
+            if(namThu != null){
+                if(namThu < 5){
+                    ObjectUser user = getUser(masv);
+                    ObjectUserHocKy oldUserHocKy = new Gson().fromJson(user.getHocky(), ObjectUserHocKy.class);
+                    ObjectUserHocKy newUserHocKy = new ObjectUserHocKy();
+                    //xóa dữ liệu học kỳ (của các năm bị loại bỏ)
+                    for(ObjectHocKy obj : oldUserHocKy.getUserData()){
+                        if(obj.getNamHoc() <= namThu){
+                            newUserHocKy.addHocKy(obj);
+                        }
+                    }
+                    values.put(UserEntry.COLUMN_HOC_KY, new Gson().toJson(newUserHocKy));
+                    for(int i = (namThu + 1); i<=5; i++){
+                        //xóa dữ liệu người dùng (của các năm bị loại bỏ)
+                        deleteUserData(masv, i);
+                    }
+                }
+            }
             String[] args = new String[]{masv};
             flag = database.update(UserEntry.TABLE_NAME, values, UserEntry.COLUMN_MA_SV + "=?", args);
         } catch (Exception e){
@@ -2024,6 +2048,28 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             result = database.delete(UserEntry.TABLE_NAME,
                     UserEntry.COLUMN_MA_SV + " = ?",
                     new String[]{masv});
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //close();
+        }
+        return result;
+    }
+
+    /**
+     * xóa dữ liệu người dùng ứng với năm học cụ thể
+     * @param masv mã sinh viên (String)
+     * @param namhoc năm học (int)
+     * @return
+     */
+    public int deleteUserData(String masv, int namhoc){
+        int result = -1;
+        try{
+            // Mở kết nối
+            openDataBase();
+            result = database.delete(UserDataEntry.TABLE_NAME,
+                    UserDataEntry.COLUMN_MA_SV + " = ? AND " + UserDataEntry.COLUMN_NAM_THU + " = ?",
+                    new String[]{masv, String.valueOf(namhoc)});
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

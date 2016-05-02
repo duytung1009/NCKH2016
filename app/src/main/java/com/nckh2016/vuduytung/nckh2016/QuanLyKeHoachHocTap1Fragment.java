@@ -47,6 +47,7 @@ public class QuanLyKeHoachHocTap1Fragment extends Fragment {
     CircularProgressView progressBar;
 
     public QuanLyKeHoachHocTap1Fragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -113,6 +114,17 @@ public class QuanLyKeHoachHocTap1Fragment extends Fragment {
                 mainTask.cancel(true);
             }
         }
+    }
+
+    public void refreshView(){
+        if(mainTask != null){
+            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
+        }
+        Utils.showProcessBar(getContext(), progressBar, listViewHocTap);
+        mainTask = new MainTask(getContext());
+        mainTask.execute();
     }
 
     public class MainTask extends AsyncTask<Void, Long, Void> {

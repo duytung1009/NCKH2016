@@ -14,7 +14,7 @@
     <string name="btn_xem">xem</string>
     <string name="editmasv">mã sinh viên</string>
     <string name="edithoten">họ và tên</string>
-    <string name="editemail">email</string>
+    <string name="editemail">email - không bắt buộc</string>
     <string name="txthoten">họ tên</string>
     <string name="txtmasinhvien">mã sinh viên</string>
 
@@ -27,11 +27,12 @@
     <string name="btn_themmonhoc">thêm môn học</string>
     <string name="btn_capnhatmonhoc">cập nhật điểm số</string>
     <string name="btn_luumonhoc">lưu môn học</string>
+    <string name="btn_xoahocky">xóa học kỳ</string>
 
     <string name="btn_1_fragment_niengiam">Chương trình đào tạo</string>
     <string name="btn_2_fragment_niengiam">Bộ môn chủ quản</string>
     <string name="btn_3_fragment_niengiam">Hướng dẫn sử dụng</string>
-    <string name="btn_4_fragment_niengiam">Về ứng dụng</string>
+    <string name="btn_4_fragment_niengiam">Thông tin ứng dụng</string>
 
     <string name="btn_them_anh">thêm</string>
     <string name="btn_sua_anh">sửa</string>
@@ -67,6 +68,7 @@
     <string name="title_activity_quan_ly_tai_khoan">Danh sách hồ sơ</string>
     <string name="title_activity_backup">Sao lưu - phục hồi</string>
 
+    <string name="chonChuyenSau">Cần chọn hướng chuyên sâu trước</string>
     <string name="khong">Chưa có dữ liệu</string>
 
     <string name="txt">TextView</string>
@@ -96,9 +98,10 @@
     <string name="txtSaoLuu">sao lưu hồ sơ</string>
     <string name="txtSwitchAccount">đổi tài khoản</string>
     <string name="txtAddYear">học hết 1 năm rồi \\o/</string>
-    <string name="txtPermissionDenided">Không có quyền truy cập bộ nhớ</string>
+    <string name="txtPermissionDenided">Không có quyền truy cập bộ nhớ\nCấp quyền truy cập cho ứng dụng tại Cài đặt -> Ứng dụng</string>
     <string name="txtPermissionWriteSuccess">File backup đã lưu tại </string>
     <string name="txtCapNhatThongTin">Cập nhật thông tin cá nhân</string>
+    <string name="txtChuaChonChuyenNganh">Chưa chọn hướng chuyên sâu</string>
 
     <string name="txtBuilding">Đang hoàn thiện...</string>
 

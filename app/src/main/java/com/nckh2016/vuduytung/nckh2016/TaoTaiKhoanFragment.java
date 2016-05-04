@@ -92,9 +92,12 @@ public class TaoTaiKhoanFragment extends Fragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         mListChuyenSau = data.getChuyenSauTheoNganh(((ObjectNganh)mListNganh.get(position)).getManganh());
                         List<String> mListTenChuyenSau = new ArrayList<String>();
+                        mListTenChuyenSau.add(0, getResources().getString(R.string.txtChuaChonChuyenNganh));
+                        int i = 1;
                         for (Object object : mListChuyenSau) {
                             ObjectChuyenSau value = (ObjectChuyenSau) object;
-                            mListTenChuyenSau.add(value != null ? value.getTenchuyensau() : null);
+                            mListTenChuyenSau.add(i, value != null ? value.getTenchuyensau() : null);
+                            i++;
                         }
                         ArrayAdapter<String> mChuyenSauAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, mListTenChuyenSau);
                         mChuyenSauAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -130,13 +133,17 @@ public class TaoTaiKhoanFragment extends Fragment {
                     manganh = ((ObjectNganh)mListNganh.get(mSpinnerNganh.getSelectedItemPosition())).getManganh();
                 }
                 if(mSpinnerChuyenSau.getSelectedItem() != null){
-                    chuyensau = ((ObjectChuyenSau)mListChuyenSau.get(mSpinnerChuyenSau.getSelectedItemPosition())).getMachuyensau();
+                    if(mSpinnerChuyenSau.getSelectedItemPosition() == 0){
+                        chuyensau = "0";
+                    }else {
+                        chuyensau = ((ObjectChuyenSau)mListChuyenSau.get((mSpinnerChuyenSau.getSelectedItemPosition() - 1))).getMachuyensau();
+                    }
                 }
                 if(mSpinnerNamHoc.getSelectedItem() != null){
                     namthu = mSpinnerNamHoc.getSelectedItem().toString();
                 }
 
-                if(masv.isEmpty() || hoten.isEmpty() || makhoa == null || manganh == null || namthu == null || chuyensau==null){
+                if(masv.isEmpty() || hoten.isEmpty() || makhoa == null || manganh == null || namthu == null || chuyensau == null){
                     Toast.makeText(getContext(), "bổ sung thêm thông tin", Toast.LENGTH_SHORT).show();
                 } else {
                     ObjectUserHocKy newUserHocKy = new ObjectUserHocKy();

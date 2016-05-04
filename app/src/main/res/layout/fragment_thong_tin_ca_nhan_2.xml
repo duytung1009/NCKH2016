@@ -38,7 +38,14 @@
                     android:id="@+id/editHoTen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/txtHoTen" />
+                    android:hint="@string/edithoten" />
+
+                <Spinner
+                    android:id="@+id/spinnerChuyenSau"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editHoTen"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -79,9 +86,9 @@
             android:id="@+id/line_bottom"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_above="@+id/btnGroup"
             android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:layout_marginRight="@dimen/activity_vertical_margin"
-            android:layout_above="@+id/btnGroup"
             android:background="#efefef" />
 
         <LinearLayout
@@ -95,11 +102,11 @@
             <Button
                 android:id="@+id/btnCancel"
                 style="@style/btn_layout"
-                android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/btn_huy"/>
+                android:text="@string/btn_huy"
+                android:textColor="@color/white" />
 
             <View
                 android:layout_width="1dp"
@@ -111,11 +118,11 @@
             <Button
                 android:id="@+id/btnUpdate"
                 style="@style/btn_layout"
-                android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/btn_capnhat"/>
+                android:text="@string/btn_capnhat"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

@@ -61,12 +61,23 @@
             android:layout_below="@+id/layoutTieuDe"
             android:background="#c0c0c0" />
 
+        <TextView
+            android:id="@+id/txtThongBao"
+            style="@style/bigText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnThemMonHoc"
+            android:layout_below="@+id/objLine"
+            android:gravity="center"
+            android:text="@string/chonChuyenSau"
+            android:textColor="@color/colorPrimary" />
+
         <ListView
             android:id="@+id/list_view_chonmonhoc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/btnThemMonHoc"
-            android:layout_below="@+id/objLine"></ListView>
+            android:layout_below="@+id/objLine"/>
 
         <Button
             android:id="@+id/btnThemMonHoc"

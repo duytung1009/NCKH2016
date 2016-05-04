@@ -47,6 +47,7 @@ public class GioiThieuActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         btnUpdate = (Button)findViewById(R.id.btnUpdate);
+        btnUpdate.setVisibility(View.GONE);
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -51,6 +51,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
     ListView mListHocKy;
     Button btnThemMonHoc;
     CheckBox selectAllCheckBox;
+    TextView txtThongBao;
 
     public KeHoachHocTap2Fragment() {
         // Required empty public constructor
@@ -68,6 +69,7 @@ public class KeHoachHocTap2Fragment extends Fragment {
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
+        txtThongBao = (TextView)view.findViewById(R.id.txtThongBao);
         mListHocKy = (ListView)view.findViewById(R.id.list_view_chonmonhoc);
         btnThemMonHoc = (Button)view.findViewById(R.id.btnThemMonHoc);
         selectAllCheckBox = (CheckBox)view.findViewById(R.id.selectAllCheckBox);
@@ -149,9 +151,14 @@ public class KeHoachHocTap2Fragment extends Fragment {
                 break;
         }
         ArrayList<Object> mArrayList = data.getChuongTrinhDaoTao(selectedHocKy.getNganh(), selectedHocKy.getNamHoc(), maHocKy, chuyenSau);
+        //nếu học kỳ không có môn học nào -> lọc theo hướng chuyên sâu, dùng mã chuyên sâu của người dùng
         if(mArrayList.size() == 0){
             chuyenSau = Integer.parseInt(data.getUser(current_user).getMachuyensau());
-            mArrayList = data.getChuongTrinhDaoTao(selectedHocKy.getNganh(), selectedHocKy.getNamHoc(), maHocKy, chuyenSau);
+            if(chuyenSau == 0){
+                txtThongBao.setVisibility(View.VISIBLE);
+            } else {
+                mArrayList = data.getChuongTrinhDaoTao(selectedHocKy.getNganh(), selectedHocKy.getNamHoc(), maHocKy, chuyenSau);
+            }
         }
         ArrayList<Object> mMonHocCaiThien = data.getMonHocCaiThien(current_user, mArrayList);
 

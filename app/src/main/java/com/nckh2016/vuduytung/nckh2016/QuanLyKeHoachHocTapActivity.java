@@ -116,6 +116,17 @@ public class QuanLyKeHoachHocTapActivity extends BaseNavActivity {
         ft.commit();*/
     }
 
+    public void loadFragment4(ObjectHocKy hocKy, ArrayList<String> danhSachMonHoc){
+        Bundle bundle = new Bundle();
+        String jsonHocKy = new Gson().toJson(hocKy);
+        bundle.putStringArrayList(DANHSACHMONHOC, danhSachMonHoc);
+        bundle.putString(HOCKY, jsonHocKy);
+
+        Fragment frag4 = new QuanLyKeHoachHocTap4Fragment();
+        frag4.setArguments(bundle);
+        replaceFragment(frag4, FRAG4);
+    }
+
     private void replaceFragment(Fragment fragment, String frag){
         FragmentManager fm = getSupportFragmentManager();
         boolean fragmentPopped = fm.popBackStackImmediate(frag, 0);
@@ -138,6 +149,7 @@ public class QuanLyKeHoachHocTapActivity extends BaseNavActivity {
             loadFragment1();
         } else {
             frag1.refreshView();
+            fm.popBackStack();
             fm.popBackStack();
         }
     }

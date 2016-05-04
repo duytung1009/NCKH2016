@@ -104,6 +104,7 @@
             android:background="#c0c0c0" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/txtThongBao"
             style="@style/bigText"
             android:layout_width="match_parent"

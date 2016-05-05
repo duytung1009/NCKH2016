@@ -95,7 +95,6 @@ public class MainActivity extends BaseNavActivity
     protected void onStart() {
         super.onStart();
         tabLayout.setEnabled(false);
-        Utils.showProcessBar(this, progressBar, viewPager);
         mainTask = new MainTask(this);
         mainTask.execute();
     }
@@ -280,7 +279,6 @@ public class MainActivity extends BaseNavActivity
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == 1){
             tabLayout.setEnabled(false);
-            Utils.showProcessBar(this, progressBar, viewPager);
             mainTask = new MainTask(this);
             mainTask.execute();
             updateNavigationView();
@@ -297,6 +295,7 @@ public class MainActivity extends BaseNavActivity
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Utils.showProcessBar(mContext, progressBar, viewPager);
         }
 
         @Override

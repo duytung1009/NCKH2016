@@ -79,7 +79,6 @@ public class AdapterXoaMonHoc  extends ArrayAdapter<Object> {
                 btnXoa.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        progressDelete.show();
                         new MainTask(mContext).execute(mObject);
                     }
                 });
@@ -99,6 +98,7 @@ public class AdapterXoaMonHoc  extends ArrayAdapter<Object> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDelete.show();
         }
 
         @Override

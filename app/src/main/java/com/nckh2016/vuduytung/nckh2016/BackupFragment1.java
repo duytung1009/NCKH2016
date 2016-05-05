@@ -143,7 +143,6 @@ public class BackupFragment1 extends Fragment {
                         mainTask.cancel(true);
                     }
                 }
-                Utils.showProcessBar(getContext(), progressBar, mainLayout);
                 mainTask = new MainTask(getContext());
                 mainTask.execute();
             }
@@ -168,7 +167,6 @@ public class BackupFragment1 extends Fragment {
                                     if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
                                     } else {
-                                        Utils.hideProcessBar(getContext(), progressBar, mainLayout);
                                         Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
@@ -203,7 +201,6 @@ public class BackupFragment1 extends Fragment {
                                     if (mainTask.getStatus() == AsyncTask.Status.RUNNING) {
                                         mainTask.cancel(true);
                                     }
-                                    Utils.showProcessBar(getContext(), progressBar, mainLayout);
                                     mainTask = new MainTask(getContext());
                                     mainTask.execute();
                                 }
@@ -262,22 +259,18 @@ public class BackupFragment1 extends Fragment {
                         mainTask.cancel(true);
                     }
                     progressBackup.dismiss();
-                    Utils.showProcessBar(getContext(), progressBar, mainLayout);
                     mainTask = new MainTask(getContext());
                     mainTask.execute();
                     Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionWriteSuccess) + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
                 } else {
-                    Utils.hideProcessBar(getContext(), progressBar, mainLayout);
                     Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
                 }
             }
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:{
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Utils.showProcessBar(getContext(), progressBar, mainLayout);
                     mainTask = new MainTask(getContext());
                     mainTask.execute();
                 } else {
-                    Utils.hideProcessBar(getContext(), progressBar, mainLayout);
                     Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -291,11 +284,10 @@ public class BackupFragment1 extends Fragment {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             } else {
-                Utils.hideProcessBar(getContext(), progressBar, mainLayout);
                 Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Utils.showProcessBar(getContext(), progressBar, mainLayout);
+
             mainTask = new MainTask(getContext());
             mainTask.execute();
         }
@@ -422,7 +414,6 @@ public class BackupFragment1 extends Fragment {
                     mainTask.cancel(true);
                 }
             }
-            Utils.showProcessBar(getContext(), progressBar, mainLayout);
             mainTask = new MainTask(getContext());
             mainTask.execute();
         } else {
@@ -440,6 +431,7 @@ public class BackupFragment1 extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Utils.showProcessBar(getContext(), progressBar, mainLayout);
         }
 
         @Override

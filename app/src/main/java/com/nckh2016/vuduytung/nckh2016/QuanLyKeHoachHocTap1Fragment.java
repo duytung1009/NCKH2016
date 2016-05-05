@@ -72,7 +72,6 @@ public class QuanLyKeHoachHocTap1Fragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Utils.showProcessBar(getContext(), progressBar, listViewHocTap);
         mainTask = new MainTask(getContext());
         mainTask.execute();
     }
@@ -122,7 +121,7 @@ public class QuanLyKeHoachHocTap1Fragment extends Fragment {
                 mainTask.cancel(true);
             }
         }
-        Utils.showProcessBar(getContext(), progressBar, listViewHocTap);
+
         mainTask = new MainTask(getContext());
         mainTask.execute();
     }
@@ -137,6 +136,7 @@ public class QuanLyKeHoachHocTap1Fragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Utils.showProcessBar(getContext(), progressBar, listViewHocTap);
         }
 
         @Override

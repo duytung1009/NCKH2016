@@ -13,10 +13,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterCTDT;
+import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import com.nckh2016.vuduytung.nckh2016.object.Items;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectCTDT;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy2;
-import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -140,7 +140,6 @@ public class FragmentQuaTrinhHocTap extends Fragment {
     public void onStart() {
         super.onStart();
         setUpChart();
-        Utils.showProcessBar(getContext(), progressBar, mainChart);
         mainTask = new MainTask(getContext());
         mainTask.execute();
     }
@@ -317,6 +316,7 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Utils.showProcessBar(getContext(), progressBar, mainChart);
         }
 
         @Override

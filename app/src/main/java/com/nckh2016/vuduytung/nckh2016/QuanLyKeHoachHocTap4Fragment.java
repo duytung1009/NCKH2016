@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHocNhapDiem;
+import com.nckh2016.vuduytung.nckh2016.Data.AdapterXoaMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
@@ -51,7 +51,7 @@ public class QuanLyKeHoachHocTap4Fragment extends Fragment {
     private ObjectUserHocKy userData;
     private ObjectHocKy selectedHocKy;
     //các adapter
-    AdapterMonHocNhapDiem monHocAdapter;
+    AdapterXoaMonHoc monHocAdapter;
     //các asynctask
     MainTask mainTask;
     //các view
@@ -156,7 +156,8 @@ public class QuanLyKeHoachHocTap4Fragment extends Fragment {
                         }
                     });
                 }
-                monHocAdapter = new AdapterMonHocNhapDiem(getActivity(), 0, objects);
+                monHocAdapter = new AdapterXoaMonHoc(getActivity(), 0, current_user);
+                monHocAdapter.addAll(objects);
                 lvMonHoc.setAdapter(monHocAdapter);
                 lvMonHoc.setSelection(0);
             }

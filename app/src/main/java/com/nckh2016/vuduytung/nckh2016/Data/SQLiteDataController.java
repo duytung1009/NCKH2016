@@ -2135,6 +2135,28 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     /**
+     * xóa dữ liệu môn học của người dùng cụ thể
+     * @param masv mã sinh viên (String)
+     * @param mamh mã môn học (String)
+     * @return
+     */
+    public int deleteMonHoc(String masv, String mamh){
+        int result = -1;
+        try{
+            // Mở kết nối
+            openDataBase();
+            result = database.delete(UserDataEntry.TABLE_NAME,
+                    UserDataEntry.COLUMN_MA_SV + " = ? AND " + UserDataEntry.COLUMN_MA_MON_HOC + " = ?",
+                    new String[]{masv, mamh});
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //close();
+        }
+        return result;
+    }
+
+    /**
      * xóa dữ liệu người dùng ứng với năm học cụ thể
      * @param masv mã sinh viên (String)
      * @param namhoc năm học (int)

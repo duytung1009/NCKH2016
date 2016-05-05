@@ -15,12 +15,18 @@ android {
         applicationId "com.nckh2016.vuduytung.nckh2016"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 2
-        versionName "1.1"
+        versionCode 4
+        versionName "1.3"
     }
     buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }

@@ -70,14 +70,15 @@
             android:layout_below="@+id/objLine"
             android:gravity="center"
             android:text="@string/chonChuyenSau"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            android:visibility="gone" />
 
         <ListView
             android:id="@+id/list_view_chonmonhoc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/btnThemMonHoc"
-            android:layout_below="@+id/objLine"/>
+            android:layout_below="@+id/objLine" />
 
         <Button
             android:id="@+id/btnThemMonHoc"

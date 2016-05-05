@@ -44,11 +44,6 @@ public class AdapterMonHoc extends ArrayAdapter<Object> {
     }
 
     @Override
-    public void clear() {
-        super.clear();
-    }
-
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (objects.size() != 0) {

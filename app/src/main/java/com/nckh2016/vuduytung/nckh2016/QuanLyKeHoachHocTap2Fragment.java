@@ -1,15 +1,12 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +16,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
-import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
@@ -222,12 +217,12 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
             btnXoaHocKy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*ArrayList<String> danhSachMonHoc = new ArrayList<String>();
+                    ArrayList<String> danhSachMonHoc = new ArrayList<String>();
                     for(Object value : userMonHoc){
                         danhSachMonHoc.add(((ObjectMonHoc)value).getMamh());
                     }
-                    ((QuanLyKeHoachHocTapActivity)mContext).loadFragment4(selectedHocKy, danhSachMonHoc);*/
-                    new AlertDialog.Builder(getContext())
+                    ((QuanLyKeHoachHocTapActivity)mContext).loadFragment4(selectedHocKy, danhSachMonHoc);
+                    /*new AlertDialog.Builder(getContext())
                             .setTitle("Xóa học kỳ")
                             .setMessage("Xóa toàn bộ thông tin của học kỳ này?")
                             .setIcon(R.drawable.error)
@@ -264,7 +259,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
                                 }
-                            }).show();
+                            }).show();*/
                 }
             });
         }

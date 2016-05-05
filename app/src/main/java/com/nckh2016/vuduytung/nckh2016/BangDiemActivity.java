@@ -132,7 +132,9 @@ public class BangDiemActivity extends BaseNavActivity {
                                         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                                         intent.setType("image/*");
                                         intent.setAction(Intent.ACTION_GET_CONTENT);
-                                        startActivityForResult(intent, REQUEST_FROM_GALLERY);
+                                        if (intent.resolveActivity(getPackageManager()) != null) {
+                                            startActivityForResult(intent, REQUEST_FROM_GALLERY);
+                                        }
                                         break;
                                     }
                                     default:

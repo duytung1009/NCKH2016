@@ -97,7 +97,7 @@ public class XemNhanhFragment3 extends Fragment {
             Log.e("tag", e.getMessage());
         }
         double diemMin = 4, diemMax = 5.5;
-        final ArrayList<Object> userMonHocCaiThien = data.getMonHocChuaQua(current_user, diemMin, diemMax);
+        final ArrayList<Object> userMonHocCaiThien = data.getMonHocCaiThien(current_user, data.getMonHocMinMax(current_user, diemMin, diemMax));
         AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
         mAdapter.addAll(userMonHocCaiThien);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);

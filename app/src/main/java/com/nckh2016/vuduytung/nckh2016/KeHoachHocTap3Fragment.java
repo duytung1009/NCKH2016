@@ -18,13 +18,12 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHocNhapDiem;
+import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUserData;
-import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -130,11 +129,13 @@ public class KeHoachHocTap3Fragment extends Fragment {
                                 tinChi += ((ObjectMonHoc)value).getTinchi();
                             }
                             tinChi += ((KeHoachHocTapActivity)getActivity()).tinChiHocKy;
-                            if(tinChi > 14){
+                            //tạm tắt chức năng hạn chế đăng ký số tín chỉ theo điểm số hiện tại
+                            insertDiem(data, values);
+                            /*if(tinChi > 14){
                                 Toast.makeText(getContext(), "Đăng ký quá giới hạn 14 tín chỉ\nTổng điểm hiện tại: " + String.valueOf(new DecimalFormat("####0.00").format(tongDiem)), Toast.LENGTH_SHORT).show();
                             } else {
                                 insertDiem(data, values);
-                            }
+                            }*/
                         } else {
                             insertDiem(data, values);
                         }

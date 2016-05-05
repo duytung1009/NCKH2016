@@ -109,7 +109,9 @@ public class XemNhanhFragment4 extends Fragment {
         } else {
             double tongDiem = 0;
             for(Object value : userHocPhanTheDuc){
-                tongDiem += ((ObjectMonHoc)value).getDiem();
+                if(((ObjectMonHoc)value).getDiem() != -1){
+                    tongDiem += ((ObjectMonHoc)value).getDiem();
+                }
             }
             tieuDe = "Điểm tổng kết: " + new DecimalFormat("####0.##").format(tongDiem/5);
         }

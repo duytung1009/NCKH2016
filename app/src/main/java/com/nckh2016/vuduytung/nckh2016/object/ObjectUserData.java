@@ -10,6 +10,8 @@ public class ObjectUserData {
     String namthu;
     String diemso;
     byte[] bangdiem;
+    //bổ sung cho phần tính tổng điểm
+    int tinchi;
 
     public ObjectUserData() {
         this.masv = null;
@@ -18,6 +20,7 @@ public class ObjectUserData {
         this.namthu = null;
         this.diemso = null;
         this.bangdiem = null;
+        this.tinchi = 0;
     }
 
     public ObjectUserData(String masv, String mamonhoc, String hocky, String namthu, String diemso) {
@@ -36,6 +39,14 @@ public class ObjectUserData {
         this.namthu = namthu;
         this.diemso = diemso;
         this.bangdiem = bangdiem;
+    }
+
+    public ObjectUserData(String mamonhoc, String hocky, String namthu, String diemso, int tinchi) {
+        this.mamonhoc = mamonhoc;
+        this.hocky = hocky;
+        this.namthu = namthu;
+        this.diemso = diemso;
+        this.tinchi = tinchi;
     }
 
     public String getMasv() {
@@ -84,5 +95,13 @@ public class ObjectUserData {
 
     public void setBangdiem(byte[] bangdiem) {
         this.bangdiem = bangdiem;
+    }
+
+    public int getTinchi() {
+        return tinchi;
+    }
+
+    public void setTinchi(int tinchi) {
+        this.tinchi = tinchi;
     }
 }

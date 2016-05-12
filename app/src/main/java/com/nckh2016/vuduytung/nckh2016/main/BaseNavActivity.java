@@ -37,10 +37,6 @@ import com.nckh2016.vuduytung.nckh2016.ThongTinCaNhanActivity;
 import com.nckh2016.vuduytung.nckh2016.XemNhanhActivity;
 
 public class BaseNavActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
-    public static final String SUB_PREFS_TENSINHVIEN = "user_name";
     //các biến được khôi phục lại nếu app resume
     private String current_user_masv = null;
     private String current_user_hoten = null;
@@ -82,12 +78,12 @@ public class BaseNavActivity extends AppCompatActivity implements NavigationView
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         //disable item icon tint color
         navigationView.setItemIconTintList(null);
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if(currentUserData.getString(SUB_PREFS_MASINHVIEN, null) == null || currentUserData.getString(SUB_PREFS_TENSINHVIEN, null) == null){
+        SharedPreferences currentUserData = getSharedPreferences(Utils.PREFS_NAME, MODE_PRIVATE);
+        if(currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null) == null || currentUserData.getString(Utils.SUB_PREFS_TENSINHVIEN, null) == null){
             //chua co du lieu
         } else{
-            current_user_hoten = currentUserData.getString(SUB_PREFS_TENSINHVIEN, null);
-            current_user_masv = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user_hoten = currentUserData.getString(Utils.SUB_PREFS_TENSINHVIEN, null);
+            current_user_masv = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
             View headerView = navigationView.getHeaderView(0);
             TextView txtNavTenSinhVien = (TextView) headerView.findViewById(R.id.txtNavTenSinhVien);
             TextView txtNavMaSinhVien = (TextView) headerView.findViewById(R.id.txtNavMaSinhVien);
@@ -102,19 +98,19 @@ public class BaseNavActivity extends AppCompatActivity implements NavigationView
         super.onResume();
         updateNavigationView();
         //lấy dữ liệu Global
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        current_user_hoten = currentUserData.getString(SUB_PREFS_TENSINHVIEN, null);
-        current_user_masv = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        SharedPreferences currentUserData = getSharedPreferences(Utils.PREFS_NAME, MODE_PRIVATE);
+        current_user_hoten = currentUserData.getString(Utils.SUB_PREFS_TENSINHVIEN, null);
+        current_user_masv = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
     }
 
     public void updateNavigationView(){
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences currentUserData = getSharedPreferences(Utils.PREFS_NAME, MODE_PRIVATE);
         View headerView = navigationView.getHeaderView(0);
         TextView txtNavTenSinhVien = (TextView) headerView.findViewById(R.id.txtNavTenSinhVien);
         TextView txtNavMaSinhVien = (TextView) headerView.findViewById(R.id.txtNavMaSinhVien);
-        if(currentUserData.getString(SUB_PREFS_MASINHVIEN, null) != null){
-            current_user_hoten = currentUserData.getString(SUB_PREFS_TENSINHVIEN, null);
-            current_user_masv = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        if(currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null) != null){
+            current_user_hoten = currentUserData.getString(Utils.SUB_PREFS_TENSINHVIEN, null);
+            current_user_masv = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
             txtNavTenSinhVien.setText(current_user_hoten);
             txtNavMaSinhVien.setText(current_user_masv);
         } else {

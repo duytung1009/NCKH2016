@@ -30,8 +30,9 @@ import android.widget.Toast;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterListFile;
-import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -57,13 +58,9 @@ public class BackupFragment1 extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các giá trị Global trong Activity
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
-    private static final String PATTERN = "_backup.txt";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
     //các asynctask + biến liên quan
@@ -116,8 +113,8 @@ public class BackupFragment1 extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_backup_fragment_1, container, false);
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
+        current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         mainLayout = (RelativeLayout)view.findViewById(R.id.mainLayout);
         progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
         final SQLiteDataController data = SQLiteDataController.getInstance(getContext());
@@ -128,7 +125,7 @@ public class BackupFragment1 extends Fragment {
             Log.e("tag", e.getMessage());
         }
         listViewFile = (ListView)view.findViewById(R.id.listViewFile);
-        adapterListFile = new AdapterListFile(getContext(), 0, BackupFragment1.this);
+        adapterListFile = new AdapterListFile(BackupFragment1.this, 0);
         listViewFile.setAdapter(adapterListFile);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -147,6 +144,7 @@ public class BackupFragment1 extends Fragment {
                 mainTask.execute();
             }
         });
+        //button
         Button btnBackup = (Button)view.findViewById(R.id.btnBackup);
         if(current_user == null){
             btnBackup.setVisibility(View.GONE);
@@ -163,48 +161,8 @@ public class BackupFragment1 extends Fragment {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-                                    } else {
-                                        Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    progressBackup = new ProgressDialog(getContext());
-                                    progressBackup.setMessage("Sao lưu hồ sơ");
-                                    progressBackup.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                                    progressBackup.setIndeterminate(true);
-                                    progressBackup.setProgressNumberFormat(null);
-                                    progressBackup.setProgressPercentFormat(null);
-                                    progressBackup.show();
-                                    SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-                                    try {
-                                        data.isCreatedDatabase();
-                                    } catch (IOException e) {
-                                        Log.e("tag", e.getMessage());
-                                    }
-                                    ObjectUser user = data.getUser(current_user);
-                                    user.setUserdata(data.getUserData(current_user));
-                                    Gson gson = new Gson();
-                                    String json = gson.toJson(user);
-                                    String filename = current_user + PATTERN;
-                                    File file = new File(Environment.getExternalStorageDirectory(), filename);
-                                    try {
-                                        FileOutputStream outputStream = new FileOutputStream(file);
-                                        outputStream.write(json.getBytes());
-                                        outputStream.close();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                    progressBackup.dismiss();
-                                    Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionWriteSuccess) + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
-                                    if (mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-                                        mainTask.cancel(true);
-                                    }
-                                    mainTask = new MainTask(getContext());
-                                    mainTask.execute();
-                                }
                                 dialog.dismiss();
+                                backupUser();
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -228,40 +186,56 @@ public class BackupFragment1 extends Fragment {
         switch (requestCode){
             case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:{
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    progressBackup = new ProgressDialog(getContext());
-                    progressBackup.setMessage("Sao lưu hồ sơ");
-                    progressBackup.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    progressBackup.setIndeterminate(true);
-                    progressBackup.setProgressNumberFormat(null);
-                    progressBackup.setProgressPercentFormat(null);
-                    progressBackup.show();
-                    SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-                    try{
-                        data.isCreatedDatabase();
-                    }
-                    catch (IOException e){
-                        Log.e("tag", e.getMessage());
-                    }
-                    ObjectUser user = data.getUser(current_user);
-                    user.setUserdata(data.getUserData(current_user));
-                    Gson gson = new Gson();
-                    String json = gson.toJson(user);
-                    String filename = current_user + PATTERN;
-                    File file = new File(Environment.getExternalStorageDirectory(), filename);
-                    try {
-                        FileOutputStream outputStream = new FileOutputStream(file);
-                        outputStream.write(json.getBytes());
-                        outputStream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-                        mainTask.cancel(true);
-                    }
-                    progressBackup.dismiss();
-                    mainTask = new MainTask(getContext());
-                    mainTask.execute();
-                    Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionWriteSuccess) + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
+                    new AsyncTask<Void, Long, Void>(){
+                        @Override
+                        protected void onPreExecute() {
+                            super.onPreExecute();
+                            progressBackup = new ProgressDialog(getContext());
+                            progressBackup.setMessage("Sao lưu hồ sơ");
+                            progressBackup.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                            progressBackup.setIndeterminate(true);
+                            progressBackup.setProgressNumberFormat(null);
+                            progressBackup.setProgressPercentFormat(null);
+                            progressBackup.show();
+                        }
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+                            try{
+                                data.isCreatedDatabase();
+                            }
+                            catch (IOException e){
+                                Log.e("tag", e.getMessage());
+                            }
+                            ObjectUser user = data.getUser(current_user);
+                            user.setUserdata(data.getUserData(current_user));
+                            Gson gson = new Gson();
+                            String json = gson.toJson(user);
+                            String filename = current_user + Utils.BACKUP_FILE_PATTERN;
+                            File file = new File(Environment.getExternalStorageDirectory(), filename);
+                            try {
+                                FileOutputStream outputStream = new FileOutputStream(file);
+                                outputStream.write(json.getBytes());
+                                outputStream.close();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                                mainTask.cancel(true);
+                            }
+                            progressBackup.dismiss();
+                            mainTask = new MainTask(getContext());
+                            mainTask.execute();
+                            Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionWriteSuccess) + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
+                        }
+                    }.execute();
                 } else {
                     Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
                 }
@@ -297,9 +271,9 @@ public class BackupFragment1 extends Fragment {
     public void onResume() {
         super.onResume();
         //lấy dữ liệu Global
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
     }
 
@@ -352,73 +326,185 @@ public class BackupFragment1 extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void restoreUser(File file){
-        progressRestore = new ProgressDialog(getContext());
-        progressRestore.setMessage("Khôi phục hồ sơ");
-        progressRestore.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressRestore.setIndeterminate(true);
-        progressRestore.setProgressNumberFormat(null);
-        progressRestore.setProgressPercentFormat(null);
-        progressRestore.show();
-        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-        try{
-            data.isCreatedDatabase();
-        }
-        catch (IOException e){
-            Log.e("tag", e.getMessage());
-        }
-        try {
-            FileInputStream fis = new FileInputStream(file);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line);
-            }
-            String json = sb.toString();
-            Gson gson = new Gson();
-            ObjectUser user = gson.fromJson(json, ObjectUser.class);
-            progressRestore.dismiss();
-            if (user.getMasv() == null) {
-                Toast.makeText(getContext(), "Không thể đọc dữ liệu từ tệp đã chọn", Toast.LENGTH_SHORT).show();
+    public void backupUser(){
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
             } else {
-                if (data.insertUser(user)) {
-                    ((BackupActivity)getActivity()).updateNavigationView();
-                    Toast.makeText(getContext(), "Đã khôi phục", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Khôi phục thất bại", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            progressRestore.dismiss();
+        } else {
+            new AsyncTask<Void, Long, Void>(){
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                    progressBackup = new ProgressDialog(getContext());
+                    progressBackup.setMessage("Sao lưu hồ sơ");
+                    progressBackup.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressBackup.setIndeterminate(true);
+                    progressBackup.setProgressNumberFormat(null);
+                    progressBackup.setProgressPercentFormat(null);
+                    progressBackup.show();
+                }
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+                    try{
+                        data.isCreatedDatabase();
+                    }
+                    catch (IOException e){
+                        Log.e("tag", e.getMessage());
+                    }
+                    ObjectUser user = data.getUser(current_user);
+                    user.setUserdata(data.getUserData(current_user));
+                    Gson gson = new Gson();
+                    String json = gson.toJson(user);
+                    String filename = current_user + Utils.BACKUP_FILE_PATTERN;
+                    File file = new File(Environment.getExternalStorageDirectory(), filename);
+                    try {
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        outputStream.write(json.getBytes());
+                        outputStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                        mainTask.cancel(true);
+                    }
+                    progressBackup.dismiss();
+                    mainTask = new MainTask(getContext());
+                    mainTask.execute();
+                    Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionWriteSuccess) + Environment.getExternalStorageDirectory(), Toast.LENGTH_SHORT).show();
+                }
+            }.execute();
         }
     }
 
-    public void deleteFile(String path){
-        progressDelete = new ProgressDialog(getContext());
-        progressDelete.setMessage("Xóa hồ sơ");
-        progressDelete.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDelete.setIndeterminate(true);
-        progressDelete.setProgressNumberFormat(null);
-        progressDelete.setProgressPercentFormat(null);
-        progressDelete.show();
-        File file = new File(path);
-        boolean deleted = file.delete();
-        progressDelete.dismiss();
-        if(deleted){
-            if(mainTask != null){
-                if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
-                    mainTask.cancel(true);
+    public void restoreUser(File file){
+        new AsyncTask<File, Long, Void>(){
+            private int mCase = -1;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressRestore = new ProgressDialog(getContext());
+                progressRestore.setMessage("Khôi phục hồ sơ");
+                progressRestore.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressRestore.setIndeterminate(true);
+                progressRestore.setProgressNumberFormat(null);
+                progressRestore.setProgressPercentFormat(null);
+                progressRestore.show();
+            }
+
+            @Override
+            protected Void doInBackground(File... params) {
+                File file = params[0];
+                SQLiteDataController data = SQLiteDataController.getInstance(getContext());
+                try {
+                    data.isCreatedDatabase();
+                } catch (IOException e) {
+                    Log.e("tag", e.getMessage());
+                }
+                try {
+                    FileInputStream fis = new FileInputStream(file);
+                    InputStreamReader isr = new InputStreamReader(fis);
+                    BufferedReader bufferedReader = new BufferedReader(isr);
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    String json = sb.toString();
+                    Gson gson = new Gson();
+                    ObjectUser user = gson.fromJson(json, ObjectUser.class);
+                    if (user.getMasv() == null) {
+                        mCase = 0;
+                    } else {
+                        if (data.insertUser(user)) {
+                            mCase = 1;
+                        } else {
+                            mCase = 2;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    return null;
                 }
             }
-            mainTask = new MainTask(getContext());
-            mainTask.execute();
-        } else {
-            Toast.makeText(getContext(), "Xóa hồ sơ thất bại", Toast.LENGTH_SHORT).show();
-        }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                progressRestore.dismiss();
+                switch(mCase){
+                    case 0:{
+                        Toast.makeText(getContext(), "Không thể đọc dữ liệu từ tệp đã chọn", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case 1:{
+                        ((BackupActivity) getActivity()).updateNavigationView();
+                        Toast.makeText(getContext(), "Đã khôi phục", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case 2:{
+                        Toast.makeText(getContext(), "Khôi phục thất bại", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    default:{
+                        Toast.makeText(getContext(), "Khôi phục thất bại", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
+            }
+        }.execute(file);
+    }
+
+    public void deleteFile(String path){
+        new AsyncTask<String, Long, Boolean>(){
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressDelete = new ProgressDialog(getContext());
+                progressDelete.setMessage("Xóa hồ sơ");
+                progressDelete.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressDelete.setIndeterminate(true);
+                progressDelete.setProgressNumberFormat(null);
+                progressDelete.setProgressPercentFormat(null);
+                progressDelete.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(String... params) {
+                String path = params[0];
+                File file = new File(path);
+                return file.delete();
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                progressDelete.dismiss();
+                if(aBoolean){
+                    if(mainTask != null){
+                        if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                            mainTask.cancel(true);
+                        }
+                    }
+                    mainTask = new MainTask(getContext());
+                    mainTask.execute();
+                } else {
+                    Toast.makeText(getContext(), "Xóa hồ sơ thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute(path);
     }
 
     public class MainTask extends AsyncTask<Void, Long, Void> {
@@ -466,7 +552,7 @@ public class BackupFragment1 extends Fragment {
                         if (tempListFile[i].isDirectory()) {
                             scanForUserFile(tempListFile[i]);
                         } else {
-                            if (tempListFile[i].getName().equals(current_user + PATTERN)){
+                            if (tempListFile[i].getName().equals(current_user + Utils.BACKUP_FILE_PATTERN)){
                                 listFile.add(tempListFile[i]);
                             }
                             /*if (tempListFile[i].getName().endsWith(PATTERN)){

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.Items;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectCTDT;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
@@ -74,8 +75,7 @@ public class Nganh3Fragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
-                intent.putExtra("MaMonHoc", ((ObjectCTDT) mListCTDT.get(position)).getMamh());
-                intent.putExtra("caller", "BoMonActivity");
+                intent.putExtra(Utils.MA_MON_HOC, ((ObjectCTDT) mListCTDT.get(position)).getMamh());
                 startActivity(intent);
             }
         });

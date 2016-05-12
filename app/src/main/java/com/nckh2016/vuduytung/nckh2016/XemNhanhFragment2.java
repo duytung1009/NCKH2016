@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,9 +14,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
@@ -32,13 +36,16 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class XemNhanhFragment2 extends Fragment {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
-    //các giá trị global
-    private static final String MONHOC = "MaMonHoc";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
+    private ArrayList<Object> listMonHoc = new ArrayList<>();
+    //các view
+    CircularProgressView progressBar;
+    RelativeLayout mainLayout;
+    TextView txtTieuDe;
+    ListView lvMonHoc;
+    //các AsyncTask
+    MainTask mainTask;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,34 +94,40 @@ public class XemNhanhFragment2 extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_xem_nhanh_2, container, false);
-        final SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
-        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-        try{
-            data.isCreatedDatabase();
-        }
-        catch (IOException e){
-            Log.e("tag", e.getMessage());
-        }
-        double diemMin = 0, diemMax = 4;
-        final ArrayList<Object> userMonHocChuaQua = data.getMonHocChuaQua(current_user, data.getMonHocMinMax(current_user, diemMin, diemMax));
-        AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
-        mAdapter.addAll(userMonHocChuaQua);
+        final SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
+        current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
+        mainLayout = (RelativeLayout) view.findViewById(R.id.mainLayout);
+        progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
-        TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         imageView.setImageResource(R.drawable.high_priority);
-        txtTieuDe.setText("Môn học chưa qua: " + userMonHocChuaQua.size() + " môn");
-        ListView lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
+        txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
+        lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
         lvMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
-                intent.putExtra(MONHOC, ((ObjectMonHoc) userMonHocChuaQua.get(position)).getMamh());
+                intent.putExtra(Utils.MA_MON_HOC, ((ObjectMonHoc) listMonHoc.get(position)).getMamh());
                 startActivity(intent);
             }
         });
-        lvMonHoc.setAdapter(mAdapter);
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mainTask = new MainTask(getContext());
+        mainTask.execute();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mainTask != null) {
+            if (mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+                mainTask.cancel(true);
+            }
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -154,5 +167,47 @@ public class XemNhanhFragment2 extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class MainTask extends AsyncTask<Void, Long, ArrayList<Object>> {
+        private Context mContext;
+
+        public MainTask(Context mContext) {
+            this.mContext = mContext;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Utils.showProcessBar(getContext(), progressBar, mainLayout);
+        }
+
+        @Override
+        protected ArrayList<Object> doInBackground(Void... params) {
+            SQLiteDataController data = SQLiteDataController.getInstance(mContext);
+            try {
+                data.isCreatedDatabase();
+            } catch (IOException e) {
+                Log.e("tag", e.getMessage());
+            }
+            double diemMin = 0, diemMax = 4;
+            return data.getMonHocChuaQua(current_user, data.getMonHocMinMax(current_user, diemMin, diemMax));
+        }
+
+        @Override
+        protected void onProgressUpdate(Long... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Object> objects) {
+            super.onPostExecute(objects);
+            listMonHoc = objects;
+            AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
+            mAdapter.addAll(objects);
+            txtTieuDe.setText("Môn học chưa qua: " + objects.size() + " môn");
+            lvMonHoc.setAdapter(mAdapter);
+            Utils.hideProcessBar(mContext, progressBar, mainLayout);
+        }
     }
 }

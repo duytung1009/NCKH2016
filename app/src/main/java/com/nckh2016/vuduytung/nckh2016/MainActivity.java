@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import com.nckh2016.vuduytung.nckh2016.main.BaseNavActivity;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 
 import java.io.IOException;
@@ -36,11 +37,6 @@ import java.util.List;
 
 public class MainActivity extends BaseNavActivity
         implements FragmentQuaTrinhHocTap.OnFragmentInteractionListener, FragmentNguoiDung.OnFragmentInteractionListener, FragmentNienGiam.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener{
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
-    public static final String SUB_PREFS_TENSINHVIEN = "user_name";
-    public static final String SUB_PREFS_DATASINHVIEN = "user_data";
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_main_activity";
     public static final String SUB_PREFS_TABLAYOUTSTATE = "tab_position";
@@ -69,11 +65,11 @@ public class MainActivity extends BaseNavActivity
         spinnerNguoiDung.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                SharedPreferences settings = getSharedPreferences(Utils.PREFS_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString(SUB_PREFS_MASINHVIEN, (mListUser.get(position)).getMasv());
-                editor.putString(SUB_PREFS_TENSINHVIEN, (mListUser.get(position)).getHoten());
-                editor.putString(SUB_PREFS_DATASINHVIEN, (mListUser.get(position)).getHocky());
+                editor.putString(Utils.SUB_PREFS_MASINHVIEN, (mListUser.get(position)).getMasv());
+                editor.putString(Utils.SUB_PREFS_TENSINHVIEN, (mListUser.get(position)).getHoten());
+                editor.putString(Utils.SUB_PREFS_DATASINHVIEN, (mListUser.get(position)).getHocky());
                 editor.apply();
                 if (tabLayout.getTabCount() > 0) {
                     try{
@@ -105,9 +101,9 @@ public class MainActivity extends BaseNavActivity
         if(!(mAdapter == null)){
             mAdapter.notifyDataSetChanged();
         }
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences currentUserData = getSharedPreferences(Utils.PREFS_NAME, MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
         //lấy dữ liệu được lưu lại khi app Paused
         SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
@@ -158,29 +154,29 @@ public class MainActivity extends BaseNavActivity
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.whiteTransparent), ContextCompat.getColor(this, R.color.white));
         // Restore preferences
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences currentUserData = getSharedPreferences(Utils.PREFS_NAME, MODE_PRIVATE);
         if(!users.isEmpty()){
-            if((currentUserData.getString(SUB_PREFS_MASINHVIEN, null) == null) || (currentUserData.getString(SUB_PREFS_MASINHVIEN, null).isEmpty())){
+            if((currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null) == null) || (currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null).isEmpty())){
                 SharedPreferences.Editor editor = currentUserData.edit();
-                editor.putString(SUB_PREFS_MASINHVIEN, (users.get(0)).getMasv());
-                editor.putString(SUB_PREFS_TENSINHVIEN, (users.get(0)).getHoten());
-                editor.putString(SUB_PREFS_DATASINHVIEN, (users.get(0)).getHocky());
+                editor.putString(Utils.SUB_PREFS_MASINHVIEN, (users.get(0)).getMasv());
+                editor.putString(Utils.SUB_PREFS_TENSINHVIEN, (users.get(0)).getHoten());
+                editor.putString(Utils.SUB_PREFS_DATASINHVIEN, (users.get(0)).getHocky());
                 editor.apply();
                 updateNavigationView();
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab1_name), 0);
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab2_name), 1);
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab3_name), 2);
             } else{
-                current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+                current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab1_name), 0);
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab2_name), 1);
                 tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab3_name), 2);
             }
         } else {
             SharedPreferences.Editor editor = currentUserData.edit();
-            editor.putString(SUB_PREFS_MASINHVIEN, null);
-            editor.putString(SUB_PREFS_TENSINHVIEN, null);
-            editor.putString(SUB_PREFS_DATASINHVIEN, null);
+            editor.putString(Utils.SUB_PREFS_MASINHVIEN, null);
+            editor.putString(Utils.SUB_PREFS_TENSINHVIEN, null);
+            editor.putString(Utils.SUB_PREFS_DATASINHVIEN, null);
             editor.apply();
             updateNavigationView();
             tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_tab3_name), 0);
@@ -341,7 +337,7 @@ public class MainActivity extends BaseNavActivity
             switch (mNumOfTabs){
                 case 1:
                     if(tab3 == null){
-                        tab3 = new FragmentNienGiam();
+                        tab3 = FragmentNienGiam.newInstance(null, null);
                     }
                     return tab3;
                 case 3:

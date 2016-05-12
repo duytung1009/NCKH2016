@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc2;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 
@@ -33,9 +34,6 @@ import java.util.Comparator;
  * A simple {@link Fragment} subclass.
  */
 public class KeHoachHocTap2Fragment extends Fragment {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_kehoachhoctap2_fragment";
     public static final String SUB_PREFS_CHECKALL = "checkAll";
@@ -64,8 +62,8 @@ public class KeHoachHocTap2Fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ke_hoach_hoc_tap_2, container, false);
         // Restore preferences
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
+        current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
@@ -172,7 +170,8 @@ public class KeHoachHocTap2Fragment extends Fragment {
             });
         }
 
-        monHocAdapter = new AdapterMonHoc2(this, 0, mMonHocCaiThien, current_user);
+        monHocAdapter = new AdapterMonHoc2(this, 0);
+        monHocAdapter.addAll(mMonHocCaiThien);
         selectAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -235,9 +234,9 @@ public class KeHoachHocTap2Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         //lấy dữ liệu Global
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
         //lấy dữ liệu được lưu lại khi app Paused
         SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);

@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUserData;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import com.nckh2016.vuduytung.nckh2016.main.BaseNavActivity;
@@ -40,9 +41,6 @@ import java.util.Date;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
 public class BangDiemActivity extends BaseNavActivity {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_bangdiem_activity";
     public static final String SUB_PREFS_MAMONHOC = "maMonHoc";
@@ -76,9 +74,9 @@ public class BangDiemActivity extends BaseNavActivity {
     protected void onStart() {
         super.onStart();
         //lấy dữ liệu Global
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences currentUserData = getSharedPreferences(Utils.PREFS_NAME, MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
         userData = new ObjectUserData();
         if (current_user != null) {
@@ -227,9 +225,9 @@ public class BangDiemActivity extends BaseNavActivity {
     protected void onResume() {
         super.onResume();
         //lấy dữ liệu Global
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences currentUserData = getSharedPreferences(Utils.PREFS_NAME, MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
         //lấy dữ liệu được lưu lại khi app Paused
         SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);

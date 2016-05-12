@@ -32,6 +32,12 @@ public class AdapterUser extends ArrayAdapter<Object> {
     }
 
     @Override
+    public void add(Object object) {
+        super.add(object);
+        this.objects.add(object);
+    }
+
+    @Override
     public void addAll(Collection<?> collection) {
         this.objects = (ArrayList)collection;
         super.addAll(collection);
@@ -41,11 +47,6 @@ public class AdapterUser extends ArrayAdapter<Object> {
     public void remove(Object object) {
         this.objects.remove(object);
         super.remove(object);
-    }
-
-    @Override
-    public void clear() {
-        super.clear();
     }
 
     @Override

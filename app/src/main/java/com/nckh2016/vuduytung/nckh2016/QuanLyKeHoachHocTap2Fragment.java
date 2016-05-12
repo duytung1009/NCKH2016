@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
@@ -37,15 +38,10 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class QuanLyKeHoachHocTap2Fragment extends Fragment {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
-    public static final String SUB_PREFS_DATASINHVIEN = "user_data";
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_quanlykehoachhoctap2_fragment";
     //các giá trị global
     private static final String HOCKY = "hocky";
-    private static final String MONHOC = "MaMonHoc";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
     private ObjectUserHocKy userData;
@@ -70,9 +66,9 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_quan_ly_ke_hoach_hoc_tap_2, container, false);
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
-        userData = new Gson().fromJson(currentUserData.getString(SUB_PREFS_DATASINHVIEN, null), ObjectUserHocKy.class);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
+        current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
+        userData = new Gson().fromJson(currentUserData.getString(Utils.SUB_PREFS_DATASINHVIEN, null), ObjectUserHocKy.class);
         selectedHocKy = new Gson().fromJson(getArguments().getString(HOCKY), ObjectHocKy.class);
         //selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
 
@@ -91,7 +87,7 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
-                intent.putExtra(MONHOC, ((ObjectMonHoc) userMonHoc.get(position)).getMamh());
+                intent.putExtra(Utils.MA_MON_HOC, ((ObjectMonHoc) userMonHoc.get(position)).getMamh());
                 startActivity(intent);
             }
         });
@@ -166,7 +162,6 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                 Utils.switchView(mContext, lvMonHoc, txtThongBao);
             } else {
                 Utils.switchView(mContext, txtThongBao, lvMonHoc);
-
                 if(userMonHoc.size() > 1){
                     Collections.sort(userMonHoc, new Comparator<Object>() {
                         public int compare(Object o1, Object o2) {
@@ -176,15 +171,13 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                         }
                     });
                 }
-
                 mAdapter = new AdapterMonHoc(getContext(), 0);
                 mAdapter.addAll(userMonHoc);
                 lvMonHoc.setAdapter(mAdapter);
             }
             int tongTC = 0;
             for(Object value : userMonHoc){
-                String[] danhSachBoQua = new String[] {"4010701","4010702","4010703","4010704","4010705","4080508","4080509"};
-                List<String> listBoQua = Arrays.asList(danhSachBoQua);
+                List<String> listBoQua = Arrays.asList(Utils.DANH_SACH_BO_QUA);
                 if(!listBoQua.contains(((ObjectMonHoc)value).getMamh()) && ((ObjectMonHoc)value).getDiem() != -1f) {
                     tongTC += ((ObjectMonHoc)value).getTinchi();
                 }
@@ -222,44 +215,6 @@ public class QuanLyKeHoachHocTap2Fragment extends Fragment {
                         danhSachMonHoc.add(((ObjectMonHoc)value).getMamh());
                     }
                     ((QuanLyKeHoachHocTapActivity)mContext).loadFragment4(selectedHocKy, danhSachMonHoc);
-                    /*new AlertDialog.Builder(getContext())
-                            .setTitle("Xóa học kỳ")
-                            .setMessage("Xóa toàn bộ thông tin của học kỳ này?")
-                            .setIcon(R.drawable.error)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //xóa
-                                    boolean flag = userData.removeHocKy(selectedHocKy);
-                                    if (flag) {
-                                        SharedPreferences currentUserData = mContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = currentUserData.edit();
-                                        editor.putString(SUB_PREFS_DATASINHVIEN, new Gson().toJson(userData));
-                                        editor.apply();
-                                        SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-                                        try {
-                                            data.isCreatedDatabase();
-                                        } catch (IOException e) {
-                                            Log.e("tag", e.getMessage());
-                                        }
-                                        ContentValues updateValues = new ContentValues();
-                                        updateValues.put(MyContract.UserEntry.COLUMN_HOC_KY, new Gson().toJson(userData));
-                                        data.updateNguoiDung(current_user, updateValues);
-                                        data.deleteUserData(current_user, selectedHocKy.getHocKy(), selectedHocKy.getNamHoc());
-                                        //((QuanLyKeHoachHocTapActivity) getContext()).loadFragment1();
-                                        ((QuanLyKeHoachHocTapActivity) getContext()).refreshFragment1();
-                                    } else {
-                                        Toast.makeText(getContext(), "Lỗi! xóa thất bại", Toast.LENGTH_SHORT).show();
-                                    }
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).show();*/
                 }
             });
         }

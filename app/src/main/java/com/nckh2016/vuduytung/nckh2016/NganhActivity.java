@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.LinearLayout;
 
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectCTDT;
 
 public class NganhActivity extends AppCompatActivity {
@@ -103,8 +104,7 @@ public class NganhActivity extends AppCompatActivity {
             ft.commit();
         } else {
             Intent intent = new Intent(this, ChiTietMonHocActivity.class);
-            intent.putExtra("MaMonHoc", monHoc.getMamh());
-            intent.putExtra("caller", "BoMonActivity");
+            intent.putExtra(Utils.MA_MON_HOC, monHoc.getMamh());
             startActivity(intent);
         }
     }

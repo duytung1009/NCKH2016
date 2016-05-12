@@ -1,7 +1,6 @@
 package com.nckh2016.vuduytung.nckh2016;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,17 +10,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
-import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -31,22 +29,18 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link XemNhanhFragment4.OnFragmentInteractionListener} interface
+ * {@link XemNhanhFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link XemNhanhFragment4#newInstance} factory method to
+ * Use the {@link XemNhanhFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class XemNhanhFragment4 extends Fragment {
-    //các giá trị global
-    private static final String MONHOC = "MaMonHoc";
+public class XemNhanhFragment extends Fragment {
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
-    private ArrayList<Object> listMonHoc = new ArrayList<>();
     //các view
     CircularProgressView progressBar;
     RelativeLayout mainLayout;
-    TextView txtTieuDe;
-    ListView lvMonHoc;
+    LinearLayout listViewDieuKien;
     //các AsyncTask
     MainTask mainTask;
 
@@ -61,7 +55,7 @@ public class XemNhanhFragment4 extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public XemNhanhFragment4() {
+    public XemNhanhFragment() {
         // Required empty public constructor
     }
 
@@ -71,11 +65,11 @@ public class XemNhanhFragment4 extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment XemNhanhFragment4.
+     * @return A new instance of fragment XemNhanhFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static XemNhanhFragment4 newInstance(String param1, String param2) {
-        XemNhanhFragment4 fragment = new XemNhanhFragment4();
+    public static XemNhanhFragment newInstance(String param1, String param2) {
+        XemNhanhFragment fragment = new XemNhanhFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -96,23 +90,16 @@ public class XemNhanhFragment4 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_xem_nhanh_4, container, false);
+        View view = inflater.inflate(R.layout.fragment_xem_nhanh, container, false);
         final SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         mainLayout = (RelativeLayout) view.findViewById(R.id.mainLayout);
+        listViewDieuKien = (LinearLayout) view.findViewById(R.id.listViewDieuKien);
         progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
-        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
-        imageView.setImageResource(R.drawable.sport);
-        txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
-        lvMonHoc = (ListView)view.findViewById(R.id.lvMonHoc);
-        lvMonHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
-                intent.putExtra(MONHOC, ((ObjectMonHoc) listMonHoc.get(position)).getMamh());
-                startActivity(intent);
-            }
-        });
+        ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
+        TextView txtTieuDe = (TextView) view.findViewById(R.id.txtTieuDe);
+        imageView.setImageResource(R.drawable.quick_view);
+        txtTieuDe.setText(getResources().getString(R.string.title_fragment_xemnhanh));
         return view;
     }
 
@@ -172,8 +159,13 @@ public class XemNhanhFragment4 extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private class MainTask extends AsyncTask<Void, Long, ArrayList<Object>> {
+    private class MainTask extends AsyncTask<Void, Long, Void> {
         private Context mContext;
+        private ObjectUser user;
+        private double tongDiem = -1;
+        private int tinChiTichLuy = 0;
+        private int tongTinChi = -1;
+        private ArrayList<Object> userHocPhanTheDuc = new ArrayList<>();
 
         public MainTask(Context mContext) {
             this.mContext = mContext;
@@ -183,17 +175,33 @@ public class XemNhanhFragment4 extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             Utils.showProcessBar(getContext(), progressBar, mainLayout);
+            listViewDieuKien.removeAllViews();
         }
 
         @Override
-        protected ArrayList<Object> doInBackground(Void... params) {
+        protected Void doInBackground(Void... params) {
             SQLiteDataController data = SQLiteDataController.getInstance(mContext);
             try {
                 data.isCreatedDatabase();
             } catch (IOException e) {
                 Log.e("tag", e.getMessage());
             }
-            return data.getHocPhanTheDuc(current_user);
+            //tổng điểm
+            tongDiem = data.tongDiem(current_user);
+            //tổng tín chỉ
+            int[] yData = data.soTinChi(current_user);
+            for (int i = 2; i < yData.length; i++) {
+                tongTinChi += yData[i];
+            }
+            user = data.getUser(current_user);
+            if (data.checkNganhHoc4Nam(user.getManganh())) {
+                tinChiTichLuy = 120;
+            } else {
+                tinChiTichLuy = 150;
+            }
+            //giáo dục thể chất
+            userHocPhanTheDuc = data.getHocPhanTheDuc(current_user);
+            return null;
         }
 
         @Override
@@ -202,25 +210,55 @@ public class XemNhanhFragment4 extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Object> objects) {
-            super.onPostExecute(objects);
-            listMonHoc = objects;
-            AdapterMonHoc mAdapter = new AdapterMonHoc(getContext(), 0);
-            mAdapter.addAll(objects);
-            String tieuDe = "";
-            if(objects.size() < 5){
-                tieuDe = "Còn thiếu: " + String.valueOf(5 - objects.size()) + " học phần";
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            //tích lũy tín chỉ
+            View viewTongTinChi = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
+            ImageView imageViewTongTinChi = (ImageView) viewTongTinChi.findViewById(R.id.imageViewMonHocDieuKien);
+            TextView textViewTongTinChi = (TextView) viewTongTinChi.findViewById(R.id.textViewMonHocDieuKien);
+            if (tongTinChi < tinChiTichLuy) {
+                imageViewTongTinChi.setImageResource(R.drawable.circle);
             } else {
-                double tongDiem = 0;
-                for(Object value : objects){
-                    if(((ObjectMonHoc)value).getDiem() != -1){
-                        tongDiem += ((ObjectMonHoc)value).getDiem();
+                imageViewTongTinChi.setImageResource(R.drawable.check);
+            }
+            textViewTongTinChi.setText("Tín chỉ tích lũy đạt tối thiểu " + tinChiTichLuy + " tín chỉ\nTín chỉ tích lũy hiện tại: " + tongTinChi + " tín chỉ");
+            listViewDieuKien.addView(viewTongTinChi);
+            //tổng điểm
+            View viewTongDiem = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
+            ImageView imageViewTongDiem = (ImageView) viewTongDiem.findViewById(R.id.imageViewMonHocDieuKien);
+            TextView textViewTongDiem = (TextView) viewTongDiem.findViewById(R.id.textViewMonHocDieuKien);
+            if (Double.compare(tongDiem, 2) < 0) {
+                imageViewTongDiem.setImageResource(R.drawable.circle);
+            } else {
+                imageViewTongDiem.setImageResource(R.drawable.check);
+            }
+            textViewTongDiem.setText("Điểm tích lũy đạt từ 2,0 trở lên\nĐiểm tích lũy hiện tại: " + new DecimalFormat("####0.##").format(tongDiem));
+            listViewDieuKien.addView(viewTongDiem);
+            //học phần giáo dục thể chất
+            View viewGiaoDucTheChat = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
+            ImageView imageViewGiaoDucTheChat = (ImageView) viewGiaoDucTheChat.findViewById(R.id.imageViewMonHocDieuKien);
+            TextView textViewGiaoDucTheChat = (TextView) viewGiaoDucTheChat.findViewById(R.id.textViewMonHocDieuKien);
+            if (userHocPhanTheDuc.size() < 5) {
+                imageViewGiaoDucTheChat.setImageResource(R.drawable.circle);
+                textViewGiaoDucTheChat.setText("Hoàn thành học phần giáo dục thể chất\nCòn thiếu: " + String.valueOf(5 - userHocPhanTheDuc.size()) + " học phần");
+            } else {
+                double tongDiemGDTC = 0;
+                for (Object value : userHocPhanTheDuc) {
+                    if (((ObjectMonHoc) value).getDiem() != -1) {
+                        tongDiemGDTC += ((ObjectMonHoc) value).getDiem();
                     }
                 }
-                tieuDe = "Điểm tổng kết: " + new DecimalFormat("####0.##").format(tongDiem/5);
+                tongDiemGDTC = tongDiemGDTC/5;
+                if (Double.compare(tongDiemGDTC, 5.5) < 0) {
+                    imageViewGiaoDucTheChat.setImageResource(R.drawable.circle);
+                    textViewGiaoDucTheChat.setText("Hoàn thành học phần giáo dục thể chất\nTổng điểm hiện tại: " + new DecimalFormat("####0.##").format(tongDiemGDTC));
+                } else {
+                    imageViewGiaoDucTheChat.setImageResource(R.drawable.check);
+                    textViewGiaoDucTheChat.setText("Hoàn thành học phần giáo dục thể chất\nTổng điểm hiện tại: " + new DecimalFormat("####0.##").format(tongDiemGDTC));
+                }
             }
-            txtTieuDe.setText(tieuDe);
-            lvMonHoc.setAdapter(mAdapter);
+            listViewDieuKien.addView(viewGiaoDucTheChat);
+            //tự chọn... (cái này khó)
             Utils.hideProcessBar(mContext, progressBar, mainLayout);
         }
     }

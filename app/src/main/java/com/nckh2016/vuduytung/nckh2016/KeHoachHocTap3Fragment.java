@@ -19,11 +19,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHocNhapDiem;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUserData;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,9 +37,6 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class KeHoachHocTap3Fragment extends Fragment {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_kehoachhoctap3_fragment";
     public static final String SUB_PREFS_HOCKY = "hocKy";
@@ -61,8 +60,8 @@ public class KeHoachHocTap3Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ke_hoach_hoc_tap_3, container, false);
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
+        current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView)view.findViewById(R.id.txtTieuDe);
         btnLuuMonHoc = (Button)view.findViewById(R.id.btnLuuMonHoc);
@@ -86,7 +85,8 @@ public class KeHoachHocTap3Fragment extends Fragment {
 
         selectedHocKy = new ObjectHocKy(getArguments().getInt("namhoc"), getArguments().getInt("hocky"), getArguments().getString("nganh"));
         userHocKy = new ObjectHocKy(getArguments().getInt("user_namhoc"), getArguments().getInt("user_hocky"), getArguments().getString("nganh"));
-        monHocAdapter = new AdapterMonHocNhapDiem(getActivity(), 0, mArrayList);
+        monHocAdapter = new AdapterMonHocNhapDiem(getActivity(), 0);
+        monHocAdapter.addAll(mArrayList);
         mListMonHoc = (ListView)view.findViewById(R.id.list_view_monhoc_nhapdiem);
         mListMonHoc.setAdapter(monHocAdapter);
         mListMonHoc.setSelection(0);
@@ -129,13 +129,12 @@ public class KeHoachHocTap3Fragment extends Fragment {
                                 tinChi += ((ObjectMonHoc)value).getTinchi();
                             }
                             tinChi += ((KeHoachHocTapActivity)getActivity()).tinChiHocKy;
-                            //tạm tắt chức năng hạn chế đăng ký số tín chỉ theo điểm số hiện tại
-                            insertDiem(data, values);
-                            /*if(tinChi > 14){
+                            //hạn chế đăng ký số tín chỉ theo điểm số hiện tại
+                            if(tinChi > 14){
                                 Toast.makeText(getContext(), "Đăng ký quá giới hạn 14 tín chỉ\nTổng điểm hiện tại: " + String.valueOf(new DecimalFormat("####0.00").format(tongDiem)), Toast.LENGTH_SHORT).show();
                             } else {
                                 insertDiem(data, values);
-                            }*/
+                            }
                         } else {
                             insertDiem(data, values);
                         }
@@ -163,9 +162,9 @@ public class KeHoachHocTap3Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         //lấy dữ liệu Global
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
         //lấy dữ liệu được lưu lại khi app Paused
         SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);

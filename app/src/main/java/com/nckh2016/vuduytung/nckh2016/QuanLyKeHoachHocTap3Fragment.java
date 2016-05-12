@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHocNhapDiem;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUserData;
@@ -36,18 +37,15 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class QuanLyKeHoachHocTap3Fragment extends Fragment {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
-    public static final String SUB_PREFS_DATASINHVIEN = "user_data";
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_quanlykehoachhoctap3_fragment";
     //các giá trị global
     private static final String HOCKY = "hocky";
-    private static final String DANHSACHMONHOC = "danhsachmonhoc";
+    //private static final String DANHSACHMONHOC = "danhsachmonhoc";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
     private ObjectHocKy selectedHocKy;
+    private ArrayList<Object> userMonHoc;
     //các adapter
     AdapterMonHocNhapDiem monHocAdapter;
     //các asynctask
@@ -70,8 +68,8 @@ public class QuanLyKeHoachHocTap3Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_quan_ly_ke_hoach_hoc_tap_3, container, false);
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
+        current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         selectedHocKy = new Gson().fromJson(getArguments().getString(HOCKY), ObjectHocKy.class);
 
         txtThongBao = (TextView)view.findViewById(R.id.txtThongBao);
@@ -112,9 +110,9 @@ public class QuanLyKeHoachHocTap3Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         //lấy dữ liệu Global
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
     }
 
@@ -148,7 +146,8 @@ public class QuanLyKeHoachHocTap3Fragment extends Fragment {
             } catch (IOException e) {
                 Log.e("tag", e.getMessage());
             }
-            return data.getMonHoc(current_user, getArguments().getStringArrayList(DANHSACHMONHOC));
+            //return data.getMonHoc(current_user, getArguments().getStringArrayList(DANHSACHMONHOC));
+            return data.getUserData(current_user, selectedHocKy.getNamHoc(), selectedHocKy.getHocKy());
         }
 
         @Override
@@ -160,6 +159,7 @@ public class QuanLyKeHoachHocTap3Fragment extends Fragment {
             } else {
                 Utils.switchView(mContext, txtThongBao, lvMonHoc);
                 btnCapNhatMonHoc.setVisibility(View.VISIBLE);
+                userMonHoc = objects;
                 if(objects.size() > 1){
                     Collections.sort(objects, new Comparator<Object>() {
                         public int compare(Object o1, Object o2) {
@@ -169,7 +169,8 @@ public class QuanLyKeHoachHocTap3Fragment extends Fragment {
                         }
                     });
                 }
-                monHocAdapter = new AdapterMonHocNhapDiem(getActivity(), 0, objects);
+                monHocAdapter = new AdapterMonHocNhapDiem(getActivity(), 0);
+                monHocAdapter.addAll(objects);
                 lvMonHoc.setAdapter(monHocAdapter);
                 lvMonHoc.setSelection(0);
                 btnCapNhatMonHoc.setOnClickListener(new View.OnClickListener() {

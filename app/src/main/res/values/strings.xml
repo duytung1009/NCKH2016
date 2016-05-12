@@ -46,6 +46,7 @@
     <string name="main_activity_tab2_name">điểm số</string>
     <string name="main_activity_tab3_name">niên giám</string>
 
+    <string name="mon_hoc_chua_qua_activity_tab0_name">thống kê\nsơ bộ</string>
     <string name="mon_hoc_chua_qua_activity_tab1_name">môn\nđang học</string>
     <string name="mon_hoc_chua_qua_activity_tab2_name">môn học\nchưa qua</string>
     <string name="mon_hoc_chua_qua_activity_tab3_name">môn học\ncải thiện</string>
@@ -67,6 +68,13 @@
     <string name="title_activity_bang_diem">Bảng điểm</string>
     <string name="title_activity_quan_ly_tai_khoan">Danh sách hồ sơ</string>
     <string name="title_activity_backup">Sao lưu - phục hồi</string>
+
+    <string name="title_fragment_xemnhanh">Thống kê sơ bộ</string>
+
+    <string name="subtitleDieuKienTienQuyet">điều kiện tiên quyết</string>
+    <string name="subtitleNoiDung">nội dung</string>
+    <string name="subtitleTaiLieuThamKhao">tài liệu tham khảo</string>
+    <string name="subtitleDieuKienTotNghiep">điều kiện tốt nghiệp</string>
 
     <string name="chonChuyenSau">Cần chọn hướng chuyên sâu trước</string>
     <string name="khong">Chưa có dữ liệu</string>

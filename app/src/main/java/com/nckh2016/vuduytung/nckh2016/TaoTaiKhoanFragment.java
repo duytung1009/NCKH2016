@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectChuyenSau;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectKhoa;
@@ -34,11 +35,6 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class TaoTaiKhoanFragment extends Fragment {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
-    public static final String SUB_PREFS_TENSINHVIEN = "user_name";
-    public static final String SUB_PREFS_DATASINHVIEN = "user_data";
     //các biến được khôi phục lại nếu app resume
     private ArrayList<Object> mListKhoa, mListNganh, mListChuyenSau;
     //các asynctask
@@ -226,11 +222,11 @@ public class TaoTaiKhoanFragment extends Fragment {
                 Toast.makeText(getContext(), "thêm hồ sơ thất bại", Toast.LENGTH_SHORT).show();
             } else {
                 //((TaoTaiKhoanActivity)getActivity()).loadFragment2();
-                SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                SharedPreferences settings = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString(SUB_PREFS_MASINHVIEN, user.getAsString(UserEntry.COLUMN_MA_SV));
-                editor.putString(SUB_PREFS_TENSINHVIEN, user.getAsString(UserEntry.COLUMN_HO_TEN));
-                editor.putString(SUB_PREFS_DATASINHVIEN, user.getAsString(UserEntry.COLUMN_HOC_KY));
+                editor.putString(Utils.SUB_PREFS_MASINHVIEN, user.getAsString(UserEntry.COLUMN_MA_SV));
+                editor.putString(Utils.SUB_PREFS_TENSINHVIEN, user.getAsString(UserEntry.COLUMN_HO_TEN));
+                editor.putString(Utils.SUB_PREFS_DATASINHVIEN, user.getAsString(UserEntry.COLUMN_HOC_KY));
                 editor.commit();
                 getActivity().setResult(1);
                 ((TaoTaiKhoanActivity)getActivity()).finish();

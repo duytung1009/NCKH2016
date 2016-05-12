@@ -10,8 +10,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:padding="10dp"
-        android:src="@drawable/literature"/>
+        android:padding="10dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"

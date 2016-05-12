@@ -25,6 +25,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -40,9 +41,6 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class FragmentQuaTrinhHocTap extends Fragment {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_quatrinhhoctap_fragment";
     public static final String SUB_PREFS_TONGTINCHI = "tongTinChi";
@@ -115,8 +113,8 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         //get chart
         mainChart = (PieChart)view.findViewById(R.id.mainChart);
         progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
+        current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         df = new DecimalFormat("####0.00");
         mainChart.setNoDataTextDescription("no data");
         mainChart.setDrawSliceText(false);  //hide title
@@ -148,9 +146,9 @@ public class FragmentQuaTrinhHocTap extends Fragment {
     public void onResume() {
         super.onResume();
         //lấy dữ liệu Global
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
         //lấy dữ liệu được lưu lại khi app Paused
         SharedPreferences state = getContext().getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
@@ -199,8 +197,8 @@ public class FragmentQuaTrinhHocTap extends Fragment {
         /*for(int value : yData){
             tongTinChi += value;
         }*/
-        //không tính tín chỉ bị F
-        //bỏ qua i=1 là số tín chỉ đang học
+        //bỏ qua i=0 là số tín chỉ đang học
+        //bỏ qua i=1 là số tín chỉ bị F
         for(int i=2; i<yData.length; i++){
             tongTinChi += yData[i];
         }

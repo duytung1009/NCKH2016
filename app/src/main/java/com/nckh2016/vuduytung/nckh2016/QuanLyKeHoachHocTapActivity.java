@@ -15,10 +15,6 @@ import com.nckh2016.vuduytung.nckh2016.main.BaseNavActivity;
 import java.util.ArrayList;
 
 public class QuanLyKeHoachHocTapActivity extends BaseNavActivity {
-    //các giá trị Preferences Global
-    /*public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
-    public static final String SUB_PREFS_DATASINHVIEN = "user_data";*/
     //các giá trị để dùng load Fragment
     private static final String BLANK_FRAGMENT = "blank";
     private static final String FRAG1 = "FRAG1";

@@ -85,14 +85,12 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@style/colorSubTitleText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
                         android:paddingTop="20dp"
-                        android:singleLine="true"
-                        android:text="ĐIỀU KIỆN TIÊN QUYẾT"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="16sp" />
+                        android:text="@string/subtitleDieuKienTienQuyet" />
 
                     <LinearLayout
                         android:id="@+id/listViewMonHocDieuKien"
@@ -103,14 +101,12 @@
                         android:layout_height="wrap_content"/>
 
                     <TextView
+                        style="@style/colorSubTitleText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
                         android:paddingTop="20dp"
-                        android:singleLine="true"
-                        android:text="NỘI DUNG"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="16sp" />
+                        android:text="@string/subtitleNoiDung" />
 
                     <TextView
                         android:id="@+id/txtNoiDung"
@@ -123,14 +119,12 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        style="@style/colorSubTitleText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
                         android:paddingTop="20dp"
-                        android:singleLine="true"
-                        android:text="TÀI LIỆU THAM KHẢO"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="16sp" />
+                        android:text="@string/subtitleTaiLieuThamKhao" />
 
                     <TextView
                         android:id="@+id/txtTaiLieu"

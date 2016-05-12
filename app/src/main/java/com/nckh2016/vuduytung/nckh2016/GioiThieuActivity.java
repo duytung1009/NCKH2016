@@ -31,9 +31,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class GioiThieuActivity extends AppCompatActivity {
-
-    public static String DB_PATH = "/data/data/com.nckh2016.vuduytung.nckh2016/databases/";
-    private static String DB_NAME = "nckh2016db.sqlite";
     private static final String DATABASE_URL = "";
     private DownloadFileFromURL updateTask;
     private Button btnUpdate;
@@ -60,11 +57,6 @@ public class GioiThieuActivity extends AppCompatActivity {
                 updateTask.execute(DATABASE_URL);
             }
         });
-        processUpdate = new ProgressDialog(this);
-        processUpdate.setMessage("Cập nhật CTDT");
-        processUpdate.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        processUpdate.setIndeterminate(false);
-        processUpdate.setMax(100);
     }
 
     @Override
@@ -109,6 +101,11 @@ public class GioiThieuActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            processUpdate = new ProgressDialog(mContext);
+            processUpdate.setMessage("Cập nhật CTDT");
+            processUpdate.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            processUpdate.setIndeterminate(false);
+            processUpdate.setMax(100);
             processUpdate.show();
         }
 
@@ -132,7 +129,7 @@ public class GioiThieuActivity extends AppCompatActivity {
                 mConnection.connect();
                 int lengthOfFile = mConnection.getContentLength();
                 InputStream input = new BufferedInputStream(url.openStream(), 8192);
-                OutputStream output = new FileOutputStream(DB_PATH + DB_NAME);
+                OutputStream output = new FileOutputStream(SQLiteDataController.DB_PATH + SQLiteDataController.DB_NAME);
                 byte data[] = new byte[1024];
                 long total = 0;
                 while ((count = input.read(data)) != -1) {

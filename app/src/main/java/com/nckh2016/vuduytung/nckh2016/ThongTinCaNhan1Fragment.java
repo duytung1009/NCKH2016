@@ -24,6 +24,7 @@ import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import com.nckh2016.vuduytung.nckh2016.animation.AnimatorPath;
 import com.nckh2016.vuduytung.nckh2016.animation.PathEvaluator;
 import com.nckh2016.vuduytung.nckh2016.animation.PathPoint;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 
 import java.io.IOException;
@@ -32,9 +33,6 @@ import java.io.IOException;
  * A simple {@link Fragment} subclass.
  */
 public class ThongTinCaNhan1Fragment extends Fragment {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
     private ObjectUser objectUser;
@@ -80,9 +78,9 @@ public class ThongTinCaNhan1Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
         mainTask = new MainTask(getContext());
         mainTask.execute();

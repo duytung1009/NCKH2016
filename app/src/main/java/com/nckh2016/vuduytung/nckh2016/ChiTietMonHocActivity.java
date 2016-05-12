@@ -21,19 +21,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
+import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ChiTietMonHocActivity extends AppCompatActivity {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
-    //các giá trị global
-    private static final String MONHOC = "MaMonHoc";
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_chitietmonhoc_activity";
     public static final String SUB_PREFS_MAMONHOC = "maMonHoc";
@@ -43,6 +40,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
     private ArrayList<Boolean> monHocDaQua = new ArrayList<Boolean>();
     //các view
     MainTask mainTask;
+    ImageView imageView;
     TextView txtMaMonHoc, txtTenMonHoc, txtTinChi, txtNoiDung, txtTaiLieu, txtDiem, txtDiem2;
     LinearLayout listViewMonHocDieuKien;
     Button btnBangDiem;
@@ -57,28 +55,27 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ImageView imageView = (ImageView)findViewById(R.id.imageView);
-        imageView.setImageResource(R.drawable.literature);
-        rightLayout = (LinearLayout)findViewById(R.id.rightLayout);
+        imageView = (ImageView) findViewById(R.id.imageView);
+        rightLayout = (LinearLayout) findViewById(R.id.rightLayout);
         txtMaMonHoc = (TextView) findViewById(R.id.txtMaMonHoc);
         txtTenMonHoc = (TextView) findViewById(R.id.txtTieuDe);
         txtTinChi = (TextView) findViewById(R.id.txtTinChi);
-        listViewMonHocDieuKien = (LinearLayout)findViewById(R.id.listViewMonHocDieuKien);
+        listViewMonHocDieuKien = (LinearLayout) findViewById(R.id.listViewMonHocDieuKien);
         //txtDieuKien = (TextView) findViewById(R.id.txtDieuKien);
         txtNoiDung = (TextView) findViewById(R.id.txtNoiDung);
         txtTaiLieu = (TextView) findViewById(R.id.txtTaiLieu);
-        btnBangDiem = (Button)findViewById(R.id.btnBangDiem);
+        btnBangDiem = (Button) findViewById(R.id.btnBangDiem);
         ab = getSupportActionBar();
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
-        maMonHoc = getIntent().getStringExtra(MONHOC);
+        SharedPreferences currentUserData = getSharedPreferences(Utils.PREFS_NAME, MODE_PRIVATE);
+        current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
+        maMonHoc = getIntent().getStringExtra(Utils.MA_MON_HOC);
         rightLayout.setVisibility(View.GONE);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(maMonHoc!=null && !maMonHoc.isEmpty()){
+        if (maMonHoc != null && !maMonHoc.isEmpty()) {
             mainTask = new MainTask(this);
             mainTask.execute(maMonHoc);
         }
@@ -88,16 +85,16 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //lấy dữ liệu Global
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        SharedPreferences currentUserData = getSharedPreferences(Utils.PREFS_NAME, MODE_PRIVATE);
+        if (current_user == null) {
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
         //lấy dữ liệu được lưu lại khi app Paused
         SharedPreferences state = getSharedPreferences(PREFS_STATE, Context.MODE_PRIVATE);
-        if(maMonHoc == null){
+        if (maMonHoc == null) {
             maMonHoc = state.getString(SUB_PREFS_MAMONHOC, null);
-            if(maMonHoc!=null && !maMonHoc.isEmpty()){
-                if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+            if (maMonHoc != null && !maMonHoc.isEmpty()) {
+                if (mainTask.getStatus() == AsyncTask.Status.RUNNING) {
                     mainTask.cancel(true);
                 }
                 mainTask = new MainTask(this);
@@ -119,8 +116,8 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(mainTask != null){
-            if(mainTask.getStatus() == AsyncTask.Status.RUNNING) {
+        if (mainTask != null) {
+            if (mainTask.getStatus() == AsyncTask.Status.RUNNING) {
                 mainTask.cancel(true);
             }
         }
@@ -156,7 +153,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private class MainTask extends AsyncTask<String, Long, ObjectMonHoc>{
+    private class MainTask extends AsyncTask<String, Long, ObjectMonHoc> {
         private Context mContext;
 
         public MainTask(Context mContext) {
@@ -166,6 +163,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            listViewMonHocDieuKien.removeAllViews();
         }
 
         @Override
@@ -176,36 +174,47 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                 buffer.append(",").append(each);
             String joined = buffer.deleteCharAt(0).toString();
             SQLiteDataController data = SQLiteDataController.getInstance(mContext);
-            try{
+            try {
                 data.isCreatedDatabase();
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 Log.e("tag", e.getMessage());
             }
             ObjectMonHoc result = new ObjectMonHoc();
-            try{
+            try {
                 result = data.getMonHoc(joined);
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            if(result != null){
-                if(result.getMamh() != null && !result.getMamh().isEmpty()){
-                    if(current_user != null){
+            if (result != null) {
+                if (result.getMamh() != null && !result.getMamh().isEmpty()) {
+                    if (current_user != null) {
                         result.setDiem(data.getDiem(current_user, result.getMamh()));
+                        //check loại môn học
+                        ObjectUser user = data.getUser(current_user);
+                        if (data.checkTuChon(current_user, result.getMamh(), user.getManganh(), -3)) {
+                            result.setTuchon("A");
+                        } else if (data.checkTuChon(current_user, result.getMamh(), user.getMakhoa() + "0", -2)) {
+                            result.setTuchon("B");
+                        } else if (data.checkTuChon(current_user, result.getMamh(), "1", -1)) {
+                            result.setTuchon("C");
+                        } else if (data.checkHocPhanTheDuc(result.getMamh())) {
+                            result.setTuchon("TD");
+                        } else {
+                            result.setTuchon(null);
+                        }
                     }
                     //lấy tên môn học điều kiện
                     monHocDaQua.clear();
                     String dieukien = "";
                     String madieukien = result.getDieukien();
-                    if(madieukien != null){
-                        if(madieukien.length() >= 7 ) {
+                    if (madieukien != null) {
+                        if (madieukien.length() >= 7) {
                             String[] items = madieukien.split(",");
-                            for (String item : items)
-                            {
-                                if(data.getTenMonHoc(item) != null){
+                            for (String item : items) {
+                                if (data.getTenMonHoc(item) != null) {
                                     dieukien += data.getTenMonHoc(item);
                                     dieukien += "\n";
-                                    if(current_user != null){
+                                    if (current_user != null) {
                                         monHocDaQua.add(data.checkMonHocChuaQua(current_user, item));
                                     }
                                 }
@@ -227,13 +236,28 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ObjectMonHoc objectMonHoc) {
             super.onPostExecute(objectMonHoc);
-            if(objectMonHoc != null){
+            if (objectMonHoc != null) {
                 ab.setSubtitle(objectMonHoc.getMamh());
+                if(objectMonHoc.getTuchon() != null){
+                    if (objectMonHoc.getTuchon().equals("A")) {
+                        imageView.setImageResource(R.drawable.tuchon_a);
+                    } else if (objectMonHoc.getTuchon().equals("B")) {
+                        imageView.setImageResource(R.drawable.tuchon_b);
+                    } else if (objectMonHoc.getTuchon().equals("C")) {
+                        imageView.setImageResource(R.drawable.tuchon_c);
+                    } else if (objectMonHoc.getTuchon().equals("TD")) {
+                        imageView.setImageResource(R.drawable.sport);
+                    } else {
+                        imageView.setImageResource(R.drawable.literature);
+                    }
+                } else {
+                    imageView.setImageResource(R.drawable.literature);
+                }
                 txtMaMonHoc.setText(objectMonHoc.getMamh());
                 txtTenMonHoc.setSingleLine(false);
                 txtTenMonHoc.setText(objectMonHoc.getTenmh());
                 String tinChi = "...";
-                if(objectMonHoc.getTinchi() != null){
+                if (objectMonHoc.getTinchi() != null) {
                     tinChi = objectMonHoc.getTinchi().toString();
                 }
                 txtTinChi.setText(tinChi);
@@ -241,11 +265,10 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                 View view;
                 ImageView imageViewMonHocDieuKien;
                 TextView textViewMonHocDieuKien;
-                listViewMonHocDieuKien.removeAllViews();
-                if(madieukien.isEmpty()){
+                if (madieukien.isEmpty()) {
                     view = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
-                    imageViewMonHocDieuKien = (ImageView)view.findViewById(R.id.imageViewMonHocDieuKien);
-                    textViewMonHocDieuKien = (TextView)view.findViewById(R.id.textViewMonHocDieuKien);
+                    imageViewMonHocDieuKien = (ImageView) view.findViewById(R.id.imageViewMonHocDieuKien);
+                    textViewMonHocDieuKien = (TextView) view.findViewById(R.id.textViewMonHocDieuKien);
                     imageViewMonHocDieuKien.setVisibility(View.GONE);
                     textViewMonHocDieuKien.setText(getResources().getString(R.string.khong));
                     listViewMonHocDieuKien.addView(view);
@@ -254,9 +277,9 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                     String[] items = madieukien.split("\n");
                     for (String item : items) {
                         view = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
-                        imageViewMonHocDieuKien = (ImageView)view.findViewById(R.id.imageViewMonHocDieuKien);
-                        textViewMonHocDieuKien = (TextView)view.findViewById(R.id.textViewMonHocDieuKien);
-                        if(monHocDaQua.get(i)){
+                        imageViewMonHocDieuKien = (ImageView) view.findViewById(R.id.imageViewMonHocDieuKien);
+                        textViewMonHocDieuKien = (TextView) view.findViewById(R.id.textViewMonHocDieuKien);
+                        if (monHocDaQua.get(i)) {
                             imageViewMonHocDieuKien.setImageResource(R.drawable.circle);
                         } else {
                             imageViewMonHocDieuKien.setImageResource(R.drawable.check);
@@ -270,7 +293,7 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                 txtNoiDung.setText(objectMonHoc.getNoidung());
                 txtTaiLieu.setText(objectMonHoc.getTailieu());
                 //nếu có điểm
-                if(objectMonHoc.getDiem() != -1){
+                if (objectMonHoc.getDiem() != -1) {
                     btnBangDiem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -283,16 +306,16 @@ public class ChiTietMonHocActivity extends AppCompatActivity {
                     txtDiem.setTypeface(light);
                     txtDiem2 = (TextView) findViewById(R.id.txtDiem2);
                     txtDiem2.setText(new DecimalFormat("####0.00").format(objectMonHoc.getDiem()));
-                    if(objectMonHoc.getDiem() < 4){
+                    if (objectMonHoc.getDiem() < 4) {
                         txtDiem.setText("F");
                         txtDiem.setTextColor(ContextCompat.getColor(mContext, R.color.diemF));
-                    } else if(objectMonHoc.getDiem() < 5.5){
+                    } else if (objectMonHoc.getDiem() < 5.5) {
                         txtDiem.setText("D");
                         txtDiem.setTextColor(ContextCompat.getColor(mContext, R.color.diemD));
-                    } else if(objectMonHoc.getDiem() < 7){
+                    } else if (objectMonHoc.getDiem() < 7) {
                         txtDiem.setText("C");
                         txtDiem.setTextColor(ContextCompat.getColor(mContext, R.color.diemC));
-                    } else if(objectMonHoc.getDiem() < 8.5){
+                    } else if (objectMonHoc.getDiem() < 8.5) {
                         txtDiem.setText("B");
                         txtDiem.setTextColor(ContextCompat.getColor(mContext, R.color.diemB));
                     } else {

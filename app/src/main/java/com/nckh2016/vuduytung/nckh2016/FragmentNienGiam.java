@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,9 +24,6 @@ import android.widget.LinearLayout;
  * create an instance of this fragment.
  */
 public class FragmentNienGiam extends Fragment {
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
 
@@ -77,8 +76,8 @@ public class FragmentNienGiam extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fragment_nien_giam, container, false);
         Button btnHoSo = (Button)view.findViewById(R.id.btnHoSo);
         Button btnDangKy = (Button)view.findViewById(R.id.btnDangKy);
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
+        current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         if(current_user == null){
             btnHoSo.setVisibility(View.GONE);
         } else {
@@ -137,9 +136,9 @@ public class FragmentNienGiam extends Fragment {
     public void onResume() {
         super.onResume();
         //lấy dữ liệu Global
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
     }
 

@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
@@ -59,8 +60,7 @@ public class SearchResultActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(parent.getContext(), ChiTietMonHocActivity.class);
-                intent.putExtra("MaMonHoc", ((ObjectMonHoc) mListResult.get(position)).getMamh());
-                intent.putExtra("caller", "SearchResultActivity");
+                intent.putExtra(Utils.MA_MON_HOC, ((ObjectMonHoc) mListResult.get(position)).getMamh());
                 startActivity(intent);
             }
         });

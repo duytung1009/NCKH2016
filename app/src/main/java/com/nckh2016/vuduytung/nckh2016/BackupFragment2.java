@@ -36,6 +36,7 @@ import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
 import com.google.gson.Gson;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUser;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 import com.nckh2016.vuduytung.nckh2016.GoogleDrive.ApiClientAsyncTask;
@@ -68,11 +69,6 @@ public class BackupFragment2 extends BaseDriveFragment {
     private String mParam1;
     private String mParam2;
 
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
-    //các giá trị Global trong Activity
-    private static final String PATTERN = "_backup.txt";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
     //các asynctask + biến liên quan
@@ -124,8 +120,8 @@ public class BackupFragment2 extends BaseDriveFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_backup_fragment_2, container, false);
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
+        current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         mainLayout = (RelativeLayout)view.findViewById(R.id.mainLayout);
         progressBar = (CircularProgressView) view.findViewById(R.id.progressBar);
         mResultsListView = (ListView) view.findViewById(R.id.listViewResults);
@@ -144,7 +140,6 @@ public class BackupFragment2 extends BaseDriveFragment {
                         loadingTask.cancel(true);
                     }
                 }
-                Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mainLayout);
                 loadingTask = new LoadingTask(getContext().getApplicationContext());
                 loadingTask.execute();
             }
@@ -210,16 +205,15 @@ public class BackupFragment2 extends BaseDriveFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Utils.showProcessBar(getContext(), progressBar, mainLayout);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         //lấy dữ liệu Global
-        SharedPreferences currentUserData = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
     }
 
@@ -241,7 +235,6 @@ public class BackupFragment2 extends BaseDriveFragment {
     @Override
     public void onConnected(Bundle connectionHint) {
         super.onConnected(connectionHint);
-        Utils.showProcessBar(getContext(), progressBar, mainLayout);
         loadingTask = new LoadingTask(getContext());
         loadingTask.execute();
     }
@@ -279,13 +272,6 @@ public class BackupFragment2 extends BaseDriveFragment {
     }
 
     public void restoreUser(Metadata metadata){
-        progressRestore = new ProgressDialog(getContext());
-        progressRestore.setMessage("Khôi phục hồ sơ");
-        progressRestore.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressRestore.setIndeterminate(true);
-        progressRestore.setProgressNumberFormat(null);
-        progressRestore.setProgressPercentFormat(null);
-        progressRestore.show();
         new RetrieveDriveFileContentsTask(getContext()).execute(metadata.getDriveId());
     }
 
@@ -313,7 +299,6 @@ public class BackupFragment2 extends BaseDriveFragment {
                         if(loadingTask.getStatus() == AsyncTask.Status.RUNNING) {
                             loadingTask.cancel(true);
                         }
-                        Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mainLayout);
                         loadingTask = new LoadingTask(getContext().getApplicationContext());
                         loadingTask.execute();
                     }
@@ -367,7 +352,7 @@ public class BackupFragment2 extends BaseDriveFragment {
                     }
 
                     MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                            .setTitle(current_user + PATTERN)
+                            .setTitle(current_user + Utils.BACKUP_FILE_PATTERN)
                             .setMimeType("text/plain")
                             .setStarred(true).build();
 
@@ -394,7 +379,6 @@ public class BackupFragment2 extends BaseDriveFragment {
                 }
             }
             progressUpload.dismiss();
-            Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mainLayout);
             loadingTask = new LoadingTask(getContext().getApplicationContext());
             loadingTask.execute();
         }
@@ -410,6 +394,7 @@ public class BackupFragment2 extends BaseDriveFragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Utils.showProcessBar(getContext().getApplicationContext(), progressBar, mainLayout);
         }
 
         @Override
@@ -440,6 +425,18 @@ public class BackupFragment2 extends BaseDriveFragment {
     private class RetrieveDriveFileContentsTask extends ApiClientAsyncTask<DriveId, Boolean, String> {
         public RetrieveDriveFileContentsTask(Context context) {
             super(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressRestore = new ProgressDialog(getContext());
+            progressRestore.setMessage("Khôi phục hồ sơ");
+            progressRestore.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressRestore.setIndeterminate(true);
+            progressRestore.setProgressNumberFormat(null);
+            progressRestore.setProgressPercentFormat(null);
+            progressRestore.show();
         }
 
         @Override

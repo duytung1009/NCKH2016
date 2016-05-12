@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.Data.AdapterMonHoc;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectMonHoc;
 import com.nckh2016.vuduytung.nckh2016.Data.SQLiteDataController;
 
@@ -52,8 +53,7 @@ public class BoMon2Fragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ChiTietMonHocActivity.class);
-                intent.putExtra("MaMonHoc", ((ObjectMonHoc) mListMonHoc.get(position)).getMamh());
-                intent.putExtra("caller", "BoMonActivity");
+                intent.putExtra(Utils.MA_MON_HOC, ((ObjectMonHoc) mListMonHoc.get(position)).getMamh());
                 startActivity(intent);
             }
         });

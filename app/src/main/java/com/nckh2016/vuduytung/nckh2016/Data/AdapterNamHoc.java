@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.nckh2016.vuduytung.nckh2016.QuanLyKeHoachHocTapActivity;
 import com.nckh2016.vuduytung.nckh2016.R;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectHocKy;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectUserHocKy;
 
@@ -29,7 +30,6 @@ public class AdapterNamHoc extends BaseAdapter {
     private static final int LIST_ITEM_TYPE_1 = 0;
     private static final int LIST_ITEM_TYPE_2 = 1;
     private static final int LIST_ITEM_TYPE_COUNT = 2;
-    public static final String PREFS_NAME = "current_user";
 
     private ArrayList<ObjectHocKy> mData = new ArrayList<ObjectHocKy>();
     private LayoutInflater mInflater;
@@ -153,7 +153,7 @@ public class AdapterNamHoc extends BaseAdapter {
                                 ObjectHocKy newHocKy = new ObjectHocKy(i.getNamHoc(), hocKyMoi, i.getNganh());
                                 mData.add(viTri, newHocKy);
                                 notifyDataSetChanged();
-                                SharedPreferences currentUserData = mContext.getSharedPreferences(PREFS_NAME, mContext.MODE_PRIVATE);
+                                SharedPreferences currentUserData = mContext.getSharedPreferences(Utils.PREFS_NAME, mContext.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = currentUserData.edit();
                                 Gson gson = new Gson();
                                 ObjectUserHocKy userData = gson.fromJson(currentUserData.getString("user_data", null), ObjectUserHocKy.class);

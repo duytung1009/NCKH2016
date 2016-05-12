@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.nckh2016.vuduytung.nckh2016.main.BaseNavActivity;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 
 //activity thí nghiệm về Meaningful Transitions (
 public class ThongTinCaNhanActivity extends BaseNavActivity {
@@ -17,10 +18,6 @@ public class ThongTinCaNhanActivity extends BaseNavActivity {
     private static final String BLANK_FRAGMENT = "blank";
     private static final String FRAG1 = "FRAG1";
     private static final String FRAG2 = "FRAG2";
-    //các giá trị Preferences Global
-    public static final String PREFS_NAME = "current_user";
-    public static final String SUB_PREFS_MASINHVIEN = "user_mssv";
-    public static final String SUB_PREFS_TENSINHVIEN = "user_name";
     //các biến được khôi phục lại nếu app resume
     private String current_user = null;
     //các view
@@ -33,11 +30,11 @@ public class ThongTinCaNhanActivity extends BaseNavActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_thong_tin_ca_nhan);
 
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences currentUserData = getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
         txtMaSinhVien = (TextView)findViewById(R.id.txtMaSinhVien);
         txtTenSinhVien = (TextView)findViewById(R.id.txtTenSinhVien);
-        txtMaSinhVien.setText(currentUserData.getString(SUB_PREFS_MASINHVIEN, null));
-        txtTenSinhVien.setText(currentUserData.getString(SUB_PREFS_TENSINHVIEN, null));
+        txtMaSinhVien.setText(currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null));
+        txtTenSinhVien.setText(currentUserData.getString(Utils.SUB_PREFS_TENSINHVIEN, null));
         mFabContainer = (FrameLayout) findViewById(R.id.fab_container);
 
     }
@@ -45,9 +42,9 @@ public class ThongTinCaNhanActivity extends BaseNavActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SharedPreferences currentUserData = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences currentUserData = getSharedPreferences(Utils.PREFS_NAME, MODE_PRIVATE);
         if(current_user == null){
-            current_user = currentUserData.getString(SUB_PREFS_MASINHVIEN, null);
+            current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         }
         loadFragment1();
     }

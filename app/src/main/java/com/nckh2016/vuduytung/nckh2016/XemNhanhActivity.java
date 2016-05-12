@@ -15,7 +15,7 @@ import android.view.View;
 import com.nckh2016.vuduytung.nckh2016.main.BaseNavActivity;
 
 public class XemNhanhActivity extends BaseNavActivity
-        implements XemNhanhFragment1.OnFragmentInteractionListener, XemNhanhFragment4.OnFragmentInteractionListener, XemNhanhFragment2.OnFragmentInteractionListener, XemNhanhFragment3.OnFragmentInteractionListener{
+        implements XemNhanhFragment.OnFragmentInteractionListener, XemNhanhFragment1.OnFragmentInteractionListener, XemNhanhFragment4.OnFragmentInteractionListener, XemNhanhFragment2.OnFragmentInteractionListener, XemNhanhFragment3.OnFragmentInteractionListener{
     //các giá trị Preferences của Activity
     public static final String PREFS_STATE = "saved_state_xemnhanh_activity";
     public static final String SUB_PREFS_TABLAYOUTSTATE = "tab_position";
@@ -72,13 +72,15 @@ public class XemNhanhActivity extends BaseNavActivity
 
     public void loadTabs(){
         tabLayout = (TabLayout)findViewById(R.id.tab_layout);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.whiteTransparent), ContextCompat.getColor(this, R.color.white));
         tabLayout.removeAllTabs();
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab1_name), 0);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab2_name), 1);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab3_name), 2);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab4_name), 3);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab0_name), 0);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab1_name), 1);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab2_name), 2);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab3_name), 3);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.mon_hoc_chua_qua_activity_tab4_name), 4);
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -118,15 +120,18 @@ public class XemNhanhActivity extends BaseNavActivity
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:{
-                    return XemNhanhFragment1.newInstance(null, null);
+                    return XemNhanhFragment.newInstance(null, null);
                 }
                 case 1:{
-                    return XemNhanhFragment2.newInstance(null, null);
+                    return XemNhanhFragment1.newInstance(null, null);
                 }
                 case 2:{
-                    return XemNhanhFragment3.newInstance(null, null);
+                    return XemNhanhFragment2.newInstance(null, null);
                 }
                 case 3:{
+                    return XemNhanhFragment3.newInstance(null, null);
+                }
+                case 4:{
                     return XemNhanhFragment4.newInstance(null, null);
                 }
                 default:

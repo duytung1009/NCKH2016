@@ -18,6 +18,7 @@ import com.nckh2016.vuduytung.nckh2016.Data.MyContract.MonHocEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.NganhEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserDataEntry;
 import com.nckh2016.vuduytung.nckh2016.Data.MyContract.UserEntry;
+import com.nckh2016.vuduytung.nckh2016.main.Utils;
 import com.nckh2016.vuduytung.nckh2016.object.Items;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectBoMon;
 import com.nckh2016.vuduytung.nckh2016.object.ObjectCTDT;
@@ -44,14 +45,14 @@ import java.util.List;
 /**
  * Created by Tung on 20/2/2016.
  * Nếu bạn đang đọc những dòng này, nghĩa là bạn đang làm tiếp dự án cũ của mình
- * Thành thật xin lỗi vì đống code… mong trời phật phù hộ cho bạn ._.
+ * …mong trời phật phù hộ cho bạn ._.
  */
 public class SQLiteDataController extends SQLiteOpenHelper {
     public static SQLiteDataController mInstance = null;
     // database
     public static String DB_PATH = "/data/data/com.nckh2016.vuduytung.nckh2016/databases/";
-    private static String DB_NAME = "nckh2016db.sqlite";
-    private static final int DATABASE_VERSION = 1;
+    public static String DB_NAME = "nckh2016db.sqlite";
+    public static final int DATABASE_VERSION = 1;
     public SQLiteDatabase database;
     private final Context mContext;
 
@@ -148,7 +149,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     public boolean isCreatedDatabase() throws IOException {
         //Default là đã có DB
         boolean result = true;
-        //Nếu chưa tồn tại DB thì copy từ Asses vào Data
+        //Nếu chưa tồn tại DB thì copy từ Assets vào Data
         if (!checkExistDataBase()) {
             this.getReadableDatabase();
             try {
@@ -158,7 +159,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             } catch (Exception e) {
                 throw new Error("Error copying database");
             }
-
         }
         return result;
     }
@@ -491,11 +491,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     if (!checkMonHocBoQua(mamh)) {
                         diemSo = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
                         tinChi = getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))).getTinchi();
-                        if (checkTuChon(mamh, "1", -1)) {
+                        if (checkTuChon(masv, mamh, "1", -1)) {
                             tuChonC.add(new ObjectMonHoc(mamh, diemSo, tinChi));
-                        } else if (checkTuChon(mamh, user.getMakhoa() + "0", -2)) {
+                        } else if (checkTuChon(masv, mamh, user.getMakhoa() + "0", -2)) {
                             tuChonB.add(new ObjectMonHoc(mamh, diemSo, tinChi));
-                        } else if (checkTuChon(mamh, user.getManganh(), -3)) {
+                        } else if (checkTuChon(masv, mamh, user.getManganh(), -3)) {
                             tuChonA.add(new ObjectMonHoc(mamh, diemSo, tinChi));
                         } else {
                             //không tính những môn bị điểm F và môn chưa học (điểm = -1)
@@ -507,7 +507,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     }
                 }
                 if (tuChonA.size() != 0) {
-                    tuChonA = sort(tuChonA);
+                    tuChonA = sortDiem(tuChonA);
                     double diemTuChonA = 0;
                     int tinChiTuChonA = 0;
                     int maxTinChi = 6;
@@ -521,7 +521,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     tongTinChi += tinChiTuChonA;
                 }
                 if (tuChonB.size() != 0) {
-                    tuChonB = sort(tuChonB);
+                    tuChonB = sortDiem(tuChonB);
                     double diemTuChonB = 0;
                     int tinChiTuChonB = 0;
                     int maxTinChi = 8;
@@ -535,7 +535,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     tongTinChi += tinChiTuChonB;
                 }
                 if (tuChonC.size() != 0) {
-                    tuChonC = sort(tuChonC);
+                    tuChonC = sortDiem(tuChonC);
                     double diemTuChonC = 0;
                     int tinChiTuChonC = 0;
                     int maxTinChi = 8;
@@ -584,11 +584,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     if (!checkMonHocBoQua(mamh)) {
                         double diem = mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO));
                         int tinChi = getMonHoc(mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC))).getTinchi();
-                        if (checkTuChon(mamh, "1", -1)) {
+                        if (checkTuChon(masv, mamh, "1", -1)) {
                             tuChonC.add(new ObjectMonHoc(mamh, diem, tinChi));
-                        } else if (checkTuChon(mamh, user.getMakhoa() + "0", -2)) {
+                        } else if (checkTuChon(masv, mamh, user.getMakhoa() + "0", -2)) {
                             tuChonB.add(new ObjectMonHoc(mamh, diem, tinChi));
-                        } else if (checkTuChon(mamh, user.getManganh(), -3)) {
+                        } else if (checkTuChon(masv, mamh, user.getManganh(), -3)) {
                             tuChonA.add(new ObjectMonHoc(mamh, diem, tinChi));
                         } else {
                             if (diem == -1) {
@@ -610,7 +610,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     }
                 }
                 if (tuChonA.size() != 0) {
-                    tuChonA = sort(tuChonA);
+                    tuChonA = sortDiem(tuChonA);
                     int tinChiTuChonA = 0;
                     int maxTinChi = 6;
                     int i = 0;
@@ -637,7 +637,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     }
                 }
                 if (tuChonB.size() != 0) {
-                    tuChonB = sort(tuChonB);
+                    tuChonB = sortDiem(tuChonB);
                     int tinChiTuChonB = 0;
                     int maxTinChi = 8;
                     int i = 0;
@@ -664,7 +664,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     }
                 }
                 if (tuChonC.size() != 0) {
-                    tuChonC = sort(tuChonC);
+                    tuChonC = sortDiem(tuChonC);
                     int tinChiTuChonC = 0;
                     int maxTinChi = 8;
                     int i = 0;
@@ -709,7 +709,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
      * @param values danh sách cần sắp xếp (ArrayList<Object>)
      * @return
      */
-    public ArrayList<Object> sort(ArrayList<Object> values) {
+    public ArrayList<Object> sortDiem(ArrayList<Object> values) {
         if (values.size() >= 2) {
             for (int i = 0; i < values.size() - 1; i++) {
                 for (int j = i + 1; j < values.size(); j++) {
@@ -779,11 +779,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     );
                     //lọc các môn bị bỏ qua
                     if (!checkMonHocBoQua(mMonHoc.getMamonhoc())) {
-                        if (checkTuChon(mMonHoc.getMamonhoc(), "1", -1)) {
+                        if (checkTuChon(masv, mMonHoc.getMamonhoc(), "1", -1)) {
                             mTuChonC.add(mMonHoc);
-                        } else if (checkTuChon(mMonHoc.getMamonhoc(), user.getMakhoa() + "0", -2)) {
+                        } else if (checkTuChon(masv, mMonHoc.getMamonhoc(), user.getMakhoa() + "0", -2)) {
                             mTuChonB.add(mMonHoc);
-                        } else if (checkTuChon(mMonHoc.getMamonhoc(), user.getManganh(), -3)) {
+                        } else if (checkTuChon(masv, mMonHoc.getMamonhoc(), user.getManganh(), -3)) {
                             mTuChonA.add(mMonHoc);
                         } else {
                             //không tính những môn bị điểm F và môn chưa học (điểm = -1)
@@ -885,11 +885,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     );
                     //lọc các môn bị bỏ qua
                     if (!checkMonHocBoQua(mMonHoc.getMamonhoc())) {
-                        if (checkTuChon(mMonHoc.getMamonhoc(), "1", -1)) {
+                        if (checkTuChon(masv, mMonHoc.getMamonhoc(), "1", -1)) {
                             mTuChonC.add(mMonHoc);
-                        } else if (checkTuChon(mMonHoc.getMamonhoc(), user.getMakhoa() + "0", -2)) {
+                        } else if (checkTuChon(masv, mMonHoc.getMamonhoc(), user.getMakhoa() + "0", -2)) {
                             mTuChonB.add(mMonHoc);
-                        } else if (checkTuChon(mMonHoc.getMamonhoc(), user.getManganh(), -3)) {
+                        } else if (checkTuChon(masv, mMonHoc.getMamonhoc(), user.getManganh(), -3)) {
                             mTuChonA.add(mMonHoc);
                         } else {
                             mDanhSachMonHoc.add(mMonHoc);
@@ -1068,15 +1068,48 @@ public class SQLiteDataController extends SQLiteOpenHelper {
      * @param hocKy học kỳ (int)
      * @return
      */
-    public boolean checkTuChon(String mamh, String mabm, int hocKy) {
+    public boolean checkTuChon(String masv, String mamh, String mabm, int hocKy) {
+        boolean result = false;
+        Cursor mCursor = null;
+        ObjectUser user = getUser(masv);
+        try {
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME
+                    + " WHERE " + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = '" + mabm + "'"
+                    + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " = '" + hocKy + "'"
+                    + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC + " = '" + mamh + "'", null);
+            if (mCursor.moveToFirst()) {
+                String maMonHoc = mCursor.getString(mCursor.getColumnIndexOrThrow(ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC));
+                if(!checkCTDT(user.getManganh(), maMonHoc)){
+                    result = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (mCursor != null) {
+                mCursor.close();
+            }
+            //close();
+        }
+        return result;
+    }
+
+    /**
+     * kiểm tra xem môn học có thuộc CTDT không
+     * @param mabm mã chuyên ngành của người dùng (String)
+     * @param mamh mã môn học (String)
+     * @return
+     */
+    public boolean checkCTDT(String mabm, String mamh){
         boolean result = false;
         Cursor mCursor = null;
         try {
             openDataBase();
             mCursor = database.rawQuery("SELECT * FROM " + ChuongTrinhDaoTaoEntry.TABLE_NAME
                     + " WHERE " + ChuongTrinhDaoTaoEntry.COLUMN_MA_BO_MON + " = " + mabm
-                    + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " = " + hocKy
-                    + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC + " = " + mamh, null);
+                    + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_MA_MON_HOC + " = " + mamh
+                    + " AND " + ChuongTrinhDaoTaoEntry.COLUMN_HOC_KY + " NOT IN (-1,-2,-3)" , null);
             if (mCursor.moveToFirst()) {
                 result = true;
             }
@@ -1090,7 +1123,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result;
     }
-
 
     /**
      * lấy danh sách tất cả các môn học
@@ -2517,6 +2549,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                             null
                     ));
                 }
+                result = sortMaMonHoc(result);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -2646,18 +2679,107 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    /**
+     * lấy danh sách môn tự chọn theo từng sinh viên (trả về danh sách môn học đơn giản)
+     * @param masv mã sinh viên (String)
+     * @param tuchon 1: tự chọn A, 2: tự chọn B, 3: tự chọn C (int)
+     * @return
+     */
+    public ArrayList<Object> getTuChon(String masv, int tuchon){
+        ArrayList<Object> result = new ArrayList<>();
+        Cursor mCursor = null;
+        ObjectUser user = getUser(masv);
+        try {
+            openDataBase();
+            mCursor = database.rawQuery("SELECT * FROM " + UserDataEntry.TABLE_NAME
+                    + " WHERE " + UserDataEntry.COLUMN_MA_SV + " = " + masv, null);
+            if (mCursor != null) {
+                while (mCursor.moveToNext()) {
+                    String mamh = mCursor.getString(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_MA_MON_HOC));
+                    switch (tuchon){
+                        case 1:{
+                            if(checkTuChon(masv, mamh, user.getManganh(), -3)){
+                                ObjectMonHoc monHoc = getMonHoc(mamh);
+                                result.add(new ObjectMonHoc(
+                                        mamh,
+                                        monHoc.getMabm(),
+                                        monHoc.getTenmh(),
+                                        monHoc.getTinchi(),
+                                        monHoc.getDieukien(),
+                                        monHoc.getNoidung(),
+                                        monHoc.getTailieu(),
+                                        null,
+                                        mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)),
+                                        (mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM)) != null)
+                                ));
+                            }
+                        }
+                        case 2:{
+                            if(checkTuChon(masv, mamh, user.getMakhoa() + "0", -2)){
+                                ObjectMonHoc monHoc = getMonHoc(mamh);
+                                result.add(new ObjectMonHoc(
+                                        mamh,
+                                        monHoc.getMabm(),
+                                        monHoc.getTenmh(),
+                                        monHoc.getTinchi(),
+                                        monHoc.getDieukien(),
+                                        monHoc.getNoidung(),
+                                        monHoc.getTailieu(),
+                                        null,
+                                        mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)),
+                                        (mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM)) != null)
+                                ));
+                            }
+                        }
+                        case 3:{
+                            if(checkTuChon(masv, mamh, "1", -1)){
+                                ObjectMonHoc monHoc = getMonHoc(mamh);
+                                result.add(new ObjectMonHoc(
+                                        mamh,
+                                        monHoc.getMabm(),
+                                        monHoc.getTenmh(),
+                                        monHoc.getTinchi(),
+                                        monHoc.getDieukien(),
+                                        monHoc.getNoidung(),
+                                        monHoc.getTailieu(),
+                                        null,
+                                        mCursor.getDouble(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_DIEM_SO)),
+                                        (mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM)) != null)
+                                ));
+                            }
+                        }
+                        default:{
+
+                        }
+                    }
+                }
+                result = locMonTrungLapObjectMonHoc(result);
+                result = sortMaMonHoc(result);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (mCursor != null) {
+                mCursor.close();
+            }
+        }
+        return result;
+    }
+
     public boolean checkMonHocBoQua(String mamh) {
-        String[] danhSachBoQua = new String[]{"4010701", "4010702", "4010703", "4010704", "4010705", "4080508", "4080509"};
-        List<String> listBoQua = Arrays.asList(danhSachBoQua);
+        List<String> listBoQua = Arrays.asList(Utils.DANH_SACH_BO_QUA);
         return listBoQua.contains(mamh);
     }
 
     public boolean checkNganhHoc4Nam(String manganh) {
-        String[] danhSachBoQua = new String[]{"701", "702"};
-        List<String> listBoQua = Arrays.asList(danhSachBoQua);
+        List<String> listBoQua = Arrays.asList(Utils.DANH_SACH_NGANH_HOC_4_NAM);
         return listBoQua.contains(manganh);
     }
 
+    public boolean checkHocPhanTheDuc(String mamh){
+        List<String> listBoQua = Arrays.asList(Utils.DANH_SACH_HOC_PHAN_THE_DUC);
+        return listBoQua.contains(mamh);
+    }
     /*public Cursor getAllKhoa(){
         Cursor mCursor = null;
         try{

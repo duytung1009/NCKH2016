@@ -40,7 +40,7 @@ public class XemNhanhFragment extends Fragment {
     //các view
     CircularProgressView progressBar;
     RelativeLayout mainLayout;
-    LinearLayout listViewDieuKien;
+    LinearLayout listViewDieuKien, layoutTuChonA, layoutTuChonB, layoutTuChonC;
     //các AsyncTask
     MainTask mainTask;
 
@@ -95,6 +95,9 @@ public class XemNhanhFragment extends Fragment {
         current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
         mainLayout = (RelativeLayout) view.findViewById(R.id.mainLayout);
         listViewDieuKien = (LinearLayout) view.findViewById(R.id.listViewDieuKien);
+        layoutTuChonA = (LinearLayout) view.findViewById(R.id.layoutTuChonA);
+        layoutTuChonB = (LinearLayout) view.findViewById(R.id.layoutTuChonB);
+        layoutTuChonC = (LinearLayout) view.findViewById(R.id.layoutTuChonC);
         progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
         TextView txtTieuDe = (TextView) view.findViewById(R.id.txtTieuDe);
@@ -166,6 +169,9 @@ public class XemNhanhFragment extends Fragment {
         private int tinChiTichLuy = 0;
         private int tongTinChi = -1;
         private ArrayList<Object> userHocPhanTheDuc = new ArrayList<>();
+        private ArrayList<Object> tuChonA = new ArrayList<>();
+        private ArrayList<Object> tuChonB = new ArrayList<>();
+        private ArrayList<Object> tuChonC = new ArrayList<>();
 
         public MainTask(Context mContext) {
             this.mContext = mContext;
@@ -201,6 +207,10 @@ public class XemNhanhFragment extends Fragment {
             }
             //giáo dục thể chất
             userHocPhanTheDuc = data.getHocPhanTheDuc(current_user);
+            //tự chọn
+            tuChonA = data.getTuChon(current_user, 1);
+            tuChonB = data.getTuChon(current_user, 2);
+            tuChonC = data.getTuChon(current_user, 3);
             return null;
         }
 
@@ -212,35 +222,53 @@ public class XemNhanhFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            //ngán cái phần này vãi...
             //tích lũy tín chỉ
             View viewTongTinChi = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
             ImageView imageViewTongTinChi = (ImageView) viewTongTinChi.findViewById(R.id.imageViewMonHocDieuKien);
             TextView textViewTongTinChi = (TextView) viewTongTinChi.findViewById(R.id.textViewMonHocDieuKien);
+            String tongTinChiText = "Tín chỉ tích lũy đạt tối thiểu " + tinChiTichLuy + " tín chỉ\nTín chỉ tích lũy hiện tại: " + tongTinChi + " tín chỉ\n";
             if (tongTinChi < tinChiTichLuy) {
-                imageViewTongTinChi.setImageResource(R.drawable.circle);
+                imageViewTongTinChi.setImageResource(R.drawable.close_circle_outline);
+                tongTinChiText += "Còn thiếu: " + (tinChiTichLuy - tongTinChi) + " tín chỉ\n";
             } else {
                 imageViewTongTinChi.setImageResource(R.drawable.check);
             }
-            textViewTongTinChi.setText("Tín chỉ tích lũy đạt tối thiểu " + tinChiTichLuy + " tín chỉ\nTín chỉ tích lũy hiện tại: " + tongTinChi + " tín chỉ");
+            textViewTongTinChi.setText(tongTinChiText);
             listViewDieuKien.addView(viewTongTinChi);
             //tổng điểm
+            double[] mocDiem = {2,2.5,3.2,3.6};
+            String[] xepLoai = {"Trung bình","Khá","Giỏi","Xuất sắc"};
             View viewTongDiem = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
             ImageView imageViewTongDiem = (ImageView) viewTongDiem.findViewById(R.id.imageViewMonHocDieuKien);
             TextView textViewTongDiem = (TextView) viewTongDiem.findViewById(R.id.textViewMonHocDieuKien);
             if (Double.compare(tongDiem, 2) < 0) {
-                imageViewTongDiem.setImageResource(R.drawable.circle);
+                imageViewTongDiem.setImageResource(R.drawable.close_circle_outline);
             } else {
                 imageViewTongDiem.setImageResource(R.drawable.check);
             }
-            textViewTongDiem.setText("Điểm tích lũy đạt từ 2,0 trở lên\nĐiểm tích lũy hiện tại: " + new DecimalFormat("####0.##").format(tongDiem));
+            String tongDiemText = "Điểm tích lũy đạt từ 2,0 trở lên\nĐiểm tích lũy hiện tại: " + new DecimalFormat("####0.##").format(tongDiem) + "\n";
+            if(Double.compare(tongDiem, mocDiem[0]) < 0){
+                tongDiemText += "Chưa đủ điều kiện xét tốt nghiệp\nCòn thiếu: " + new DecimalFormat("####0.##").format(mocDiem[0] - tongDiem) + " điểm để đạt loại " + xepLoai[0] + "\n";
+            } else if (Double.compare(tongDiem, mocDiem[1]) < 0) {
+                tongDiemText += "Xếp loại học tập: " + xepLoai[0] + "\nCòn thiếu: " + new DecimalFormat("####0.##").format(mocDiem[1] - tongDiem) + " điểm để đạt loại " + xepLoai[1] + "\n";
+            } else if (Double.compare(tongDiem, mocDiem[2]) < 0) {
+                tongDiemText += "Xếp loại học tập: " + xepLoai[1] + "\nCòn thiếu: " + new DecimalFormat("####0.##").format(mocDiem[2] - tongDiem) + " điểm để đạt loại " + xepLoai[2] + "\n";
+            } else if (Double.compare(tongDiem, mocDiem[3]) < 0) {
+                tongDiemText += "Xếp loại học tập: " + xepLoai[2] + "\nCòn thiếu: " + new DecimalFormat("####0.##").format(mocDiem[3] - tongDiem) + " điểm để đạt loại " + xepLoai[3] + "\n";
+            } else {
+                tongDiemText += "Xếp loại học tập: " + xepLoai[3] + "\n";
+            }
+            textViewTongDiem.setText(tongDiemText);
             listViewDieuKien.addView(viewTongDiem);
             //học phần giáo dục thể chất
             View viewGiaoDucTheChat = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
             ImageView imageViewGiaoDucTheChat = (ImageView) viewGiaoDucTheChat.findViewById(R.id.imageViewMonHocDieuKien);
             TextView textViewGiaoDucTheChat = (TextView) viewGiaoDucTheChat.findViewById(R.id.textViewMonHocDieuKien);
+            String giaoDucTheChatText = "";
             if (userHocPhanTheDuc.size() < 5) {
-                imageViewGiaoDucTheChat.setImageResource(R.drawable.circle);
-                textViewGiaoDucTheChat.setText("Hoàn thành học phần giáo dục thể chất\nCòn thiếu: " + String.valueOf(5 - userHocPhanTheDuc.size()) + " học phần");
+                imageViewGiaoDucTheChat.setImageResource(R.drawable.close_circle_outline);
+                giaoDucTheChatText = "Hoàn thành học phần giáo dục thể chất\nCòn thiếu: " + String.valueOf(5 - userHocPhanTheDuc.size()) + " học phần\n";
             } else {
                 double tongDiemGDTC = 0;
                 for (Object value : userHocPhanTheDuc) {
@@ -250,15 +278,81 @@ public class XemNhanhFragment extends Fragment {
                 }
                 tongDiemGDTC = tongDiemGDTC/5;
                 if (Double.compare(tongDiemGDTC, 5.5) < 0) {
-                    imageViewGiaoDucTheChat.setImageResource(R.drawable.circle);
-                    textViewGiaoDucTheChat.setText("Hoàn thành học phần giáo dục thể chất\nTổng điểm hiện tại: " + new DecimalFormat("####0.##").format(tongDiemGDTC));
+                    imageViewGiaoDucTheChat.setImageResource(R.drawable.close_circle_outline);
+                    giaoDucTheChatText = "Hoàn thành học phần giáo dục thể chất\nTổng điểm hiện tại: " + new DecimalFormat("####0.##").format(tongDiemGDTC) + "\nCòn thiếu: " + new DecimalFormat("####0.##").format(5.5 - tongDiemGDTC) + " điểm\n";
                 } else {
                     imageViewGiaoDucTheChat.setImageResource(R.drawable.check);
-                    textViewGiaoDucTheChat.setText("Hoàn thành học phần giáo dục thể chất\nTổng điểm hiện tại: " + new DecimalFormat("####0.##").format(tongDiemGDTC));
+                    giaoDucTheChatText = "Hoàn thành học phần giáo dục thể chất\nTổng điểm hiện tại: " + new DecimalFormat("####0.##").format(tongDiemGDTC) + "\n";
                 }
             }
+            textViewGiaoDucTheChat.setText(giaoDucTheChatText);
             listViewDieuKien.addView(viewGiaoDucTheChat);
-            //tự chọn... (cái này khó)
+            //tự chọn A
+            int tinChiTuChonA = 0, monHocDaQuaTuChonA = 0;
+            for(Object obj : tuChonA){
+                ObjectMonHoc objMonHoc = (ObjectMonHoc)obj;
+                if(Double.compare(objMonHoc.getDiem(), 4) > 0){
+                    monHocDaQuaTuChonA++;
+                    tinChiTuChonA += objMonHoc.getTinchi();
+                }
+            }
+            View viewTuChonA = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
+            ImageView imageViewTuChonA = (ImageView) viewTuChonA.findViewById(R.id.imageViewMonHocDieuKien);
+            TextView textViewTuChonA = (TextView) viewTuChonA.findViewById(R.id.textViewMonHocDieuKien);
+            String tuChonAText = "Đã học " + tuChonA.size() + " môn\nĐã qua " + monHocDaQuaTuChonA + " môn";
+            if (tinChiTuChonA < 6) {
+                imageViewTuChonA.setImageResource(R.drawable.close_circle_outline);
+                tuChonAText += "\nCòn thiếu: " + (6 - tinChiTuChonA) + " tín chỉ";
+            } else {
+                imageViewTuChonA.setImageResource(R.drawable.check);
+                tuChonAText += "\nĐạt " + tinChiTuChonA + " tín chỉ";
+            }
+            textViewTuChonA.setText(tuChonAText);
+            layoutTuChonA.addView(viewTuChonA);
+            //tự chọn B
+            int tinChiTuChonB = 0, monHocDaQuaTuChonB = 0;
+            for(Object obj : tuChonB){
+                ObjectMonHoc objMonHoc = (ObjectMonHoc)obj;
+                if(Double.compare(objMonHoc.getDiem(), 4) > 0){
+                    monHocDaQuaTuChonB++;
+                    tinChiTuChonB += objMonHoc.getTinchi();
+                }
+            }
+            View viewTuChonB = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
+            ImageView imageViewTuChonB = (ImageView) viewTuChonB.findViewById(R.id.imageViewMonHocDieuKien);
+            TextView textViewTuChonB = (TextView) viewTuChonB.findViewById(R.id.textViewMonHocDieuKien);
+            String tuChonBText = "Đã học " + tuChonB.size() + " môn\nĐã qua " + monHocDaQuaTuChonB + " môn";
+            if (tinChiTuChonB < 8) {
+                imageViewTuChonB.setImageResource(R.drawable.close_circle_outline);
+                tuChonBText += "\nCòn thiếu: " + (8 - tinChiTuChonB) + " tín chỉ";
+            } else {
+                imageViewTuChonB.setImageResource(R.drawable.check);
+                tuChonBText += "\nĐạt " + tinChiTuChonB + " tín chỉ";
+            }
+            textViewTuChonB.setText(tuChonBText);
+            layoutTuChonB.addView(viewTuChonB);
+            //tự chọn C
+            int tinChiTuChonC = 0, monHocDaQuaTuChonC = 0;
+            for(Object obj : tuChonC){
+                ObjectMonHoc objMonHoc = (ObjectMonHoc)obj;
+                if(Double.compare(objMonHoc.getDiem(), 4) > 0){
+                    monHocDaQuaTuChonC++;
+                    tinChiTuChonC += objMonHoc.getTinchi();
+                }
+            }
+            View viewTuChonC = View.inflate(mContext, R.layout.item_monhoc_dieukien, null);
+            ImageView imageViewTuChonC = (ImageView) viewTuChonC.findViewById(R.id.imageViewMonHocDieuKien);
+            TextView textViewTuChonC = (TextView) viewTuChonC.findViewById(R.id.textViewMonHocDieuKien);
+            String tuChonCText = "Đã học " + tuChonC.size() + " môn\nĐã qua " + monHocDaQuaTuChonC + " môn";
+            if (tinChiTuChonC < 8) {
+                imageViewTuChonC.setImageResource(R.drawable.close_circle_outline);
+                tuChonCText += "\nCòn thiếu: " + (8 - tinChiTuChonC) + " tín chỉ";
+            } else {
+                imageViewTuChonC.setImageResource(R.drawable.check);
+                tuChonCText += "\nĐạt " + tinChiTuChonC + " tín chỉ";
+            }
+            textViewTuChonC.setText(tuChonCText);
+            layoutTuChonC.addView(viewTuChonC);
             Utils.hideProcessBar(mContext, progressBar, mainLayout);
         }
     }

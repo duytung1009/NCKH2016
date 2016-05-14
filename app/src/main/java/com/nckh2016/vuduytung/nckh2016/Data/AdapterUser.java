@@ -21,6 +21,7 @@ import java.util.Collection;
 
 /**
  * Created by Tung on 20/3/2016.
+ * (old adapter - không dùng nữa)
  */
 public class AdapterUser extends ArrayAdapter<Object> {
     private Context mContext;

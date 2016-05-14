@@ -2713,6 +2713,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                                         (mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM)) != null)
                                 ));
                             }
+                            break;
                         }
                         case 2:{
                             if(checkTuChon(masv, mamh, user.getMakhoa() + "0", -2)){
@@ -2730,6 +2731,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                                         (mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM)) != null)
                                 ));
                             }
+                            break;
                         }
                         case 3:{
                             if(checkTuChon(masv, mamh, "1", -1)){
@@ -2747,6 +2749,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                                         (mCursor.getBlob(mCursor.getColumnIndexOrThrow(UserDataEntry.COLUMN_BANG_DIEM)) != null)
                                 ));
                             }
+                            break;
                         }
                         default:{
 

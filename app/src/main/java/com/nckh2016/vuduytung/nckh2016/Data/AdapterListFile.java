@@ -23,6 +23,7 @@ import java.util.Collection;
 /**
  * Created by Tung on 30/3/2016.
  * optimized
+ * (old adapter)
  */
 public class AdapterListFile extends ArrayAdapter<Object> {
     private Context mContext;
@@ -79,7 +80,7 @@ public class AdapterListFile extends ArrayAdapter<Object> {
                 } else if (fileSize < 1024 * 1024 * 1024) {
                     size = String.valueOf(new DecimalFormat("####0.##").format((double) fileSize / 1024 / 1024)) + " MB";
                 }
-                String description = size + " - " + file.getAbsolutePath();
+                String description = size + " - " + file.getPath();
                 holder.txtDuongDan.setText(description);
                 holder.btnXoa.setOnClickListener(new View.OnClickListener() {
                     @Override

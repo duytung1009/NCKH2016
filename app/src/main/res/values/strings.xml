@@ -75,6 +75,7 @@
     <string name="subtitleNoiDung">nội dung</string>
     <string name="subtitleTaiLieuThamKhao">tài liệu tham khảo</string>
     <string name="subtitleDieuKienTotNghiep">điều kiện tốt nghiệp</string>
+    <string name="subtitleTuChon">học phần tự chọn</string>
 
     <string name="chonChuyenSau">Cần chọn hướng chuyên sâu trước</string>
     <string name="khong">Chưa có dữ liệu</string>
@@ -110,6 +111,7 @@
     <string name="txtPermissionWriteSuccess">File backup đã lưu tại </string>
     <string name="txtCapNhatThongTin">Cập nhật thông tin cá nhân</string>
     <string name="txtChuaChonChuyenNganh">Chưa chọn hướng chuyên sâu</string>
+    <string name="txtPhucHoi">Phục hồi hồ sơ</string>
 
     <string name="txtBuilding">Đang hoàn thiện...</string>
 

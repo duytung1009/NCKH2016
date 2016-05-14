@@ -1,9 +1,11 @@
 package com.nckh2016.vuduytung.nckh2016.main;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 /**
  * Created by Tung on 30/3/2016.
@@ -22,6 +24,8 @@ public class Utils {
     public static final String[] DANH_SACH_NGANH_HOC_4_NAM = new String[]{"701", "702"};
     public static final String[] DANH_SACH_HOC_PHAN_THE_DUC = new String[] {"4010701","4010702","4010703","4010704","4010705"};
     public static final String[] DANH_SACH_BO_QUA = new String[] {"4010701","4010702","4010703","4010704","4010705","4080508","4080509"};
+    //more global
+    public static final long ANIM_OFFSET = 100;
 
     public static void showProcessBar(Context context, View processBar, View content){
         Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
@@ -46,5 +50,19 @@ public class Utils {
         viewOut.startAnimation(animFadeOut);
         viewIn.setVisibility(View.VISIBLE);
         viewOut.setVisibility(View.GONE);
+    }
+
+    public static int dpToPx(int dp)
+    {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public static int pxToDp(int px)
+    {
+        return (int) (px / Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public static void showMessage(Context mContext, String message){
+        Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
     }
 }

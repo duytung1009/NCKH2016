@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +76,11 @@ public class BackupFragment1 extends Fragment {
     ListView listViewFile;
     RelativeLayout mainLayout;
 
+    //RecyclerView và đống rườm rà đi kèm
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     private OnFragmentInteractionListener mListener;
 
     public BackupFragment1() {
@@ -115,18 +121,13 @@ public class BackupFragment1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_backup_fragment_1, container, false);
         SharedPreferences currentUserData = getContext().getSharedPreferences(Utils.PREFS_NAME, Context.MODE_PRIVATE);
         current_user = currentUserData.getString(Utils.SUB_PREFS_MASINHVIEN, null);
+        /*mRecyclerView = (RecyclerView)view.findViewById(R.id.listViewFile);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);*/
+
         mainLayout = (RelativeLayout)view.findViewById(R.id.mainLayout);
         progressBar = (CircularProgressView)view.findViewById(R.id.progressBar);
-        final SQLiteDataController data = SQLiteDataController.getInstance(getContext());
-        try{
-            data.isCreatedDatabase();
-        }
-        catch (IOException e){
-            Log.e("tag", e.getMessage());
-        }
-        listViewFile = (ListView)view.findViewById(R.id.listViewFile);
-        adapterListFile = new AdapterListFile(BackupFragment1.this, 0);
-        listViewFile.setAdapter(adapterListFile);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -144,6 +145,9 @@ public class BackupFragment1 extends Fragment {
                 mainTask.execute();
             }
         });
+        listViewFile = (ListView)view.findViewById(R.id.listViewFile);
+        adapterListFile = new AdapterListFile(BackupFragment1.this, 0);
+        listViewFile.setAdapter(adapterListFile);
         //button
         Button btnBackup = (Button)view.findViewById(R.id.btnBackup);
         if(current_user == null){
@@ -261,7 +265,6 @@ public class BackupFragment1 extends Fragment {
                 Toast.makeText(getContext(), getResources().getString(R.string.txtPermissionDenided), Toast.LENGTH_SHORT).show();
             }
         } else {
-
             mainTask = new MainTask(getContext());
             mainTask.execute();
         }
@@ -537,6 +540,8 @@ public class BackupFragment1 extends Fragment {
             super.onPostExecute(aVoid);
             adapterListFile.clear();
             adapterListFile.addAll(listFile);
+            /*mAdapter = new FileAdapter(getContext(), listFile);
+            mRecyclerView.setAdapter(mAdapter);*/
             Utils.hideProcessBar(mContext, progressBar, mainLayout);
             swipeContainer.setRefreshing(false);
             if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -555,9 +560,6 @@ public class BackupFragment1 extends Fragment {
                             if (tempListFile[i].getName().equals(current_user + Utils.BACKUP_FILE_PATTERN)){
                                 listFile.add(tempListFile[i]);
                             }
-                            /*if (tempListFile[i].getName().endsWith(PATTERN)){
-                                listFile.add(tempListFile[i]);
-                            }*/
                         }
                     }
                 }

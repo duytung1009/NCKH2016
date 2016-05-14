@@ -254,7 +254,7 @@ public class ThongTinCaNhan2Fragment extends Fragment {
                     i++;
                 }
                 ArrayAdapter<String> mChuyenSauAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, mListTenChuyenSau);
-                mChuyenSauAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mChuyenSauAdapter.setDropDownViewResource(R.layout.spinner_item);
                 spinnerChuyenSau.setAdapter(mChuyenSauAdapter);
                 spinnerChuyenSau.setVisibility(View.VISIBLE);
             } else {

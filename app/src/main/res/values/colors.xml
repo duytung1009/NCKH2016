@@ -32,4 +32,5 @@
     <color name="white">#FFFFFF</color>
     <!-- Transparent: 70% #ECEFF1-->
     <color name="whiteTransparent">#B3FFFFFF</color>
+    <color name="line">#c0c0c0</color>
 </resources>

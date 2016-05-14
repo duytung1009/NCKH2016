@@ -56,6 +56,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="smallText">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="colorSubTitleText">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">16sp</item>

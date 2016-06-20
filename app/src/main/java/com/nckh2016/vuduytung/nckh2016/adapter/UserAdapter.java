@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -121,11 +122,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                                 }
                             }.execute(holder);
                             ResizeHeightAnimation anim = new ResizeHeightAnimation(v, Utils.dpToPx(200));
+                            anim.setInterpolator(new AccelerateDecelerateInterpolator());
                             anim.setDuration(Utils.ANIM_OFFSET);
                             v.startAnimation(anim);
                         } else {
                             //v.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, Utils.dpToPx(50)));
                             ResizeHeightAnimation anim = new ResizeHeightAnimation(v, Utils.dpToPx(50));
+                            anim.setInterpolator(new AccelerateDecelerateInterpolator());
                             anim.setDuration(Utils.ANIM_OFFSET);
                             v.startAnimation(anim);
                         }
@@ -226,6 +229,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         if (position > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
             //animation.setStartOffset((position + 1) * animationOffset); // có tý vấn đề khi scroll
+            animation.setInterpolator(new AccelerateDecelerateInterpolator());
             animation.setStartOffset(animationOffset); // setting the offset
             viewToAnimate.startAnimation(animation);
             lastPosition = position;

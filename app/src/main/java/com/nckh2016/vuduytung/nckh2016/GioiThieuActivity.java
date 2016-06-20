@@ -31,7 +31,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class GioiThieuActivity extends AppCompatActivity {
-    private static final String DATABASE_URL = "";
+    private static final String DATABASE_URL = "https://www.dropbox.com/s/s84xumtdab9746m/nckh2016.sqlite?dl=0";
     private DownloadFileFromURL updateTask;
     private Button btnUpdate;
     private ProgressDialog processUpdate;
@@ -57,6 +57,11 @@ public class GioiThieuActivity extends AppCompatActivity {
                 updateTask.execute(DATABASE_URL);
             }
         });
+        processUpdate = new ProgressDialog(this);
+        processUpdate.setMessage("Cập nhật CTDT");
+        processUpdate.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        processUpdate.setIndeterminate(false);
+        processUpdate.setMax(100);
     }
 
     @Override
@@ -101,11 +106,6 @@ public class GioiThieuActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            processUpdate = new ProgressDialog(mContext);
-            processUpdate.setMessage("Cập nhật CTDT");
-            processUpdate.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            processUpdate.setIndeterminate(false);
-            processUpdate.setMax(100);
             processUpdate.show();
         }
 

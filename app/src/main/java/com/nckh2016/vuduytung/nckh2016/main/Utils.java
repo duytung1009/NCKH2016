@@ -25,7 +25,7 @@ public class Utils {
     public static final String[] DANH_SACH_HOC_PHAN_THE_DUC = new String[] {"4010701","4010702","4010703","4010704","4010705"};
     public static final String[] DANH_SACH_BO_QUA = new String[] {"4010701","4010702","4010703","4010704","4010705","4080508","4080509"};
     //more global
-    public static final long ANIM_OFFSET = 100;
+    public static final long ANIM_OFFSET = 200;
 
     public static void showProcessBar(Context context, View processBar, View content){
         Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);

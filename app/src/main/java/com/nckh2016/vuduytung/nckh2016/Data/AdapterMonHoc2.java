@@ -127,7 +127,7 @@ public class AdapterMonHoc2 extends ArrayAdapter<Object> {
                     protected void onPostExecute(Void aVoid) {
                         super.onPostExecute(aVoid);
                         //tạm tắt chức năng xét điều kiện đăng ký môn học, để hủy -> xóa dòng chuaQua = false;
-                        //chuaQua = false;
+                        chuaQua = false;
                         if (chuaQua) {
                             viewHolder.itemLayout.setOnClickListener(new View.OnClickListener() {
                                 @Override

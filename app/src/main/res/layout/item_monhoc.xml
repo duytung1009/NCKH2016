@@ -90,4 +90,5 @@
         android:layout_alignParentRight="true"
         android:gravity="center"
         android:textColor="@color/colorPrimary" />
+
 </RelativeLayout>
